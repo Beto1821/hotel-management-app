@@ -43,10 +43,10 @@ export const apiClient = async <T = any>(
   }
   
   // Opções finais da requisição
-  const requestOptions: RequestInit = {
+  const requestOptions = {
     ...options,
     headers,
-  }
+  } as any
   
   try {
     // Fazer requisição usando $fetch do Nuxt

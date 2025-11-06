@@ -24,6 +24,27 @@ O **Hotel Management App** é uma aplicação completa para gerenciamento de hot
 
 É necessário rodar o Backend (FastAPI) e o Frontend (Nuxt 3) separadamente.
 
+## 🎯 **INÍCIO RÁPIDO - Execute em 2 Terminais**
+
+### Terminal 1: Backend (FastAPI)
+```bash
+cd backend
+pip install -r requirements.txt
+pip install python-multipart "pydantic[email]"
+PYTHONPATH=$(pwd) python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+✅ Backend rodando em: http://localhost:8000
+
+### Terminal 2: Frontend (Nuxt 3)
+```bash
+cd frontend
+npm install
+npm install --save-dev vue-tsc typescript
+echo '{"extends": "./.nuxt/tsconfig.json"}' > tsconfig.json
+npx nuxt dev --port 3000
+```
+✅ Frontend rodando em: http://localhost:3000
+
 ## 📋 Pré-requisitos
 
 - Python 3.10+
@@ -69,12 +90,20 @@ pip list
 ### C. Execução da API
 
 ```bash
-# Execute a API (o --reload é para desenvolvimento)
-uvicorn main:app --reload
+# IMPORTANTE: Execute no diretório /backend e configure o PYTHONPATH
+cd backend
 
-# Ou alternativamente:
-# python -m uvicorn main:app --reload
+# Instale dependências adicionais necessárias
+pip install python-multipart "pydantic[email]"
+
+# Execute a API com PYTHONPATH correto (obrigatório)
+PYTHONPATH=/caminho/completo/para/hotel_app/backend python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+
+# Ou em background (recomendado para testes):
+nohup python3 -c "import sys; sys.path.insert(0, '.'); from main import app; import uvicorn; uvicorn.run(app, host='0.0.0.0', port=8000)" > server.log 2>&1 &
 ```
+
+⚠️ **IMPORTANTE**: O PYTHONPATH é obrigatório para que os imports funcionem corretamente.
 
 ### D. Verificação da API
 
@@ -172,20 +201,46 @@ headers = {"Authorization": f"Bearer {token}"}
 
 ## ⚠️ Troubleshooting
 
-### Problema: ModuleNotFoundError
+### Problema: ModuleNotFoundError no Backend
 ```bash
-# Certifique-se de que o ambiente virtual está ativo
-source .venv/bin/activate  # macOS/Linux
-# .venv\Scripts\activate   # Windows
+# SOLUÇÃO: Configure o PYTHONPATH corretamente
+cd backend
+PYTHONPATH=$(pwd) python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
-# Reinstale as dependências
-pip install -r requirements.txt
+### Problema: "Could not import module 'main'"
+```bash
+# SOLUÇÃO: Execute no diretório correto com PYTHONPATH
+cd backend  # OBRIGATÓRIO estar neste diretório
+PYTHONPATH=/caminho/completo/para/backend python3 -m uvicorn main:app --reload
+```
+
+### Problema: "Form data requires python-multipart"
+```bash
+# SOLUÇÃO: Instale dependências adicionais
+pip install python-multipart "pydantic[email]"
+```
+
+### Problema: Frontend "Cannot find tsconfig.json"
+```bash
+# SOLUÇÃO: Crie o arquivo tsconfig.json
+cd frontend
+echo '{"extends": "./.nuxt/tsconfig.json"}' > tsconfig.json
+npm install --save-dev vue-tsc typescript
+```
+
+### Problema: Frontend "Cannot find module 'vue-tsc'"
+```bash
+# SOLUÇÃO: Instale dependências de desenvolvimento
+npm install --save-dev vue-tsc typescript
 ```
 
 ### Problema: Porta já em uso
 ```bash
-# Use uma porta diferente
+# Backend: Use porta diferente
 uvicorn main:app --reload --port 8001
+# Frontend: Use porta diferente
+npx nuxt dev --port 3001
 ```
 
 ### Problema: Banco de dados
@@ -193,7 +248,7 @@ uvicorn main:app --reload --port 8001
 # O arquivo app.db será criado automaticamente na primeira execução
 # Se houver problemas, delete e reinicie:
 rm app.db
-uvicorn main:app --reload
+PYTHONPATH=$(pwd) python3 -m uvicorn main:app --reload
 ```
 
 ---
@@ -221,11 +276,40 @@ API_BASE_URL=http://localhost:8000
 ### C. Execução
 
 ```bash
+# IMPORTANTE: Execute no diretório /frontend
+cd frontend
+
+# Instale dependências adicionais necessárias (se não instaladas)
+npm install --save-dev vue-tsc typescript
+
+# Crie o tsconfig.json (se não existir)
+echo '{"extends": "./.nuxt/tsconfig.json"}' > tsconfig.json
+
 # Execute o servidor de desenvolvimento do Nuxt 3
 npm run dev
+
+# Ou use npx diretamente:
+npx nuxt dev --port 3000
 ```
 
 O Frontend estará acessível em `http://localhost:3000`.
+
+### D. Verificação de Funcionamento ✅
+
+```bash
+# Teste o Backend
+curl http://localhost:8000/health
+# Resposta esperada: {"status":"healthy","message":"API is running"}
+
+# Teste o Frontend (abra no navegador)
+# http://localhost:3000 - deve carregar a página de login
+# http://localhost:8000/docs - documentação da API
+```
+
+### E. Logs e Monitoramento
+- **Backend**: Logs aparecem no terminal onde foi executado
+- **Frontend**: Logs do Nuxt aparecem no terminal + logs do browser (F12)
+- **Erros TypeScript**: São exibidos no terminal do frontend (não impedem funcionamento)
 
 ### D. Funcionalidades Implementadas ✅
 
