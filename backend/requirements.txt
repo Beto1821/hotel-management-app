@@ -1,0 +1,7 @@
+# backend/requirements.txt
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+passlib[bcrypt]  # Para hashing de senhas
+python-jose[cryptography] # Para JWT (Autenticação)
