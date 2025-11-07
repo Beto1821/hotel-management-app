@@ -38,6 +38,7 @@ PYTHONPATH=$(pwd) python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 800
 ### Terminal 2: Frontend (Nuxt 3)
 ```bash
 cd frontend
+cp .env.example .env
 npm install
 npm install --save-dev vue-tsc typescript
 echo '{"extends": "./.nuxt/tsconfig.json"}' > tsconfig.json
@@ -266,12 +267,19 @@ npm install
 
 ### B. Variáveis de Ambiente
 
-O arquivo `.env` já está configurado na pasta frontend:
+Configure o arquivo `.env` na pasta frontend:
 
 ```bash
-# .env
-API_BASE_URL=http://localhost:8000
+cd frontend
+
+# Copie o arquivo .env.example para .env
+cp .env.example .env
+
+# O arquivo .env contém:
+# API_BASE_URL=http://localhost:8000
 ```
+
+**Nota:** O arquivo `.env` não está no repositório por segurança. Use `.env.example` como template.
 
 ### C. Execução
 
