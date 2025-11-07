@@ -235,6 +235,30 @@ npm install --save-dev vue-tsc typescript
 npm install --save-dev vue-tsc typescript
 ```
 
+### Problema: Frontend "Failed to resolve import #app-manifest"
+```bash
+# SOLUÇÃO: Limpe cache e reinstale dependências
+rm -rf node_modules .nuxt .output
+npm install
+npm run dev
+
+# OU force a regeneração do Nuxt
+npx nuxt prepare
+npm run dev
+```
+
+### Problema: Frontend "No match found for location with path /register"
+```bash
+# AVISO: Esta é uma mensagem normal - significa que a rota /register não existe
+# O sistema está funcionando corretamente, use /login para acesso
+```
+
+### Problema: Frontend "onMounted is called when there is no active component"
+```bash
+# AVISO: Mensagem de desenvolvimento - não impede o funcionamento
+# O frontend continua operacional normalmente
+```
+
 ### Problema: Porta já em uso
 ```bash
 # Backend: Use porta diferente
