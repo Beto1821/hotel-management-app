@@ -19,6 +19,7 @@ A documentação completa da API, com todos os endpoints e exemplos, está dispo
 
 -   [Acessar a Documentação da API](https://.postman.co/workspace/My-Workspace~75c496ad-81ff-4919-8d8b-2e0ad997a493/collection/23527601-83a0b0f9-5f22-43b5-8e34-6e352bc856b9?action=share&creator=23527601)
 
+https://documenter.postman.com/preview/23527601-83a0b0f9-5f22-43b5-8e34-6e352bc856b9?environment=&versionTag=latest&apiName=CURRENT&version=latest&documentationLayout=classic-double-column&documentationTheme=dark&logo=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&logoDark=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&right-sidebar=303030&top-bar=FFFFFF&highlight=FF6C37&right-sidebar-dark=303030&top-bar-dark=212121&highlight-dark=FF6C37
 ---
 
 # 🚀 Como Executar o Projeto
