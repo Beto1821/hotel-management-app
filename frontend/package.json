@@ -8,11 +8,18 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint --ext .ts,.js,.vue .",
+    "lint:types": "vue-tsc --noEmit"
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.8",
     "@types/node": "^18.19.3",
+  "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-vue": "^9.25.0",
     "nuxt": "^3.8.4",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.1.3"

@@ -13,6 +13,11 @@ O sistema implementa autenticação de usuários via JWT, um CRUD completo para 
 -   **Banco de Dados**: SQLite (desenvolvimento).
 -   **Autenticação**: JWT com OAuth2.
 
+### � Documentação Complementar
+- [`docs/git-workflow.md`](docs/git-workflow.md) — checklist de versionamento e boas práticas de branches/commits.
+- [`docs/maintenance.md`](docs/maintenance.md) — notas de limpeza e auditoria recorrente do repositório.
+- [`docs/releases/v1.0.0.md`](docs/releases/v1.0.0.md) — resumo da versão atual e próximos passos recomendados.
+
 ### 📚 Documentação da API (Postman)
 
 A documentação completa da API, com todos os endpoints e exemplos, está disponível publicamente no Postman:
@@ -359,6 +364,20 @@ npx nuxt dev --port 3000
 
 O Frontend estará acessível em `http://localhost:3000`.
 
+### D. Qualidade de Código (Lint e Tipos)
+
+Como boa prática, execute regularmente as verificações de lint e tipos antes de enviar alterações:
+
+```bash
+# Verificar regras de estilo e padrões do projeto
+npm run lint
+
+# Validar os tipos TypeScript sem gerar arquivos
+npm run lint:types
+```
+
+Se algum erro aparecer, corrija os arquivos indicados até que ambos os comandos terminem sem falhas.
+
 ### D. Verificação de Funcionamento ✅
 
 ```bash
@@ -370,6 +389,12 @@ curl http://localhost:8000/health
 # http://localhost:3000 - deve carregar a página de login
 # http://localhost:8000/docs - documentação da API
 ```
+
+### E. Captura de Tela do Dashboard
+
+A tela abaixo demonstra o dashboard que o usuário visualiza após autenticação bem-sucedida:
+
+![Dashboard do Hotel](frontend/public/Dashboard_hotel.png)
 
 ### E. Logs e Monitoramento
 - **Backend**: Logs aparecem no terminal onde foi executado

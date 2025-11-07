@@ -66,7 +66,7 @@
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
               placeholder="Nome de usuário"
               :disabled="isLoading"
-            />
+            >
           </div>
 
           <!-- Password field -->
@@ -81,7 +81,7 @@
               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
               placeholder="Senha"
               :disabled="isLoading"
-            />
+            >
           </div>
         </div>
 
@@ -93,7 +93,7 @@
               name="remember-me"
               type="checkbox"
               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            />
+            >
             <label for="remember-me" class="ml-2 block text-sm text-gray-900">
               Lembrar de mim
             </label>
@@ -130,8 +130,15 @@
                 fill="none"
                 viewBox="0 0 24 24"
               >
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
               </svg>
             </span>
             {{ isLoading ? 'Entrando...' : 'Entrar' }}
@@ -151,14 +158,16 @@
 
       <!-- Demo credentials -->
       <div class="mt-6 p-4 bg-blue-50 rounded-md">
-        <h3 class="text-sm font-medium text-blue-800 mb-2">Credenciais de teste:</h3>
+        <h3 class="text-sm font-medium text-blue-800 mb-2">
+          Credenciais de teste:
+        </h3>
         <div class="text-xs text-blue-700 space-y-1">
           <p><strong>Usuário:</strong> testuser</p>
           <p><strong>Senha:</strong> 123456</p>
         </div>
         <button
-          @click="fillDemoCredentials"
           class="mt-2 text-xs text-blue-600 hover:text-blue-500 underline"
+          @click="fillDemoCredentials"
         >
           Preencher automaticamente
         </button>
@@ -207,13 +216,12 @@ const handleLogin = async () => {
   try {
     // Chamar a API de login
     const response = await loginRequest(username.value, password.value)
-    
+
     // Salvar o token usando o composable
     login(response.access_token)
-    
+
     // Redirecionar para o dashboard
     await router.push('/')
-    
   } catch (error: any) {
     // Tratar erro de credenciais inválidas
     if (error.status === 401) {
@@ -221,7 +229,6 @@ const handleLogin = async () => {
     } else {
       errorMessage.value = error.data?.detail || 'Ocorreu um erro inesperado. Tente novamente.'
     }
-    console.error('Login failed:', error)
   } finally {
     isLoading.value = false
   }
@@ -234,71 +241,6 @@ onMounted(() => {
     router.replace({ query: {} })
   }
 })
-
-// --- 2. Lógica de Login (Movida para uma função ASYNC separada) ---
-async function loginUser() {
-  // Limpa mensagens anteriores
-  successMessage.value = ''
-  errorMessage.value = ''
-  
-  // Validação básica
-  if (!username.value || !password.value) {
-    errorMessage.value = 'Por favor, preencha todos os campos'
-    return
-  }
-
-  isLoading.value = true
-
-  try {
-    // Obter configuração da API
-    const config = useRuntimeConfig()
-    const baseURL = config.public.apiUrl || 'http://127.0.0.1:8000'
-
-    // Preparar dados do formulário (OAuth2PasswordRequestForm)
-    const formData = new FormData()
-    formData.append('username', username.value)
-    formData.append('password', password.value)
-
-    // Fazer requisição de login usando $fetch
-    const response = await $fetch<{ access_token: string; token_type: string }>(
-      `${baseURL}/api/v1/auth/token`,
-      {
-        method: 'POST',
-        body: formData
-      }
-    )
-
-    // Login bem-sucedido
-    successMessage.value = 'Login realizado com sucesso!'
-    
-    // Salvar token usando o composable
-    // login(response.access_token) // Descomente quando a função login estiver disponível
-
-    // Pequeno delay para mostrar a mensagem de sucesso
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    // Redirecionar para a página inicial
-    await navigateTo('/')
-
-  } catch (error: any) {
-    // Tratamento de erro
-    console.error('Erro no login:', error)
-    
-    // ... Seu bloco de tratamento de erro ...
-    if (error.status === 401) {
-      errorMessage.value = 'Usuário ou senha incorretos'
-    } else if (error.status >= 500) {
-      errorMessage.value = 'Erro interno do servidor. Tente novamente mais tarde.'
-    } else if (error.message) {
-      errorMessage.value = error.data?.detail || error.message
-    } else {
-      errorMessage.value = 'Erro ao fazer login. Verifique sua conexão.'
-    }
-
-  } finally {
-    isLoading.value = false
-  }
-}
 
 // SEO e meta tags
 useHead({

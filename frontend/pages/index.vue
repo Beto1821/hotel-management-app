@@ -14,7 +14,9 @@
               </div>
             </div>
             <div class="ml-4">
-              <h1 class="text-xl font-semibold text-gray-900">Hotel Management</h1>
+              <h1 class="text-xl font-semibold text-gray-900">
+                Hotel Management
+              </h1>
             </div>
           </div>
 
@@ -24,8 +26,8 @@
               Olá, <span class="font-medium">{{ userInfo?.username || 'Usuário' }}</span>
             </span>
             <button
-              @click="handleLogout"
               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              @click="handleLogout"
             >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -41,7 +43,9 @@
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="px-4 py-6 sm:px-0">
-        <h1 class="text-3xl font-bold text-gray-900">Dashboard do Hotel</h1>
+        <h1 class="text-3xl font-bold text-gray-900">
+          Dashboard do Hotel
+        </h1>
         <p class="mt-2 text-sm text-gray-600">
           Bem-vindo ao sistema de gerenciamento de hotel
         </p>
@@ -146,7 +150,9 @@
 
       <!-- Quick Actions -->
       <div class="px-4 py-6 sm:px-0">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Ações Rápidas</h2>
+        <h2 class="text-lg font-medium text-gray-900 mb-4">
+          Ações Rápidas
+        </h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Clientes -->
           <NuxtLink
@@ -162,8 +168,12 @@
                 </div>
               </div>
               <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900">Clientes</h3>
-                <p class="text-sm text-gray-500">Gerenciar clientes do hotel</p>
+                <h3 class="text-lg font-medium text-gray-900">
+                  Clientes
+                </h3>
+                <p class="text-sm text-gray-500">
+                  Gerenciar clientes do hotel
+                </p>
               </div>
             </div>
           </NuxtLink>
@@ -182,8 +192,12 @@
                 </div>
               </div>
               <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900">Agendamentos</h3>
-                <p class="text-sm text-gray-500">Gerenciar reservas e agendamentos</p>
+                <h3 class="text-lg font-medium text-gray-900">
+                  Agendamentos
+                </h3>
+                <p class="text-sm text-gray-500">
+                  Gerenciar reservas e agendamentos
+                </p>
               </div>
             </div>
           </NuxtLink>
@@ -202,8 +216,12 @@
                 </div>
               </div>
               <div class="ml-4">
-                <h3 class="text-lg font-medium text-gray-900">Quartos</h3>
-                <p class="text-sm text-gray-500">Gerenciar quartos e ocupação</p>
+                <h3 class="text-lg font-medium text-gray-900">
+                  Quartos
+                </h3>
+                <p class="text-sm text-gray-500">
+                  Gerenciar quartos e ocupação
+                </p>
               </div>
             </div>
           </NuxtLink>
@@ -212,21 +230,25 @@
 
       <!-- Recent Activity -->
       <div class="px-4 py-6 sm:px-0">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Atividade Recente</h2>
+        <h2 class="text-lg font-medium text-gray-900 mb-4">
+          Atividade Recente
+        </h2>
         <div class="bg-white shadow rounded-lg">
           <div class="px-6 py-4">
             <div class="flow-root">
               <ul class="-mb-8">
                 <li v-for="(activity, index) in recentActivities" :key="index">
                   <div class="relative pb-8" :class="{ 'pb-0': index === recentActivities.length - 1 }">
-                    <span 
+                    <span
                       v-if="index !== recentActivities.length - 1"
                       class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                    ></span>
+                    />
                     <div class="relative flex space-x-3">
                       <div>
-                        <span class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
-                              :class="activity.iconBg">
+                        <span
+                          class="h-8 w-8 rounded-full flex items-center justify-center ring-8 ring-white"
+                          :class="activity.iconBg"
+                        >
                           <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="getIconPath(activity.icon)" />
                           </svg>
@@ -304,8 +326,8 @@ const recentActivities = ref([
 
 // Computed para informações do usuário
 const userInfo = computed(() => {
-  if (!token.value) return null
-  
+  if (!token.value) { return null }
+
   try {
     // Decodificar payload do JWT para obter username
     const payload = JSON.parse(atob(token.value.split('.')[1]))

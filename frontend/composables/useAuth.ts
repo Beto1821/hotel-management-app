@@ -20,7 +20,7 @@ export const useAuth = () => {
   const login = (newToken: string) => {
     // Salvar no estado reativo
     token.value = newToken
-    
+
     // Salvar no localStorage para persistência
     if (typeof window !== 'undefined') {
       localStorage.setItem('auth_token', newToken)
@@ -34,7 +34,7 @@ export const useAuth = () => {
   const logout = () => {
     // Limpar estado reativo
     token.value = null
-    
+
     // Remover do localStorage
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth_token')
@@ -57,17 +57,16 @@ export const useAuth = () => {
    * (Implementação básica - pode ser expandida para verificar expiração)
    */
   const isTokenValid = () => {
-    if (!token.value) return false
-    
+    if (!token.value) { return false }
+
     try {
       // Decodificar payload do JWT (sem verificação de assinatura)
       const payload = JSON.parse(atob(token.value.split('.')[1]))
       const currentTime = Math.floor(Date.now() / 1000)
-      
+
       // Verificar se o token não expirou
       return payload.exp > currentTime
     } catch (error) {
-      console.error('Erro ao validar token:', error)
       return false
     }
   }
@@ -79,11 +78,11 @@ export const useAuth = () => {
   const initializeAuth = () => {
     if (typeof window !== 'undefined') {
       const storedToken = localStorage.getItem('auth_token')
-      
+
       if (storedToken) {
         // Verificar se o token ainda é válido
         token.value = storedToken
-        
+
         if (!isTokenValid()) {
           // Token expirado, fazer logout
           logout()
@@ -107,7 +106,7 @@ export const useAuth = () => {
     // Estado
     token: readonly(token),
     isAuthenticated,
-    
+
     // Funções
     login,
     logout,

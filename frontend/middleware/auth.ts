@@ -2,7 +2,7 @@
  * Middleware de autenticação para Nuxt 3
  * Protege rotas que requerem autenticação
  */
-export default defineNuxtRouteMiddleware((to, from) => {
+export default defineNuxtRouteMiddleware((_to, _from) => {
   // Usar o composable de autenticação
   const { isAuthenticated, token, isTokenValid } = useAuth()
 
@@ -17,7 +17,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     // Token expirado, fazer logout e redirecionar
     const { logout } = useAuth()
     logout()
-    
+
     return navigateTo('/login')
   }
 

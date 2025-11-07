@@ -15,39 +15,39 @@ export const apiClient = async <T = any>(
 ): Promise<T> => {
   // Obter configuração do runtime (variáveis de ambiente)
   const config = useRuntimeConfig()
-  
+
   // Obter token de autenticação usando o composable
   const { getAuthHeader } = useAuth()
-  
+
   // URL base da API
   const baseURL = config.public.apiUrl || 'http://127.0.0.1:8000'
-  
+
   // Construir URL completa
   const url = `${baseURL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`
-  
+
   // Headers padrão
   const defaultHeaders: HeadersInit = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   }
-  
+
   // Adicionar token de autenticação se disponível
   const authHeader = getAuthHeader()
   if (authHeader) {
-    defaultHeaders['Authorization'] = authHeader
+    defaultHeaders.Authorization = authHeader
   }
-  
+
   // Combinar headers
   const headers = {
     ...defaultHeaders,
-    ...options.headers,
+    ...options.headers
   }
-  
+
   // Opções finais da requisição
   const requestOptions = {
     ...options,
-    headers,
+    headers
   } as any
-  
+
   try {
     // Fazer requisição usando $fetch do Nuxt
     const response = await $fetch<T>(url, requestOptions)
@@ -58,13 +58,13 @@ export const apiClient = async <T = any>(
       // Token inválido/expirado, fazer logout
       const { logout } = useAuth()
       logout()
-      
+
       // Redirecionar para login (opcional)
       if (typeof navigateTo !== 'undefined') {
         await navigateTo('/login')
       }
     }
-    
+
     // Re-lançar o erro para tratamento no componente
     throw error
   }
@@ -100,7 +100,7 @@ export const apiPost = <T = any>(
   return apiClient<T>(endpoint, {
     ...options,
     method: 'POST',
-    body: data ? JSON.stringify(data) : undefined,
+    body: data ? JSON.stringify(data) : undefined
   })
 }
 
@@ -118,7 +118,7 @@ export const apiPut = <T = any>(
   return apiClient<T>(endpoint, {
     ...options,
     method: 'PUT',
-    body: data ? JSON.stringify(data) : undefined,
+    body: data ? JSON.stringify(data) : undefined
   })
 }
 
@@ -139,28 +139,22 @@ export const apiDelete = <T = any>(
  * @param username - Nome de usuário
  * @param password - Senha
  */
-export const loginRequest = async (username: string, password: string) => {
+export const loginRequest = (username: string, password: string) => {
   const config = useRuntimeConfig()
   const baseURL = config.public.apiUrl || 'http://127.0.0.1:8000'
-  
+
   // Usar FormData para login (OAuth2PasswordRequestForm)
   const formData = new FormData()
   formData.append('username', username)
   formData.append('password', password)
-  
-  try {
-    const response = await $fetch<{ access_token: string; token_type: string }>(
-      `${baseURL}/api/v1/auth/token`,
-      {
-        method: 'POST',
-        body: formData,
-      }
-    )
-    
-    return response
-  } catch (error) {
-    throw error
-  }
+
+  return $fetch<{ access_token: string; token_type: string }>(
+    `${baseURL}/api/v1/auth/token`,
+    {
+      method: 'POST',
+      body: formData
+    }
+  )
 }
 
 /**
@@ -168,12 +162,11 @@ export const loginRequest = async (username: string, password: string) => {
  * @param username - Nome de usuário
  * @param password - Senha
  */
-export const registerRequest = async (username: string, password: string) => {
-  return apiPost('/api/v1/auth/register', {
+export const registerRequest = (username: string, password: string) =>
+  apiPost('/api/v1/auth/register', {
     username,
-    password,
+    password
   })
-}
 
 // ============================================
 // API de Clientes

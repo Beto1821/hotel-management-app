@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from api.api import api_router
@@ -23,6 +24,18 @@ app = FastAPI(
     description="API para gerenciamento de hotel com autenticação JWT",
     version="1.0.0",
     lifespan=lifespan
+)
+
+# Configurar CORS para permitir chamadas do frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Incluir rotas da API
