@@ -15,7 +15,9 @@ def get_password_hash(password: str) -> str:
     Returns:
         str: Senha hasheada
     """
-    return pwd_context.hash(password)
+    truncated_password = password.encode('utf-8')[:72]
+    return pwd_context.hash(truncated_password)
+
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -29,7 +31,8 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: True se as senhas coincidirem, False caso contrário
     """
-    return pwd_context.verify(plain_password, hashed_password)
+    truncated_plain_password = plain_password.encode('utf-8')[:72]
+    return pwd_context.verify(truncated_plain_password, hashed_password)
 
 
 def authenticate_user(username: str, password: str) -> Optional[dict]:

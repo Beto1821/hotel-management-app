@@ -9,13 +9,13 @@ api_router = APIRouter()
 # Incluir rotas de autenticação
 api_router.include_router(
     auth_router,
-    prefix="/v1/auth",
+    prefix="/auth",
     tags=["auth"]
 )
 
 # Incluir rotas de clientes
 api_router.include_router(
     clients_router,
-    prefix="/v1/clients",
+    prefix="/clients",
     tags=["clients"]
 )

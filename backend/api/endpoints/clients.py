@@ -18,7 +18,7 @@ from services.client_service import ClientService
 
 # Router para clientes
 router = APIRouter(
-    prefix="/clients",
+    # prefix="/clients",
     tags=["clients"],
     dependencies=[Depends(get_current_user)]
 )
