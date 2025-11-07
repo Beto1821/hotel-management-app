@@ -227,7 +227,6 @@ const handleLogin = async () => {
   }
 }
 
-// Verificar se o usuário acabou de se registrar
 onMounted(() => {
   if (route.query.registered === 'true') {
     successMessage.value = 'Registro concluído com sucesso! Faça o login para continuar.'
@@ -235,7 +234,12 @@ onMounted(() => {
     router.replace({ query: {} })
   }
 })
+
+// --- 2. Lógica de Login (Movida para uma função ASYNC separada) ---
+async function loginUser() {
+  // Limpa mensagens anteriores
   successMessage.value = ''
+  errorMessage.value = ''
   
   // Validação básica
   if (!username.value || !password.value) {
@@ -268,7 +272,7 @@ onMounted(() => {
     successMessage.value = 'Login realizado com sucesso!'
     
     // Salvar token usando o composable
-    login(response.access_token)
+    // login(response.access_token) // Descomente quando a função login estiver disponível
 
     // Pequeno delay para mostrar a mensagem de sucesso
     await new Promise(resolve => setTimeout(resolve, 1000))
@@ -277,9 +281,10 @@ onMounted(() => {
     await navigateTo('/')
 
   } catch (error: any) {
-    // Tratar diferentes tipos de erro
+    // Tratamento de erro
     console.error('Erro no login:', error)
     
+    // ... Seu bloco de tratamento de erro ...
     if (error.status === 401) {
       errorMessage.value = 'Usuário ou senha incorretos'
     } else if (error.status >= 500) {
@@ -289,6 +294,7 @@ onMounted(() => {
     } else {
       errorMessage.value = 'Erro ao fazer login. Verifique sua conexão.'
     }
+
   } finally {
     isLoading.value = false
   }
