@@ -11,7 +11,21 @@
 cd frontend
 ```
 
-2. **Instale as dependências:**
+2. **Configure as variáveis de ambiente:**
+```bash
+# Copie o arquivo .env.example para .env
+cp .env.example .env
+
+# Edite o arquivo .env se necessário
+# O valor padrão já está configurado para desenvolvimento local
+```
+
+O arquivo `.env` contém:
+```env
+API_BASE_URL=http://localhost:8000
+```
+
+3. **Instale as dependências:**
 ```bash
 npm install
 # ou
@@ -75,6 +89,27 @@ frontend/
 │   └── api.ts           # Serviços de API
 └── public/              # Arquivos estáticos
 ```
+
+## ⚙️ Configuração de Variáveis de Ambiente
+
+O projeto utiliza variáveis de ambiente para configuração flexível:
+
+### Arquivo .env
+```env
+# URL do backend FastAPI
+API_BASE_URL=http://localhost:8000
+```
+
+### Como Usar
+- Para **desenvolvimento local**: use o valor padrão `http://localhost:8000`
+- Para **produção**: altere para a URL do seu servidor de produção
+- As variáveis são carregadas automaticamente pelo Nuxt 3
+- Acesse via `useRuntimeConfig().public.apiUrl` nos componentes
+
+### Importante
+- O arquivo `.env` está no `.gitignore` e não deve ser commitado
+- Use `.env.example` como referência para criar seu `.env`
+- Nunca commit segredos ou tokens no repositório
 
 ## 🎨 Estilização
 

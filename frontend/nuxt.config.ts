@@ -39,7 +39,7 @@ export default defineNuxtConfig({
     
     // Variáveis públicas (expostas no cliente)
     public: {
-      apiBase: process.env.API_BASE_URL || 'http://localhost:8000',
+      apiUrl: process.env.API_BASE_URL || 'http://localhost:8000',
       appName: 'Hotel Management'
     }
   },
