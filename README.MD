@@ -2,21 +2,86 @@
 
 ## 📖 Descrição do Projeto
 
-O **Hotel Management App** é uma aplicação completa para gerenciamento de hotéis, desenvolvida com tecnologias modernas e arquitetura escalável. O sistema permite o cadastro de usuários, autenticação segura via JWT, e futuramente incluirá funcionalidades para reservas, clientes e inventário de quartos.
+O **Hotel Management App** é uma aplicação full-stack para gerenciamento de hotéis, construída com FastAPI (Python) para o backend e Nuxt 3 (Vue.js) para o frontend.
 
-### 🎯 **Objetivos**
-- Gerenciar reservas de quartos de hotel
-- Controlar cadastro de clientes
-- Sistema de autenticação seguro
-- Interface web moderna e responsiva
-- API REST completa e documentada
+O sistema implementa autenticação de usuários via JWT, um CRUD completo para gerenciamento de clientes e uma suíte de testes automatizados para garantir a estabilidade da API.
 
-### 🏗️ **Arquitetura**
-- **Backend**: FastAPI (Python) com SQLAlchemy e SQLite
-- **Frontend**: Nuxt 3 (Vue 3/TypeScript) - Framework moderno e reativo
-- **Autenticação**: JWT com OAuth2 Bearer e middleware de proteção
-- **Banco de Dados**: SQLite (desenvolvimento) / PostgreSQL (produção)
-- **Estilização**: Tailwind CSS para UI moderna e responsiva
+### 🏗️ Stack Tecnológica
+
+-   **Backend**: Python, FastAPI, SQLAlchemy, Pydantic, Pytest.
+-   **Frontend**: TypeScript, Nuxt 3, Vue 3, Tailwind CSS.
+-   **Banco de Dados**: SQLite (desenvolvimento).
+-   **Autenticação**: JWT com OAuth2.
+
+### 📚 Documentação da API (Postman)
+
+A documentação completa da API, com todos os endpoints e exemplos, está disponível publicamente no Postman:
+
+-   [Acessar a Documentação da API](https://.postman.co/workspace/My-Workspace~75c496ad-81ff-4919-8d8b-2e0ad997a493/collection/23527601-83a0b0f9-5f22-43b5-8e34-6e352bc856b9?action=share&creator=23527601)
+
+---
+
+# 🚀 Como Executar o Projeto
+
+É necessário rodar o Backend e o Frontend em terminais separados.
+
+### 1. Backend (API FastAPI)
+
+```bash
+# Navegue até a pasta do backend
+cd backend
+
+# Crie e ative o ambiente virtual (se for a primeira vez)
+python -m venv .venv
+source .venv/bin/activate
+
+# Instale as dependências
+pip install -r requirements.txt
+
+# Execute o servidor
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+✅ Backend rodando em `http://localhost:8000`.
+-   **Docs Interativos (Swagger)**: `http://localhost:8000/docs`
+
+### 2. Frontend (App Nuxt 3)
+
+```bash
+# Navegue até a pasta do frontend
+cd frontend
+
+# Instale as dependências
+npm install
+
+# Execute o servidor de desenvolvimento
+npm run dev
+```
+
+✅ Frontend rodando em `http://localhost:3000`.
+
+---
+
+## 🧪 Testes Automatizados (Backend)
+
+O projeto utiliza `pytest` para testes de unidade e integração, garantindo a qualidade e a estabilidade da API.
+
+### 1. Instalar Dependências de Teste
+
+```bash
+# No diretório /backend, com o ambiente virtual ativo
+pip install pytest httpx
+```
+
+### 2. Executar os Testes
+
+Para rodar a suíte completa de testes, execute o seguinte comando no diretório `/backend`:
+
+```bash
+pytest
+```
+
+Os testes são executados em um banco de dados em memória, sem afetar seus dados de desenvolvimento.
 
 ---
 
@@ -513,15 +578,7 @@ frontend/
 
 ---
 
-## 📞 Contato
-
-**Desenvolvido por**: [Seu Nome]  
-**GitHub**: [@beto1821uol](https://github.com/beto1821uol)  
-**Email**: beto1821uol.com.br@outlook.com
-
----
-
-## 📈 **Métricas do Projeto**
+##  **Métricas do Projeto**
 
 ### 📊 **Estatísticas Atuais:**
 - **Linguagens**: Python, TypeScript, Vue, CSS

@@ -169,8 +169,9 @@
 
 <script setup lang="ts">
 // Imports e composables
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuth } from '~/composables/useAuth'
+import { loginRequest } from '~/services/apiClient'
 
 // Meta da página
 definePageMeta({
@@ -187,6 +188,8 @@ const successMessage = ref('')
 
 // Composables
 const { login } = useAuth()
+const route = useRoute()
+const router = useRouter()
 
 // Função para preencher credenciais de demonstração
 const fillDemoCredentials = () => {
@@ -198,6 +201,40 @@ const fillDemoCredentials = () => {
 const handleLogin = async () => {
   // Limpar mensagens anteriores
   errorMessage.value = ''
+  successMessage.value = ''
+  isLoading.value = true
+
+  try {
+    // Chamar a API de login
+    const response = await loginRequest(username.value, password.value)
+    
+    // Salvar o token usando o composable
+    login(response.access_token)
+    
+    // Redirecionar para o dashboard
+    await router.push('/')
+    
+  } catch (error: any) {
+    // Tratar erro de credenciais inválidas
+    if (error.status === 401) {
+      errorMessage.value = 'Nome de usuário ou senha incorretos.'
+    } else {
+      errorMessage.value = error.data?.detail || 'Ocorreu um erro inesperado. Tente novamente.'
+    }
+    console.error('Login failed:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+// Verificar se o usuário acabou de se registrar
+onMounted(() => {
+  if (route.query.registered === 'true') {
+    successMessage.value = 'Registro concluído com sucesso! Faça o login para continuar.'
+    // Limpar o parâmetro da URL
+    router.replace({ query: {} })
+  }
+})
   successMessage.value = ''
   
   // Validação básica

@@ -254,7 +254,7 @@ export const updateClient = (id: number, clientData: ClientUpdate) => {
  * @param id - ID do cliente
  */
 export const deleteClient = (id: number) => {
-  return apiDelete(`/api/v1/clients/${id}`)
+  return apiDelete<void>(`/api/v1/clients/${id}`)
 }
 
 /**

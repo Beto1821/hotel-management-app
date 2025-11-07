@@ -482,22 +482,22 @@ const editClient = (client: Client) => {
   showAddForm.value = true
 }
 
-// Excluir cliente
-const removeClient = async (clientId: number) => {
+// Função para remover cliente
+const removeClient = async (id: number) => {
   if (!confirm('Tem certeza que deseja excluir este cliente?')) {
     return
   }
-  
+
+  loading.value = true
   try {
-    await deleteClient(clientId)
+    await deleteClient(id)
+    await loadClients() // Recarregar a lista
     showMessage('success', 'Cliente excluído com sucesso!')
-    
-    // Recarregar lista
-    await loadClients()
-    
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao excluir cliente:', error)
-    showMessage('error', 'Erro ao excluir cliente')
+    showMessage(error.data?.detail || 'Falha ao excluir cliente.', 'error')
+  } finally {
+    loading.value = false
   }
 }
 
