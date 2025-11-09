@@ -1,15 +1,51 @@
-import { ref, computed, onMounted, readonly } from 'vue'
+import { computed, readonly } from 'vue'
+
+const TOKEN_STORAGE_KEY = 'auth_token'
+
+/**
+ * Função auxiliar para validar tokens JWT no lado do cliente.
+ * Retorna true quando o token possui payload com exp no futuro.
+ */
+const isJwtValid = (jwt: string | null): boolean => {
+  if (!jwt || typeof jwt !== 'string') {
+    return false
+  }
+
+  // Em ambiente server-side não há acesso ao window/atob.
+  if (typeof window === 'undefined' || typeof window.atob !== 'function') {
+    return true
+  }
+
+  try {
+    const parts = jwt.split('.')
+    if (parts.length < 2) {
+      return false
+    }
+
+    const payload = JSON.parse(window.atob(parts[1]))
+    const currentTime = Math.floor(Date.now() / 1000)
+
+    return typeof payload.exp === 'number' && payload.exp > currentTime
+  } catch (_error) {
+    return false
+  }
+}
 
 /**
  * Composable para gerenciamento de autenticação
  * Controla o estado do token JWT e funções de login/logout
  */
 export const useAuth = () => {
-  // Estado reativo do token
-  const token = ref<string | null>(null)
+  // Utilizar estado global do Nuxt para compartilhar o token entre componentes
+  const token = useState<string | null>('auth.token', () => null)
+  const initialized = useState<boolean>('auth.initialized', () => false)
 
   // Computed property para verificar se o usuário está autenticado
   const isAuthenticated = computed(() => {
+    if (!initialized.value) {
+      initializeAuth()
+    }
+
     return token.value !== null && token.value.length > 0
   })
 
@@ -20,10 +56,11 @@ export const useAuth = () => {
   const login = (newToken: string) => {
     // Salvar no estado reativo
     token.value = newToken
+    initialized.value = true
 
     // Salvar no localStorage para persistência
     if (typeof window !== 'undefined') {
-      localStorage.setItem('auth_token', newToken)
+      window.localStorage.setItem(TOKEN_STORAGE_KEY, newToken)
     }
   }
 
@@ -34,10 +71,11 @@ export const useAuth = () => {
   const logout = () => {
     // Limpar estado reativo
     token.value = null
+    initialized.value = true
 
     // Remover do localStorage
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token')
+      window.localStorage.removeItem(TOKEN_STORAGE_KEY)
     }
   }
 
@@ -46,6 +84,10 @@ export const useAuth = () => {
    * @returns Token formatado para header Authorization
    */
   const getAuthHeader = () => {
+    if (!initialized.value) {
+      initializeAuth()
+    }
+
     if (token.value) {
       return `Bearer ${token.value}`
     }
@@ -57,49 +99,45 @@ export const useAuth = () => {
    * (Implementação básica - pode ser expandida para verificar expiração)
    */
   const isTokenValid = () => {
-    if (!token.value) { return false }
-
-    try {
-      // Decodificar payload do JWT (sem verificação de assinatura)
-      const payload = JSON.parse(atob(token.value.split('.')[1]))
-      const currentTime = Math.floor(Date.now() / 1000)
-
-      // Verificar se o token não expirou
-      return payload.exp > currentTime
-    } catch (error) {
-      return false
+    if (!initialized.value) {
+      initializeAuth()
     }
+
+    return isJwtValid(token.value)
   }
 
   /**
    * Inicialização do composable
    * Verifica se existe token no localStorage
    */
-  const initializeAuth = () => {
-    if (typeof window !== 'undefined') {
-      const storedToken = localStorage.getItem('auth_token')
+  function initializeAuth(): void {
+    if (initialized.value) {
+      return
+    }
 
-      if (storedToken) {
-        // Verificar se o token ainda é válido
-        token.value = storedToken
+    initialized.value = true
 
-        if (!isTokenValid()) {
-          // Token expirado, fazer logout
-          logout()
-        }
-      }
+    if (typeof window === 'undefined') {
+      token.value = null
+      return
+    }
+
+    const storedToken = window.localStorage.getItem(TOKEN_STORAGE_KEY)
+
+    if (!storedToken) {
+      token.value = null
+      return
+    }
+
+    token.value = storedToken
+
+    if (!isJwtValid(storedToken)) {
+      logout()
     }
   }
 
-  // Inicializar quando o composable for montado
-  onMounted(() => {
-    initializeAuth()
-  })
-
-  // Se não estiver em um contexto de componente, inicializar imediatamente
-  if (typeof window !== 'undefined' && !token.value) {
-    initializeAuth()
-  }
+  // Garantir inicialização imediata quando o composable for utilizado (inclui middlewares)
+  initializeAuth()
 
   // Retornar estado reativo e funções
   return {

@@ -1,6 +1,6 @@
-from typing import List
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -27,11 +27,22 @@ def create_reserva(
 def read_reservas(
     skip: int = 0,
     limit: int = 100,
+    status: Optional[str] = Query(default=None, description="Filtra reservas por status"),
+    mes: Optional[str] = Query(
+        default=None,
+        description="Filtra reservas pelo mês de check-in no formato YYYY-MM",
+    ),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    """Lista todas as reservas."""
-    reservas = reserva_service.get_reservas(db, skip=skip, limit=limit)
+    """Lista reservas com filtros opcionais de status e mês."""
+    reservas = reserva_service.get_reservas(
+        db,
+        skip=skip,
+        limit=limit,
+        status_filter=status,
+        mes=mes,
+    )
     return reservas
 
 

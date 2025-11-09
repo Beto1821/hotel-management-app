@@ -158,19 +158,7 @@
 
       <!-- Demo credentials -->
       <div class="mt-6 p-4 bg-blue-50 rounded-md">
-        <h3 class="text-sm font-medium text-blue-800 mb-2">
-          Credenciais de teste:
-        </h3>
-        <div class="text-xs text-blue-700 space-y-1">
-          <p><strong>Usuário:</strong> testuser</p>
-          <p><strong>Senha:</strong> 123456</p>
-        </div>
-        <button
-          class="mt-2 text-xs text-blue-600 hover:text-blue-500 underline"
-          @click="fillDemoCredentials"
-        >
-          Preencher automaticamente
-        </button>
+       
       </div>
     </div>
   </div>

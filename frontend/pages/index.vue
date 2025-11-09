@@ -149,7 +149,7 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Clientes -->
           <NuxtLink
-            to="/clientes"
+            to="/clients"
             class="block p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
           >
             <div class="flex items-center">
@@ -236,7 +236,7 @@
                       v-if="index !== recentActivities.length - 1"
                       class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
                       aria-hidden="true"
-                    ></span>
+                     />
                     <div class="relative flex space-x-3">
                       <div>
                         <span

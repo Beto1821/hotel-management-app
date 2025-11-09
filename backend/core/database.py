@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
 from typing import Generator
 from models.base import Base
@@ -36,3 +36,62 @@ def create_tables():
     Esta função deve ser chamada na inicialização da aplicação.
     """
     Base.metadata.create_all(bind=engine)
+    _apply_sqlite_schema_patches()
+
+
+def _apply_sqlite_schema_patches():
+    """Aplica ajustes pontuais para colunas adicionadas sem migração formal."""
+    with engine.begin() as conn:
+        columns = {
+            row[1]
+            for row in conn.execute(text("PRAGMA table_info(quartos)"))
+        }
+
+        if "status" not in columns:
+            conn.execute(
+                text(
+                    "ALTER TABLE quartos ADD COLUMN status VARCHAR(50) "
+                    "DEFAULT 'disponivel'"
+                )
+            )
+            conn.execute(
+                text(
+                    "UPDATE quartos SET status = 'disponivel' "
+                    "WHERE status IS NULL"
+                )
+            )
+
+        if "capacidade" not in columns:
+            conn.execute(
+                text(
+                    "ALTER TABLE quartos ADD COLUMN capacidade INTEGER "
+                    "DEFAULT 1"
+                )
+            )
+            conn.execute(
+                text(
+                    "UPDATE quartos SET capacidade = 1 "
+                    "WHERE capacidade IS NULL"
+                )
+            )
+
+        if "valor_diaria" not in columns:
+            conn.execute(
+                text(
+                    "ALTER TABLE quartos ADD COLUMN valor_diaria FLOAT "
+                    "DEFAULT 0"
+                )
+            )
+            conn.execute(
+                text(
+                    "UPDATE quartos SET valor_diaria = 0 "
+                    "WHERE valor_diaria IS NULL"
+                )
+            )
+
+        if "descricao" not in columns:
+            conn.execute(
+                text(
+                    "ALTER TABLE quartos ADD COLUMN descricao TEXT"
+                )
+            )

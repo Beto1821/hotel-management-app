@@ -43,7 +43,7 @@
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <!-- Page Header -->
       <div class="px-4 py-6 sm:px-0">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h1 class="text-3xl font-bold text-gray-900">
               Clientes
@@ -52,15 +52,41 @@
               Gerencie os clientes do hotel
             </p>
           </div>
-          <button
-            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            @click="showAddForm = true"
-          >
-            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            Adicionar Cliente
-          </button>
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div class="relative">
+              <label class="sr-only" for="search-clients">Buscar clientes</label>
+              <input
+                id="search-clients"
+                v-model="searchTerm"
+                type="search"
+                class="input-field pl-10 pr-9 w-full sm:w-72"
+                placeholder="Buscar por nome ou email"
+              >
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+              </svg>
+              <button
+                v-if="searchTerm"
+                type="button"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                aria-label="Limpar busca"
+                @click="searchTerm = ''"
+              >
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <button
+              class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              @click="showAddForm = true"
+            >
+              <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              Adicionar Cliente
+            </button>
+          </div>
         </div>
       </div>
 
@@ -201,10 +227,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
             </svg>
             <h3 class="mt-2 text-sm font-medium text-gray-900">
-              Nenhum cliente cadastrado
+              {{ searchTerm ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado' }}
             </h3>
             <p class="mt-1 text-sm text-gray-500">
-              Comece adicionando o primeiro cliente do hotel.
+              {{ searchTerm ? 'Tente ajustar sua busca para encontrar o cliente desejado.' : 'Comece adicionando o primeiro cliente do hotel.' }}
             </p>
             <div class="mt-6">
               <button
@@ -371,19 +397,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useAuth } from '~/composables/useAuth'
 import {
   getClients,
   createClient,
   updateClient,
   deleteClient,
+  searchClients,
   type Client
 } from '~/services/apiClient'
 
 // Meta da página - protegida por middleware de auth
 definePageMeta({
-  middleware: ['auth']
+  middleware: ['auth'],
+  alias: ['/clientes']
 })
 
 // Interface local para o formulário
@@ -404,6 +432,7 @@ const loadingClients = ref(true)
 const loading = ref(false)
 const showAddForm = ref(false)
 const editingClient = ref<Client | null>(null)
+const searchTerm = ref('')
 
 // Formulário
 const form = ref<ClientForm>({
@@ -436,11 +465,13 @@ const showMessage = (type: 'success' | 'error', text: string) => {
 
 // Carregar lista de clientes
 const loadClients = async () => {
+  const query = searchTerm.value.trim()
   try {
     loadingClients.value = true
 
-    // Implementação real com API
-    const response = await getClients(0, 100)
+    const response = query
+      ? await searchClients(query)
+      : await getClients(0, 100)
     clients.value = response
   } catch (error) {
     showMessage('error', 'Erro ao carregar lista de clientes')
@@ -542,6 +573,18 @@ const handleLogout = async () => {
 // Carregar clientes ao montar o componente
 onMounted(() => {
   loadClients()
+})
+
+// Buscar automaticamente quando termo de busca mudar (com pequena espera)
+let searchDebounce: ReturnType<typeof setTimeout> | null = null
+watch(searchTerm, (_value) => {
+  if (searchDebounce) {
+    clearTimeout(searchDebounce)
+  }
+
+  searchDebounce = setTimeout(async () => {
+    await loadClients()
+  }, 400)
 })
 
 // SEO e meta tags
