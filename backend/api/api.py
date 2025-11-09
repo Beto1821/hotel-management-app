@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from api.endpoints.auth import router as auth_router
 from api.endpoints.clients import router as clients_router
+from api.endpoints.reservas import router as reservas_router
 
 # Criar router principal da API
 api_router = APIRouter()
@@ -18,4 +19,11 @@ api_router.include_router(
     clients_router,
     prefix="/clients",
     tags=["clients"]
+)
+
+# Incluir rotas de reservas
+api_router.include_router(
+    reservas_router,
+    prefix="/reservas",
+    tags=["reservas"],
 )

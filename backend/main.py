@@ -46,7 +46,7 @@ app.include_router(api_router, prefix="/api/v1")
 def read_root():
     """
     Endpoint raiz da API.
-    
+
     Returns:
         dict: Mensagem de boas-vindas
     """
@@ -62,7 +62,7 @@ def read_root():
 def health_check():
     """
     Endpoint de verificação de saúde da API.
-    
+
     Returns:
         dict: Status da aplicação
     """

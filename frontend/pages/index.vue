@@ -17,42 +17,35 @@
               <h1 class="text-xl font-semibold text-gray-900">
                 Hotel Management
               </h1>
+              <p v-if="userInfo" class="text-sm text-gray-500">
+                Olá, {{ userInfo.username }}
+              </p>
             </div>
           </div>
 
-          <!-- User Menu -->
-          <div class="flex items-center space-x-4">
-            <span class="text-sm text-gray-600">
-              Olá, <span class="font-medium">{{ userInfo?.username || 'Usuário' }}</span>
-            </span>
-            <button
-              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              @click="handleLogout"
-            >
-              <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
-              Sair
-            </button>
-          </div>
+          <button
+            type="button"
+            class="text-sm font-medium text-blue-600 hover:text-blue-800"
+            @click="handleLogout"
+          >
+            Sair
+          </button>
         </div>
       </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <!-- Page Header -->
-      <div class="px-4 py-6 sm:px-0">
+      <header class="px-4 sm:px-0">
         <h1 class="text-3xl font-bold text-gray-900">
           Dashboard do Hotel
         </h1>
         <p class="mt-2 text-sm text-gray-600">
           Bem-vindo ao sistema de gerenciamento de hotel
         </p>
-      </div>
+      </header>
 
       <!-- Stats Cards -->
-      <div class="px-4 py-6 sm:px-0">
+      <section class="px-4 py-6 sm:px-0">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           <!-- Total de Clientes -->
           <div class="bg-white overflow-hidden shadow rounded-lg">
@@ -92,7 +85,7 @@
                       Reservas Ativas
                     </dt>
                     <dd class="text-lg font-medium text-gray-900">
-                      {{ stats.activeReservations }}
+                      {{ stats.activeReservas }}
                     </dd>
                   </dl>
                 </div>
@@ -146,10 +139,10 @@
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
       <!-- Quick Actions -->
-      <div class="px-4 py-6 sm:px-0">
+      <section class="px-4 py-6 sm:px-0">
         <h2 class="text-lg font-medium text-gray-900 mb-4">
           Ações Rápidas
         </h2>
@@ -178,9 +171,9 @@
             </div>
           </NuxtLink>
 
-          <!-- Agendamentos -->
+          <!-- Reservas -->
           <NuxtLink
-            to="/agendamentos"
+            to="/reservas"
             class="block p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
           >
             <div class="flex items-center">
@@ -193,10 +186,10 @@
               </div>
               <div class="ml-4">
                 <h3 class="text-lg font-medium text-gray-900">
-                  Agendamentos
+                  Reservas
                 </h3>
                 <p class="text-sm text-gray-500">
-                  Gerenciar reservas e agendamentos
+                  Gerenciar reservas e hospedagens
                 </p>
               </div>
             </div>
@@ -226,10 +219,10 @@
             </div>
           </NuxtLink>
         </div>
-      </div>
+      </section>
 
       <!-- Recent Activity -->
-      <div class="px-4 py-6 sm:px-0">
+      <section class="px-4 py-6 sm:px-0">
         <h2 class="text-lg font-medium text-gray-900 mb-4">
           Atividade Recente
         </h2>
@@ -242,7 +235,8 @@
                     <span
                       v-if="index !== recentActivities.length - 1"
                       class="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-                    />
+                      aria-hidden="true"
+                    ></span>
                     <div class="relative flex space-x-3">
                       <div>
                         <span
@@ -271,7 +265,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </main>
   </div>
 </template>
@@ -291,7 +285,7 @@ const { logout, token } = useAuth()
 // Estados reativos
 const stats = ref({
   totalClients: 45,
-  activeReservations: 12,
+  activeReservas: 12,
   occupiedRooms: 8,
   totalRooms: 20,
   monthlyRevenue: 25800

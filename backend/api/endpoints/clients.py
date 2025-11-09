@@ -10,8 +10,8 @@ from core.database import get_db
 from dependencies.auth import get_current_user
 from models.user_model import User
 from schemas.client_schemas import (
-    ClientCreate, 
-    ClientUpdate, 
+    ClientCreate,
+    ClientUpdate,
     ClientResponse
 )
 from services.client_service import ClientService
@@ -24,7 +24,7 @@ router = APIRouter(
 )
 
 
-@router.post("/", response_model=ClientResponse, 
+@router.post("/", response_model=ClientResponse,
              status_code=status.HTTP_201_CREATED)
 async def create_client(
     client_data: ClientCreate,

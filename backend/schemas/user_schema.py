@@ -23,7 +23,7 @@ class User(UserBase):
     Herda de UserBase e adiciona o campo id.
     """
     id: int
-    
+
     model_config = {"from_attributes": True}
 
 

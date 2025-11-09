@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+
 def test_register_user(test_client: TestClient):
     """
     Testa o registro de um novo usuário.
@@ -23,7 +24,7 @@ def test_login_for_access_token(test_client: TestClient):
         "/api/v1/auth/register",
         json={"username": "loginuser", "password": "loginpassword"},
     )
-    
+
     # Agora, tenta fazer o login
     response = test_client.post(
         "/api/v1/auth/token",

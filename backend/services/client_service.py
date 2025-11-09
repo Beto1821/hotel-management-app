@@ -12,7 +12,7 @@ from schemas.client_schemas import ClientCreate, ClientUpdate
 
 class ClientService:
     """Serviço para operações CRUD de clientes"""
-    
+
     @staticmethod
     def create_client(db: Session, client_data: ClientCreate) -> Client:
         """
@@ -33,43 +33,43 @@ class ClientService:
         except IntegrityError:
             db.rollback()
             raise ValueError("Email ou documento já cadastrado")
-    
+
     @staticmethod
     def get_client(db: Session, client_id: int) -> Optional[Client]:
         """
         Busca um cliente por ID
         """
         return db.query(Client).filter(Client.id == client_id).first()
-    
+
     @staticmethod
     def get_client_by_email(db: Session, email: str) -> Optional[Client]:
         """
         Busca um cliente por email
         """
         return db.query(Client).filter(Client.email == email).first()
-    
+
     @staticmethod
     def get_client_by_document(db: Session, document: str) -> Optional[Client]:
         """
         Busca um cliente por documento
         """
         return db.query(Client).filter(Client.document == document).first()
-    
+
     @staticmethod
     def get_clients(
-        db: Session, 
-        skip: int = 0, 
+        db: Session,
+        skip: int = 0,
         limit: int = 100
     ) -> List[Client]:
         """
         Lista todos os clientes com paginação
         """
         return db.query(Client).offset(skip).limit(limit).all()
-    
+
     @staticmethod
     def update_client(
-        db: Session, 
-        client_id: int, 
+        db: Session,
+        client_id: int,
         client_data: ClientUpdate
     ) -> Optional[Client]:
         """
@@ -78,12 +78,12 @@ class ClientService:
         db_client = db.query(Client).filter(Client.id == client_id).first()
         if not db_client:
             return None
-        
+
         # Atualizar apenas campos fornecidos
         update_data = client_data.dict(exclude_unset=True)
         for field, value in update_data.items():
             setattr(db_client, field, value)
-        
+
         try:
             db.commit()
             db.refresh(db_client)
@@ -91,7 +91,7 @@ class ClientService:
         except IntegrityError:
             db.rollback()
             raise ValueError("Email ou documento já cadastrado")
-    
+
     @staticmethod
     def delete_client(db: Session, client_id: int) -> bool:
         """
@@ -100,16 +100,16 @@ class ClientService:
         db_client = db.query(Client).filter(Client.id == client_id).first()
         if not db_client:
             return False
-        
+
         db.delete(db_client)
         db.commit()
         return True
-    
+
     @staticmethod
     def search_clients(
-        db: Session, 
-        query: str, 
-        skip: int = 0, 
+        db: Session,
+        query: str,
+        skip: int = 0,
         limit: int = 100
     ) -> List[Client]:
         """
@@ -118,7 +118,7 @@ class ClientService:
         return (
             db.query(Client)
             .filter(
-                (Client.name.ilike(f"%{query}%")) | 
+                (Client.name.ilike(f"%{query}%")) |
                 (Client.email.ilike(f"%{query}%"))
             )
             .offset(skip)

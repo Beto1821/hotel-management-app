@@ -1,0 +1,3 @@
+[flake8]
+exclude = .venv,source
+max-line-length = 120

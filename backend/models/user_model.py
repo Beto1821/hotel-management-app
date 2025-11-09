@@ -1,18 +1,18 @@
-from sqlalchemy import Column, Integer, String
+"""Modelo ORM para usuários da aplicação."""
+
+from typing import ClassVar
+
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
+
 from models.base import Base
 
 
 class User(Base):
-    """
-    Modelo SQLAlchemy para representar usuários do sistema.
-    
-    Attributes:
-        id: Chave primária do usuário
-        username: Nome de usuário único
-        hashed_password: Senha hasheada do usuário
-    """
-    __tablename__ = "users"
-    
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, nullable=False, index=True)
-    hashed_password = Column(String, nullable=False)
+    """Representa um usuário autenticável do sistema."""
+
+    __tablename__: ClassVar[str] = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    username: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)

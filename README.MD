@@ -30,6 +30,8 @@ A documentação completa da API, com todos os endpoints e exemplos, está dispo
 
 É necessário rodar o Backend e o Frontend em terminais separados.
 
+> **Nota:** mantenha o ambiente virtual apenas dentro da pasta `backend` (por exemplo, `backend/.venv`). A raiz do repositório não deve conter virtualenv ativa.
+
 ### 1. Backend (API FastAPI)
 
 ```bash
