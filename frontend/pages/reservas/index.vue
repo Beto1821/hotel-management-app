@@ -448,8 +448,25 @@ const filteredReservations = computed(() => {
   })
 })
 
+// Utilidades de data com parsing robusto (evita "Invalid Date" e problemas de timezone)
+function parseYMDToDateUTC(value: string): Date | null {
+  if (!value || typeof value !== 'string') return null
+  // Aceita 'YYYY-MM-DD' e ISO
+  const ymdMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (ymdMatch) {
+    const y = Number(ymdMatch[1])
+    const m = Number(ymdMatch[2])
+    const d = Number(ymdMatch[3])
+    return new Date(Date.UTC(y, m - 1, d))
+  }
+  const d = new Date(value)
+  return isNaN(d.getTime()) ? null : d
+}
+
 function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString('pt-BR', {
+  const d = parseYMDToDateUTC(value)
+  if (!d) return 'Data inválida'
+  return d.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric'
@@ -474,9 +491,11 @@ function formatCurrency(value: number): string {
 }
 
 function quantidadeNoites(checkin: string, checkout: string): number {
-  const start = new Date(checkin)
-  const end = new Date(checkout)
-  return Math.max(1, Math.round((end.getTime() - start.getTime()) / 86_400_000))
+  const start = parseYMDToDateUTC(checkin)
+  const end = parseYMDToDateUTC(checkout)
+  if (!start || !end) return 0
+  const diff = end.getTime() - start.getTime()
+  return Math.max(1, Math.round(diff / 86_400_000))
 }
 
 function statusBadgeClass(status: string): string {
