@@ -1,8 +1,13 @@
+import os
+
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
+
+# Garantir que a aplicação use o banco de dados em memória durante os testes
+os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
 
 from main import app
 from models.base import Base

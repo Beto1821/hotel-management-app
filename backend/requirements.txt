@@ -7,3 +7,4 @@ passlib[bcrypt]  # Para hashing de senhas
 python-jose[cryptography] # Para JWT (Autenticação)
 ruff
 flake8
+pymysql

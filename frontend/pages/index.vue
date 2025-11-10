@@ -131,7 +131,7 @@
                       Receita do Mês
                     </dt>
                     <dd class="text-lg font-medium text-gray-900">
-                      R$ {{ stats.monthlyRevenue.toLocaleString() }}
+                      {{ formatCurrency(stats.monthlyRevenue) }}
                     </dd>
                   </dl>
                 </div>
@@ -228,9 +228,18 @@
         </h2>
         <div class="bg-white shadow rounded-lg">
           <div class="px-6 py-4">
-            <div class="flow-root">
+            <div v-if="isLoading" class="text-sm text-gray-500">
+              Carregando dashboard...
+            </div>
+            <div v-else-if="errorMessage" class="text-sm text-red-500">
+              {{ errorMessage }}
+            </div>
+            <div v-else-if="recentActivities.length === 0" class="text-sm text-gray-500">
+              Nenhuma atividade recente disponível.
+            </div>
+            <div v-else class="flow-root">
               <ul class="-mb-8">
-                <li v-for="(activity, index) in recentActivities" :key="index">
+                <li v-for="(activity, index) in recentActivities" :key="activity.id">
                   <div class="relative pb-8" :class="{ 'pb-0': index === recentActivities.length - 1 }">
                     <span
                       v-if="index !== recentActivities.length - 1"
@@ -255,7 +264,7 @@
                           </p>
                         </div>
                         <div class="text-right text-sm whitespace-nowrap text-gray-500">
-                          {{ activity.time }}
+                          {{ activity.relativeTime }}
                         </div>
                       </div>
                     </div>
@@ -271,59 +280,161 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useAuth } from '~/composables/useAuth'
+import { getDashboardSummary, type DashboardActivityResponse } from '~/services/apiClient'
 
 // Meta da página - protegida por middleware de auth
 definePageMeta({
   middleware: ['auth']
 })
 
+interface DashboardStatsView {
+  totalClients: number
+  activeReservas: number
+  occupiedRooms: number
+  totalRooms: number
+  monthlyRevenue: number
+}
+
+interface ActivityCard {
+  id: number
+  description: string
+  relativeTime: string
+  icon: string
+  iconBg: string
+}
+
+const createInitialStats = (): DashboardStatsView => ({
+  totalClients: 0,
+  activeReservas: 0,
+  occupiedRooms: 0,
+  totalRooms: 0,
+  monthlyRevenue: 0
+})
+
 // Composables
 const { logout, token } = useAuth()
 
 // Estados reativos
-const stats = ref({
-  totalClients: 45,
-  activeReservas: 12,
-  occupiedRooms: 8,
-  totalRooms: 20,
-  monthlyRevenue: 25800
+const stats = ref<DashboardStatsView>(createInitialStats())
+const recentActivities = ref<ActivityCard[]>([])
+const isLoading = ref(false)
+const errorMessage = ref<string | null>(null)
+
+const relativeTimeFormatter = new Intl.RelativeTimeFormat('pt-BR', {
+  numeric: 'auto'
 })
 
-const recentActivities = ref([
-  {
-    description: 'Nova reserva criada para João Silva - Quarto 105',
-    time: '2 min atrás',
-    icon: 'calendar',
-    iconBg: 'bg-green-500'
-  },
-  {
-    description: 'Check-out realizado - Maria Santos - Quarto 203',
-    time: '1 hora atrás',
-    icon: 'user',
-    iconBg: 'bg-blue-500'
-  },
-  {
-    description: 'Novo cliente cadastrado - Pedro Oliveira',
-    time: '3 horas atrás',
-    icon: 'user-plus',
-    iconBg: 'bg-purple-500'
-  },
-  {
-    description: 'Manutenção concluída no Quarto 301',
-    time: '1 dia atrás',
-    icon: 'wrench',
-    iconBg: 'bg-yellow-500'
+const eventIconMap: Record<string, { icon: string; iconBg: string }> = {
+  reserva_confirmada: { icon: 'calendar', iconBg: 'bg-green-500' },
+  reserva_cancelada: { icon: 'cancel', iconBg: 'bg-red-500' },
+  default: { icon: 'calendar', iconBg: 'bg-blue-500' }
+}
+
+const formatCurrency = (value: number) => {
+  const safeValue = Number.isFinite(value) ? value : 0
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2
+  }).format(safeValue)
+}
+
+const formatRelativeTime = (dateString: string) => {
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) {
+    return ''
   }
-])
+
+  const diffSeconds = (date.getTime() - Date.now()) / 1000
+  const DIVISIONS: { amount: number; unit: Intl.RelativeTimeFormatUnit }[] = [
+    { amount: 60, unit: 'second' },
+    { amount: 60, unit: 'minute' },
+    { amount: 24, unit: 'hour' },
+    { amount: 7, unit: 'day' },
+    { amount: 4.34524, unit: 'week' },
+    { amount: 12, unit: 'month' },
+    { amount: Infinity, unit: 'year' }
+  ]
+
+  let duration = diffSeconds
+  for (const division of DIVISIONS) {
+    if (Math.abs(duration) < division.amount) {
+      return relativeTimeFormatter.format(
+        Math.round(duration),
+        division.unit
+      )
+    }
+    duration /= division.amount
+  }
+
+  return ''
+}
+
+const transformActivity = (activity: DashboardActivityResponse): ActivityCard => {
+  const iconMeta = eventIconMap[activity.event_type] ?? eventIconMap.default
+
+  return {
+    id: activity.id,
+    description: activity.description,
+    relativeTime: formatRelativeTime(activity.created_at),
+    icon: iconMeta.icon,
+    iconBg: iconMeta.iconBg
+  }
+}
+
+const resetDashboardState = () => {
+  stats.value = createInitialStats()
+  recentActivities.value = []
+  errorMessage.value = null
+}
+
+const loadDashboard = async () => {
+  if (!token.value) {
+    return
+  }
+
+  isLoading.value = true
+  errorMessage.value = null
+
+  try {
+    const data = await getDashboardSummary()
+
+    stats.value = {
+      totalClients: data.stats.total_clients,
+      activeReservas: data.stats.active_reservas,
+      occupiedRooms: data.stats.occupied_rooms,
+      totalRooms: data.stats.total_rooms,
+      monthlyRevenue: data.stats.monthly_revenue
+    }
+
+    recentActivities.value = data.recent_activities.map(transformActivity)
+  } catch (error) {
+    console.error('Erro ao carregar dashboard', error)
+    errorMessage.value = 'Não foi possível carregar os dados do dashboard.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watch(
+  token,
+  (newToken) => {
+    if (newToken) {
+      loadDashboard()
+    } else {
+      resetDashboardState()
+    }
+  },
+  { immediate: true }
+)
 
 // Computed para informações do usuário
 const userInfo = computed(() => {
   if (!token.value) { return null }
 
   try {
-    // Decodificar payload do JWT para obter username
     const payload = JSON.parse(atob(token.value.split('.')[1]))
     return {
       username: payload.sub
@@ -337,16 +448,18 @@ const userInfo = computed(() => {
 const getIconPath = (iconType: string) => {
   const paths = {
     calendar: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+    cancel: 'M6 18L18 6M6 6l12 12',
     user: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
     'user-plus': 'M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-12a4 4 0 110-8 4 4 0 010 8zm6 0v6m3-3h-6',
     wrench: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z M15 12a3 3 0 11-6 0 3 3 0 016 0z'
   }
-  return paths[iconType as keyof typeof paths] || paths.user
+  return paths[iconType as keyof typeof paths] || paths.calendar
 }
 
 // Função de logout
 const handleLogout = async () => {
   logout()
+  resetDashboardState()
   await navigateTo('/login')
 }
 

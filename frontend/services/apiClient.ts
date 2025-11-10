@@ -169,6 +169,35 @@ export const registerRequest = (username: string, password: string) =>
   })
 
 // ============================================
+// API de Dashboard
+// ============================================
+
+export interface DashboardStatsResponse {
+  total_clients: number
+  active_reservas: number
+  occupied_rooms: number
+  total_rooms: number
+  monthly_revenue: number
+}
+
+export interface DashboardActivityResponse {
+  id: number
+  description: string
+  status: string
+  event_type: string
+  created_at: string
+}
+
+export interface DashboardSummaryResponse {
+  stats: DashboardStatsResponse
+  recent_activities: DashboardActivityResponse[]
+}
+
+export const getDashboardSummary = () => {
+  return apiGet<DashboardSummaryResponse>('/api/v1/dashboard/')
+}
+
+// ============================================
 // API de Clientes
 // ============================================
 

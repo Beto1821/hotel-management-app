@@ -14,8 +14,8 @@
   },
   "devDependencies": {
     "@nuxt/devtools": "^1.0.8",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@types/node": "^18.19.3",
-  "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -30,6 +30,7 @@
     "@nuxtjs/tailwindcss": "^6.8.4",
     "@pinia/nuxt": "^0.5.1",
     "pinia": "^2.1.7",
+    "v-money3": "^3.24.1",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5"
   }

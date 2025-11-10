@@ -169,9 +169,7 @@
               <input
                 id="valor_diaria"
                 v-model="form.valor_diaria"
-                type="number"
-                min="0"
-                step="0.01"
+                v-money3="moneyConfig"
                 class="mt-1 input-field"
                 required
               >
@@ -502,7 +500,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch, reactive } from 'vue'
 import { useAuth } from '~/composables/useAuth'
 import {
   createRoom,
@@ -515,6 +513,7 @@ import {
   type RoomCreate,
   type RoomUpdate
 } from '~/services/apiClient'
+import { VMoney3 } from 'v-money3'
 
 definePageMeta({
   middleware: ['auth'],
@@ -541,7 +540,16 @@ type RoomFormState = {
   descricao: string
 }
 
-const form = ref<RoomFormState>({
+const moneyConfig = {
+  decimal: ',',
+  thousands: '.',
+  prefix: 'R$ ',
+  suffix: '',
+  precision: 2,
+  masked: false,
+}
+
+const form = reactive<RoomFormState>({
   numero: '',
   tipo: '',
   status: 'disponivel',
@@ -656,13 +664,18 @@ async function fetchCalendar() {
 }
 
 async function submitForm() {
-  if (!form.value.numero || !form.value.tipo || !form.value.valor_diaria) {
+  if (!form.numero || !form.tipo || !form.valor_diaria) {
     showMessage('error', 'Preencha os campos obrigatórios.')
     return
   }
 
-  const capacidadeValue = Number(form.value.capacidade) || 1
-  const valorDiariaNumber = Number(form.value.valor_diaria)
+  const capacidadeValue = Number(form.capacidade) || 1
+  const valorDiariaNumber = Number(
+    String(form.valor_diaria)
+      .replace(/[R$\s]/g, '') // remove R$ e espaços
+      .replace('.', '')        // remove separador de milhar
+      .replace(',', '.')
+  )
 
   if (!Number.isFinite(valorDiariaNumber) || valorDiariaNumber <= 0) {
     showMessage('error', 'Informe um valor de diária válido.')
@@ -670,12 +683,12 @@ async function submitForm() {
   }
 
   const basePayload = {
-    numero: form.value.numero.trim(),
-    tipo: form.value.tipo.trim(),
-    status: form.value.status,
+    numero: form.numero.trim(),
+    tipo: form.tipo.trim(),
+    status: form.status,
     capacidade: capacidadeValue,
     valor_diaria: valorDiariaNumber,
-    descricao: form.value.descricao.trim() ? form.value.descricao.trim() : undefined
+    descricao: form.descricao.trim() ? form.descricao.trim() : undefined
   }
 
   try {
@@ -696,21 +709,17 @@ async function submitForm() {
   } catch (error: any) {
     const detail = error?.data?.detail || 'Erro ao salvar quarto.'
     showMessage('error', detail)
-  } finally {
-    loading.value = false
   }
 }
 
 function editRoom(room: Room) {
   editingRoom.value = room
-  form.value = {
-    numero: room.numero,
-    tipo: room.tipo,
-    status: room.status,
-    capacidade: room.capacidade,
-    valor_diaria: room.valor_diaria,
-    descricao: room.descricao ?? ''
-  }
+  form.numero = room.numero
+  form.tipo = room.tipo
+  form.status = room.status
+  form.capacidade = room.capacidade
+  form.valor_diaria = room.valor_diaria
+  form.descricao = room.descricao || ''
   showForm.value = true
 }
 
@@ -736,14 +745,12 @@ async function removeRoom(id: number) {
 function cancelForm() {
   showForm.value = false
   editingRoom.value = null
-  form.value = {
-    numero: '',
-    tipo: '',
-    status: 'disponivel',
-    capacidade: 1,
-    valor_diaria: '',
-    descricao: ''
-  }
+  form.numero = ''
+  form.tipo = ''
+  form.status = 'disponivel'
+  form.capacidade = ''
+  form.valor_diaria = ''
+  form.descricao = ''
 }
 
 function handleLogout() {
