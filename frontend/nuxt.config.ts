@@ -16,6 +16,13 @@ export default defineNuxtConfig({
     '~/assets/css/main.css'
   ],
 
+  // Configuração do Tailwind
+  tailwindcss: {
+    config: {
+      darkMode: 'class'
+    }
+  },
+
   // Configuração de TypeScript
   typescript: {
     strict: true,

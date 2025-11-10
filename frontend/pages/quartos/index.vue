@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <nav class="bg-white shadow-sm border-b border-gray-200">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
@@ -11,7 +11,7 @@
                 </svg>
               </div>
               <div class="ml-4">
-                <h1 class="text-xl font-semibold text-gray-900">
+                <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Gestão de Quartos
                 </h1>
               </div>
@@ -19,11 +19,12 @@
           </div>
 
           <div class="flex items-center space-x-4">
-            <NuxtLink to="/" class="text-sm text-purple-600 hover:text-purple-800">
+            <NuxtLink to="/" class="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300">
               ← Voltar ao Dashboard
             </NuxtLink>
+            <ThemeToggle />
             <button
-              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-700 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-purple-500"
               @click="handleLogout"
             >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,10 +41,10 @@
       <div class="px-4 py-6 sm:px-0">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
               Quartos
             </h1>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Controle o inventário de quartos e acompanhe a ocupação
             </p>
           </div>
@@ -63,7 +64,7 @@
               <button
                 v-if="searchTerm"
                 type="button"
-                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                 aria-label="Limpar busca"
                 @click="searchTerm = ''"
               >
@@ -101,12 +102,12 @@
       </div>
 
       <div v-if="showForm" class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-medium text-gray-900">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
               {{ editingRoom ? 'Editar Quarto' : 'Novo Quarto' }}
             </h2>
-            <button class="text-gray-400 hover:text-gray-600" @click="cancelForm">
+            <button class="text-gray-400 hover:text-gray-600 dark:text-gray-400" @click="cancelForm">
               <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -189,7 +190,7 @@
             <div class="sm:col-span-2 flex justify-end space-x-3">
               <button
                 type="button"
-                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
                 @click="cancelForm"
               >
                 Cancelar
@@ -211,7 +212,7 @@
       </div>
 
       <div class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
           <div v-if="loadingRooms" class="p-8 text-center">
             <div class="inline-flex items-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24">
@@ -226,10 +227,10 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m12-6l-4-4-4 4" />
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">
+            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
               {{ searchTerm || statusFilter !== 'todos' ? 'Nenhum quarto encontrado' : 'Nenhum quarto cadastrado' }}
             </h3>
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {{ searchTerm || statusFilter !== 'todos' ? 'Ajuste os filtros para visualizar outros quartos.' : 'Adicione o primeiro quarto para começar.' }}
             </p>
             <div class="mt-6">
@@ -247,21 +248,21 @@
 
           <div v-else class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-50 dark:bg-gray-900">
                 <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Número
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Tipo
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Capacidade
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Diária
                   </th>
                   <th class="relative px-6 py-3">
@@ -269,12 +270,12 @@
                   </th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="room in filteredRooms" :key="room.id" class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+                <tr v-for="room in filteredRooms" :key="room.id" class="hover:bg-gray-50 dark:bg-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                     {{ room.numero }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ room.tipo }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
@@ -285,10 +286,10 @@
                       {{ statusLabels[room.status] || room.status }}
                     </span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ room.capacidade }} hóspedes
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ formatCurrency(room.valor_diaria) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -321,13 +322,13 @@
       </div>
 
       <section class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow rounded-lg p-6">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
           <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 class="text-lg font-medium text-gray-900">
+              <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                 Calendário de Ocupação
               </h2>
-              <p class="mt-1 text-sm text-gray-500">
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Visualize rapidamente quais quartos estão livres ou reservados no período selecionado.
               </p>
             </div>
@@ -369,11 +370,11 @@
             </div>
           </div>
 
-          <div v-if="calendarLoading" class="mt-6 text-center text-sm text-gray-500">
+          <div v-if="calendarLoading" class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
             Carregando ocupação...
           </div>
 
-          <div v-else-if="calendarData.length === 0" class="mt-6 text-center text-sm text-gray-500">
+          <div v-else-if="calendarData.length === 0" class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
             {{ rooms.length ? 'Nenhum quarto encontrado no período selecionado.' : 'Cadastre quartos para visualizar a ocupação.' }}
           </div>
 
@@ -381,14 +382,14 @@
             <div
               v-for="quarto in calendarData"
               :key="quarto.quarto_id"
-              class="border border-gray-200 rounded-lg"
+              class="border border-gray-200 dark:border-gray-700 rounded-lg"
             >
-              <div class="p-4 bg-gray-50 border-b border-gray-200 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+              <div class="p-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 class="text-base font-semibold text-gray-900">
+                  <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">
                     Quarto {{ quarto.numero }} · {{ quarto.tipo }}
                   </h3>
-                  <p class="text-sm text-gray-500">
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
                     Capacidade: {{ quarto.capacidade }} · Diária: {{ formatCurrency(quarto.valor_diaria) }}
                   </p>
                 </div>
@@ -404,10 +405,10 @@
                 <div
                   v-for="dia in quarto.ocupacao"
                   :key="`${quarto.quarto_id}-${dia.data}`"
-                  class="border border-gray-200 rounded-md p-3"
+                  class="border border-gray-200 dark:border-gray-700 rounded-md p-3"
                   :class="dia.status === 'reservado' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'"
                 >
-                  <p class="text-sm font-medium text-gray-900">
+                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
                     {{ formatDate(dia.data) }}
                   </p>
                   <p
@@ -416,7 +417,7 @@
                   >
                     {{ dia.status }}
                   </p>
-                  <p v-if="dia.reserva_id" class="text-xs text-gray-500 mt-1">
+                  <p v-if="dia.reserva_id" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     Reserva #{{ dia.reserva_id }} · Cliente {{ dia.cliente_id }}
                   </p>
                 </div>
@@ -619,7 +620,7 @@ function statusBadgeClass(status: string): string {
     ocupado: 'bg-red-100 text-red-800',
     manutencao: 'bg-yellow-100 text-yellow-800'
   }
-  return map[status] || 'bg-gray-100 text-gray-800'
+  return map[status] || 'bg-gray-100 dark:bg-gray-800 text-gray-800'
 }
 
 function showMessage(type: 'success' | 'error', text: string) {

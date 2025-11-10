@@ -1,6 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <nav class="bg-white shadow-sm border-b border-gray-200">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
@@ -11,7 +11,7 @@
                 </svg>
               </div>
               <div class="ml-4">
-                <h1 class="text-xl font-semibold text-gray-900">
+                <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Gestão de Reservas
                 </h1>
               </div>
@@ -19,11 +19,12 @@
           </div>
 
           <div class="flex items-center space-x-4">
-            <NuxtLink to="/" class="text-sm text-green-600 hover:text-green-800">
+            <NuxtLink to="/" class="text-sm text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300">
               ← Voltar ao Dashboard
             </NuxtLink>
+            <ThemeToggle />
             <button
-              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-700 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-green-500"
               @click="handleLogout"
             >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,10 +41,10 @@
       <div class="px-4 py-6 sm:px-0">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
               Reservas
             </h1>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Cadastre e acompanhe as hospedagens ativas, pendentes e concluídas
             </p>
           </div>
@@ -77,12 +78,12 @@
       </div>
 
       <div v-if="showForm" class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-medium text-gray-900">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
               {{ editingReservation ? 'Atualizar Reserva' : 'Cadastrar Reserva' }}
             </h2>
-            <button class="text-gray-400 hover:text-gray-600" @click="cancelForm">
+            <button class="text-gray-400 hover:text-gray-600 dark:text-gray-400" @click="cancelForm">
               <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
@@ -166,7 +167,7 @@
             <div class="sm:col-span-2 flex justify-end space-x-3">
               <button
                 type="button"
-                class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                 @click="cancelForm"
               >
                 Cancelar
@@ -188,7 +189,7 @@
       </div>
 
       <div class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
           <div v-if="loadingReservations" class="p-8 text-center">
             <div class="inline-flex items-center">
               <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24">
@@ -203,10 +204,10 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">
+            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
               {{ statusFilter !== 'todos' || monthFilter ? 'Nenhuma reserva encontrada' : 'Nenhuma reserva cadastrada' }}
             </h3>
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {{ statusFilter !== 'todos' || monthFilter ? 'Ajuste os filtros e tente novamente.' : 'Comece registrando a primeira reserva.' }}
             </p>
             <div class="mt-6">
@@ -224,24 +225,24 @@
 
           <div v-else class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-50 dark:bg-gray-900">
                 <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Reserva
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Cliente
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Quarto
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Período
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Status
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Valor
                   </th>
                   <th class="relative px-6 py-3">
@@ -249,27 +250,27 @@
                   </th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="reserva in filteredReservations" :key="reserva.id" class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+                <tr v-for="reserva in filteredReservations" :key="reserva.id" class="hover:bg-gray-50 dark:bg-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                     #{{ reserva.id }}
                     <span class="block text-xs text-gray-400">{{ formatDateTime(reserva.created_at) }}</span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ reserva.client?.name || 'Cliente #' + reserva.client_id }}
-                    <span v-if="reserva.client?.email" class="block text-xs text-gray-500">
+                    <span v-if="reserva.client?.email" class="block text-xs text-gray-500 dark:text-gray-400">
                       {{ reserva.client.email }}
                     </span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ reserva.quarto?.numero || 'Quarto ' + reserva.quarto_id }}
-                    <span v-if="reserva.quarto?.tipo" class="block text-xs text-gray-500">
+                    <span v-if="reserva.quarto?.tipo" class="block text-xs text-gray-500 dark:text-gray-400">
                       {{ reserva.quarto.tipo }}
                     </span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ formatDate(reserva.data_check_in) }} - {{ formatDate(reserva.data_check_out) }}
-                    <span class="block text-xs text-gray-500">
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">
                       {{ quantidadeNoites(reserva.data_check_in, reserva.data_check_out) }} noites
                     </span>
                   </td>
@@ -281,7 +282,7 @@
                       {{ statusLabels[reserva.status] || reserva.status }}
                     </span>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ formatCurrency(reserva.valor_total) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -505,7 +506,7 @@ function statusBadgeClass(status: string): string {
     concluida: 'bg-green-100 text-green-800',
     cancelada: 'bg-red-100 text-red-800'
   }
-  return map[status] || 'bg-gray-100 text-gray-800'
+  return map[status] || 'bg-gray-100 dark:bg-gray-800 text-gray-800'
 }
 
 function showMessage(type: 'success' | 'error', text: string) {

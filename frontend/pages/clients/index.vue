@@ -1,19 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <!-- Navigation Header -->
-    <nav class="bg-white shadow-sm border-b border-gray-200">
+    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <!-- Logo and Title -->
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <div class="h-8 w-8 bg-blue-600 dark:bg-blue-700 rounded-lg flex items-center justify-center">
                 <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 7h.01M7 3h.01" />
                 </svg>
               </div>
               <div class="ml-4">
-                <h1 class="text-xl font-semibold text-gray-900">
+                <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
                   Hotel Management
                 </h1>
               </div>
@@ -22,11 +22,12 @@
 
           <!-- User Menu -->
           <div class="flex items-center space-x-4">
-            <NuxtLink to="/" class="text-sm text-blue-600 hover:text-blue-800">
+            <NuxtLink to="/" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800">
               ← Voltar ao Dashboard
             </NuxtLink>
+            <ThemeToggle />
             <button
-              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-700 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-blue-500"
               @click="handleLogout"
             >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,10 +46,10 @@
       <div class="px-4 py-6 sm:px-0">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
               Clientes
             </h1>
-            <p class="mt-2 text-sm text-gray-600">
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Gerencie os clientes do hotel
             </p>
           </div>
@@ -68,7 +69,7 @@
               <button
                 v-if="searchTerm"
                 type="button"
-                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                 aria-label="Limpar busca"
                 @click="searchTerm = ''"
               >
@@ -78,7 +79,7 @@
               </button>
             </div>
             <button
-              class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               @click="showAddForm = true"
             >
               <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,13 +93,13 @@
 
       <!-- Add Client Form -->
       <div v-if="showAddForm" class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-medium text-gray-900">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
               {{ editingClient ? 'Editar Cliente' : 'Novo Cliente' }}
             </h2>
             <button
-              class="text-gray-400 hover:text-gray-600"
+              class="text-gray-400 hover:text-gray-600 dark:text-gray-400"
               @click="cancelForm"
             >
               <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +172,7 @@
               <div class="flex justify-end space-x-3">
                 <button
                   type="button"
-                  class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   @click="cancelForm"
                 >
                   Cancelar
@@ -179,7 +180,7 @@
                 <button
                   type="submit"
                   :disabled="loading"
-                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                 >
                   <svg v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                     <circle
@@ -202,11 +203,11 @@
 
       <!-- Clients Table -->
       <div class="px-4 py-6 sm:px-0">
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
           <!-- Loading State -->
           <div v-if="loadingClients" class="p-8 text-center">
             <div class="inline-flex items-center">
-              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24">
+              <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24">
                 <circle
                   class="opacity-25"
                   cx="12"
@@ -226,15 +227,15 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">
+            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-gray-100">
               {{ searchTerm ? 'Nenhum cliente encontrado' : 'Nenhum cliente cadastrado' }}
             </h3>
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {{ searchTerm ? 'Tente ajustar sua busca para encontrar o cliente desejado.' : 'Comece adicionando o primeiro cliente do hotel.' }}
             </p>
             <div class="mt-6">
               <button
-                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 @click="showAddForm = true"
               >
                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -248,18 +249,18 @@
           <!-- Table -->
           <div v-else class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
+              <thead class="bg-gray-50 dark:bg-gray-900">
                 <tr>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Cliente
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Contato
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Documento
                   </th>
-                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Data de Cadastro
                   </th>
                   <th class="relative px-6 py-3">
@@ -267,36 +268,36 @@
                   </th>
                 </tr>
               </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="client in clients" :key="client.id" class="hover:bg-gray-50">
+              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200">
+                <tr v-for="client in clients" :key="client.id" class="hover:bg-gray-50 dark:bg-gray-900">
                   <td class="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div class="text-sm font-medium text-gray-900">
+                      <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
                         {{ client.name }}
                       </div>
-                      <div v-if="client.address" class="text-sm text-gray-500">
+                      <div v-if="client.address" class="text-sm text-gray-500 dark:text-gray-400">
                         {{ client.address }}
                       </div>
                     </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">
+                    <div class="text-sm text-gray-900 dark:text-gray-100">
                       {{ client.email }}
                     </div>
-                    <div class="text-sm text-gray-500">
+                    <div class="text-sm text-gray-500 dark:text-gray-400">
                       {{ client.phone }}
                     </div>
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     {{ client.document }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     {{ formatDate(client.created_at) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div class="flex justify-end space-x-2">
                       <button
-                        class="text-blue-600 hover:text-blue-900"
+                        class="text-blue-600 dark:text-blue-400 hover:text-blue-900"
                         title="Editar cliente"
                         @click="editClient(client)"
                       >
