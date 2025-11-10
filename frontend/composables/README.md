@@ -1,16 +1,8 @@
-# 🔐 Composables/Hooks de Autenticação
+# 🔐 Composable de Autenticação (useAuth)
 
-Este diretório contém os utilitários de autenticação para diferentes frameworks.
+Este diretório contém o composable `useAuth.ts` para gerenciar a autenticação no frontend Nuxt 3.
 
-## 📁 Arquivos Disponíveis
-
-### 1. `useAuth.ts` (Vue 3/Nuxt 3)
-Composable para projetos Vue 3 e Nuxt 3.
-
-### 2. `../hooks/useAuth.ts` (Next.js/React)
-Hook customizado para projetos Next.js e React.
-
-## 🚀 Como Usar
+## 🚀 Como Usar em Componentes Vue
 
 ### Vue 3/Nuxt 3 (composables/useAuth.ts)
 

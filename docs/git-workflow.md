@@ -1,10 +1,10 @@
-# Git Workflow Checklist
+# Git Workflow e Padrões de Commit
 
-Use esta referência rápida para versionar mudanças com segurança.
+Use esta referência para versionar mudanças de forma segura e consistente.
 
 ## Checklist Antes do Commit
-- backend executa sem erros
-- dependências atualizadas em `backend/requirements.txt`
+- backend e frontend executam sem erros
+- dependências atualizadas (`requirements.txt`, `package.json`)
 - README.MD ou docs relevantes atualizados
 - `.gitignore` cobre arquivos temporários e credenciais
 - nada sensível (tokens, `.db`, `.env`) será versionado
@@ -12,13 +12,13 @@ Use esta referência rápida para versionar mudanças com segurança.
 ## Fluxo Padrão
 ```bash
 # inicializar (apenas uma vez)
-git init
-git remote add origin https://github.com/SEU_USUARIO/hotel-management-app.git
+# git init
+# git remote add origin https://github.com/SEU_USUARIO/hotel-management-app.git
 
 # trabalho diário
 git checkout -b feature/minha-feature   # crie branchs curtas
 git status                              # verifique alterações
-git add <arquivos>                      # selecione mudanças
+git add .                               # selecione mudanças
 git commit -m "feat: descreva sua mudança"
 git push -u origin feature/minha-feature
 ```
