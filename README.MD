@@ -2,16 +2,27 @@
 
 ## 📖 Descrição do Projeto
 
-O **Hotel Management App** é uma aplicação full-stack para gerenciamento de hotéis, construída com FastAPI (Python) para o backend e Nuxt 3 (Vue.js) para o frontend.
+O **Hotel Management App** é uma aplicação full-stack completa para gerenciamento de hotéis, construída com FastAPI (Python) para o backend e Nuxt 3 (Vue.js) para o frontend.
 
-O sistema implementa autenticação de usuários via JWT, um CRUD completo para gerenciamento de clientes e uma suíte de testes automatizados para garantir a estabilidade da API.
+O sistema oferece um dashboard intuitivo, gerenciamento completo de quartos, clientes e reservas, com autenticação JWT e interface moderna.
+
+### ✨ Funcionalidades Principais
+
+- 📊 **Dashboard Interativo**: Métricas em tempo real (total de clientes, reservas ativas, quartos ocupados, receita mensal)
+- 🏠 **Gestão de Quartos**: CRUD completo com filtros, busca e calendário de ocupação
+- 👥 **Gestão de Clientes**: Cadastro e gerenciamento de hóspedes
+- 📅 **Sistema de Reservas**: Controle completo de reservas com validações
+- 🔐 **Autenticação**: Sistema seguro com JWT e OAuth2
+- 📱 **Interface Responsiva**: Design moderno com Tailwind CSS
+- 🧪 **Testes Automatizados**: Cobertura completa da API
 
 ### 🏗️ Stack Tecnológica
 
--   **Backend**: Python, FastAPI, SQLAlchemy, Pydantic, Pytest.
--   **Frontend**: TypeScript, Nuxt 3, Vue 3, Tailwind CSS.
--   **Banco de Dados**: SQLite (desenvolvimento).
--   **Autenticação**: JWT com OAuth2.
+-   **Backend**: Python, FastAPI, SQLAlchemy, Pydantic, PyMySQL, Pytest
+-   **Frontend**: TypeScript, Nuxt 3, Vue 3, Tailwind CSS, v-money3
+-   **Banco de Dados**: MySQL (produção) / SQLite (testes)
+-   **Autenticação**: JWT com OAuth2
+-   **Deploy**: Docker Ready
 
 ### � Documentação Complementar
 - [`docs/git-workflow.md`](docs/git-workflow.md) — checklist de versionamento e boas práticas de branches/commits.
@@ -45,12 +56,26 @@ source .venv/bin/activate
 # Instale as dependências
 pip install -r requirements.txt
 
+# Configure o banco de dados MySQL
+# Crie um arquivo .env com suas credenciais:
+cat > .env << 'EOF'
+DB_USER=root
+DB_PASSWORD=sua_senha_mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=HOTEL_APP
+EOF
+
+# Execute o script SQL para criar as tabelas
+mysql -u root -p < database/init.sql
+
 # Execute o servidor
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-✅ Backend rodando em `http://localhost:8000`.
+✅ **Backend rodando em `http://localhost:8000`**
 -   **Docs Interativos (Swagger)**: `http://localhost:8000/docs`
+-   **Dashboard de métricas**: Disponível após login
 
 ### 2. Frontend (App Nuxt 3)
 
@@ -65,57 +90,231 @@ npm install
 npm run dev
 ```
 
-✅ Frontend rodando em `http://localhost:3000`.
+✅ **Frontend rodando em `http://localhost:3000`**
+
+### 🔑 Credenciais de Teste
+
+Para acessar o sistema, use as credenciais padrão:
+- **Usuário**: `admin`
+- **Senha**: `admin123`
 
 ---
 
-## 🧪 Testes Automatizados (Backend)
+## 💾 Configuração do Banco de Dados
 
-O projeto utiliza `pytest` para testes de unidade e integração, garantindo a qualidade e a estabilidade da API.
+### MySQL (Recomendado para Produção)
 
-### 1. Instalar Dependências de Teste
-
+1. **Instalar MySQL** (se não tiver):
 ```bash
-# No diretório /backend, com o ambiente virtual ativo
-pip install pytest httpx
+# macOS
+brew install mysql
+brew services start mysql
+
+# Ubuntu/Debian
+sudo apt-get install mysql-server
+sudo systemctl start mysql
 ```
 
-### 2. Executar os Testes
-
-Para rodar a suíte completa de testes, execute o seguinte comando no diretório `/backend`:
-
+2. **Criar o banco de dados**:
 ```bash
-pytest
+mysql -u root -p
+CREATE DATABASE HOTEL_APP;
+exit
 ```
 
-Os testes são executados em um banco de dados em memória, sem afetar seus dados de desenvolvimento.
+3. **Configurar credenciais** no arquivo `backend/.env`:
+```env
+DB_USER=root
+DB_PASSWORD=sua_senha_mysql
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=HOTEL_APP
+```
 
----
-
-# 🚀 Como Executar o Projeto
-
-É necessário rodar o Backend (FastAPI) e o Frontend (Nuxt 3) separadamente.
-
-## 🎯 **INÍCIO RÁPIDO - Execute em 2 Terminais**
-
-### Terminal 1: Backend (FastAPI)
+4. **Executar script de inicialização**:
 ```bash
 cd backend
-pip install -r requirements.txt
-pip install python-multipart "pydantic[email]"
-PYTHONPATH=$(pwd) python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+mysql -u root -p < database/init.sql
 ```
-✅ Backend rodando em: http://localhost:8000
 
-### Terminal 2: Frontend (Nuxt 3)
+### SQLite (Para desenvolvimento rápido)
+
+Para usar SQLite em desenvolvimento, apenas remova ou comente as variáveis do MySQL no `.env`. O sistema automaticamente usará SQLite.
+
+---
+
+## 🧪 Testes Automatizados
+
+### Backend (Python/FastAPI)
+```bash
+cd backend
+source .venv/bin/activate
+pip install pytest httpx
+pytest -v
+```
+
+### Frontend (TypeScript/Vue)
 ```bash
 cd frontend
-npm install
-npm install --save-dev vue-tsc typescript
-echo '{"extends": "./.nuxt/tsconfig.json"}' > tsconfig.json
-npx nuxt dev --port 3000
+npm run test        # Testes unitários
+npm run test:e2e    # Testes end-to-end (se configurados)
 ```
-✅ Frontend rodando em: http://localhost:3000
+
+---
+
+## 📱 Funcionalidades Implementadas
+
+### 📊 Dashboard
+- ✅ Métricas em tempo real
+- ✅ Total de clientes cadastrados  
+- ✅ Reservas ativas
+- ✅ Quartos ocupados
+- ✅ Receita mensal
+- ✅ Atividade recente
+
+### 🏠 Gestão de Quartos
+- ✅ Listar todos os quartos
+- ✅ Adicionar novo quarto
+- ✅ Editar quarto existente
+- ✅ Excluir quarto
+- ✅ Filtros por status
+- ✅ Busca por número/tipo
+- ✅ Calendário de ocupação
+- ✅ Máscara monetária para diárias
+
+### 👥 Gestão de Clientes  
+- ✅ CRUD completo de clientes
+- ✅ Validação de dados
+- ✅ Busca e filtros
+- ✅ Histórico de reservas
+
+### 📅 Sistema de Reservas
+- ✅ Criar reservas
+- ✅ Gerenciar status
+- ✅ Validações de datas
+- ✅ Cálculo automático de valores
+
+### 🔐 Autenticação
+- ✅ Login seguro com JWT
+- ✅ Proteção de rotas
+- ✅ Sessões persistentes
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+hotel_app/
+├── 📂 backend/                 # API FastAPI
+│   ├── 📂 api/                # Endpoints da API
+│   │   └── endpoints/         # Rotas organizadas por módulo
+│   ├── 📂 core/               # Configurações principais
+│   │   ├── database.py        # Configuração MySQL/SQLite
+│   │   └── security.py        # JWT e autenticação
+│   ├── 📂 models/             # Modelos SQLAlchemy
+│   ├── 📂 schemas/            # Schemas Pydantic
+│   ├── 📂 services/           # Lógica de negócio
+│   ├── 📂 tests/              # Testes automatizados
+│   ├── 📂 database/           # Scripts SQL
+│   │   └── init.sql          # Inicialização do MySQL
+│   ├── 📄 .env               # Variáveis de ambiente
+│   └── 📄 main.py            # Ponto de entrada da API
+│
+├── 📂 frontend/               # App Nuxt 3
+│   ├── 📂 components/        # Componentes Vue reutilizáveis
+│   ├── 📂 pages/             # Páginas da aplicação
+│   │   ├── index.vue         # Dashboard
+│   │   ├── login.vue         # Autenticação
+│   │   ├── quartos/          # Gestão de quartos
+│   │   ├── clientes/         # Gestão de clientes
+│   │   └── reservas/         # Gestão de reservas
+│   ├── 📂 services/          # Integração com API
+│   │   └── apiClient.ts      # Cliente HTTP
+│   ├── 📂 composables/       # Funções reutilizáveis
+│   └── 📂 plugins/           # Plugins (v-money3, etc)
+│
+├── 📄 README.md              # Documentação do projeto
+└── 📂 docs/                  # Documentação adicional
+```
+
+---
+
+## 🔧 Tecnologias e Dependências
+
+### Backend
+- **FastAPI** - Framework web moderno e rápido
+- **SQLAlchemy** - ORM para Python
+- **Pydantic** - Validação de dados
+- **PyMySQL** - Driver MySQL
+- **python-jose** - JWT tokens
+- **passlib** - Hash de senhas
+- **pytest** - Framework de testes
+
+### Frontend  
+- **Nuxt 3** - Framework Vue.js
+- **Vue 3** - Framework JavaScript reativo
+- **TypeScript** - JavaScript tipado
+- **Tailwind CSS** - Framework CSS utilitário
+- **v-money3** - Máscara monetária
+- **Pinia** - Gerenciamento de estado
+
+---
+
+## 🚀 Deploy e Produção
+
+### Docker (Recomendado)
+
+```bash
+# Construir imagens
+docker-compose build
+
+# Executar containers
+docker-compose up -d
+
+# Verificar logs
+docker-compose logs -f
+```
+
+### Deploy Manual
+
+1. **Configurar variáveis de ambiente de produção**
+2. **Configurar banco MySQL em produção**
+3. **Build do frontend**: `npm run build`
+4. **Deploy do backend**: `gunicorn` ou `uvicorn`
+
+---
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie sua feature branch (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -m 'Add nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## 👨‍💻 Desenvolvedor
+
+Desenvolvido com ❤️ por [Beto1821](https://github.com/Beto1821)
+
+---
+
+## 📞 Suporte
+
+Para dúvidas ou problemas:
+- 🐛 [Issues do GitHub](https://github.com/Beto1821/hotel-management-app/issues)
+- 📧 Entre em contato através do GitHub
+
+---
+
+**✨ Projeto Hotel Management App - Gerenciamento de hotéis moderno e eficiente!**
 
 ## 📋 Pré-requisitos
 
