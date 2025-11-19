@@ -74,8 +74,7 @@ def get_current_active_user(
     """
     Função de dependência para obter o usuário atual ativo.
 
-    Esta função pode ser estendida para verificar se o usuário está ativo,
-    não foi banido, tem permissões específicas, etc.
+    Esta função verifica se o usuário está ativo e não bloqueado.
 
     Args:
         current_user (User): Usuário atual obtido via get_current_user
@@ -84,12 +83,22 @@ def get_current_active_user(
         User: Usuário ativo autenticado
 
     Raises:
-        HTTPException: 400 se o usuário estiver inativo
+        HTTPException: 400 se o usuário estiver inativo ou bloqueado
     """
-
-    # Por enquanto, apenas retorna o usuário
-    # Aqui você pode adicionar verificações como:
-    # - if not current_user.is_active: raise HTTPException(...)
-    # - if current_user.is_banned: raise HTTPException(...)
+    from datetime import datetime
+    
+    # Verifica se o usuário está ativo
+    if not current_user.is_active:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Usuário inativo"
+        )
+    
+    # Verifica se a conta está bloqueada
+    if current_user.locked_until and current_user.locked_until > datetime.utcnow():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Conta bloqueada até {current_user.locked_until.strftime('%d/%m/%Y %H:%M:%S')} devido a múltiplas tentativas de login falhadas"
+        )
 
     return current_user

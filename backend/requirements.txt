@@ -9,3 +9,7 @@ python-dotenv
 ruff
 flake8
 pymysql
+pyotp  # Para autenticação de dois fatores (2FA)
+qrcode  # Para gerar QR codes de configuração 2FA
+pillow  # Dependência do qrcode
+python-multipart  # Para formulários OAuth2
