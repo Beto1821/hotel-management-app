@@ -46,7 +46,15 @@ export default defineNuxtConfig({
 
     // Variáveis públicas (expostas no cliente)
     public: {
-      apiBase: process.env.API_BASE_URL || 'http://localhost:8000',
+      // Nova chave `apiUrl` — usada por `services/apiClient.ts`.
+      // Primeiro procura `NUXT_PUBLIC_API_URL` (recomendado para Nuxt),
+      // depois `API_BASE_URL` (compatibilidade com README),
+      // e por fim `http://localhost:8000` como fallback.
+      apiUrl: process.env.NUXT_PUBLIC_API_URL || process.env.API_BASE_URL || 'http://localhost:8000',
+
+      // Mantemos `apiBase` por compatibilidade com configurações anteriores,
+      // mas `apiUrl` é a chave que o cliente realmente consome.
+      apiBase: process.env.API_BASE_URL || process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000',
       appName: 'Hotel Management'
     }
   },

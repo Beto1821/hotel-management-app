@@ -143,16 +143,21 @@ export const loginRequest = (username: string, password: string) => {
   const config = useRuntimeConfig()
   const baseURL = config.public.apiUrl || 'http://127.0.0.1:8000'
 
-  // Usar FormData para login (OAuth2PasswordRequestForm)
-  const formData = new FormData()
-  formData.append('username', username)
-  formData.append('password', password)
+  // OAuth2PasswordRequestForm **requires** x-www-form-urlencoded
+  // Não usar FormData (multipart/form-data) — isso quebrou o login.
+  const params = new URLSearchParams()
+  params.append('username', username)
+  params.append('password', password)
 
+  // Enviar como application/x-www-form-urlencoded
   return $fetch<{ access_token: string; token_type: string }>(
     `${baseURL}/api/v1/auth/token`,
     {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: params.toString()
     }
   )
 }
