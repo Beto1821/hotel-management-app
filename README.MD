@@ -619,10 +619,10 @@ A tela abaixo demonstra o dashboard que o usuário visualiza após autenticaçã
 
 ### F. Próximos Desenvolvimentos 🔄
 
-- Páginas de Agendamentos/Reservas (`/bookings`)
-- Páginas de Quartos (`/rooms`)
-- Sistema de relatórios e analytics
+- Upload de imagens (quartos e clientes)
 - Notificações em tempo real
+- CI/CD pipeline
+- Containerização Docker
 
 ---
 
@@ -731,27 +731,10 @@ frontend/
 - [x] **Documentação Completa** - APIs documentadas no Swagger
 
 ### 🔄 **Próximos Desenvolvimentos:**
-- [ ] **Sistema de Reservas** - CRUD de agendamentos/bookings
-- [ ] **Gerenciamento de Quartos** - Cadastro e controle de ocupação
-- [ ] **Dashboard Analytics** - Relatórios e métricas
-- [ ] **Sistema de Permissões** - Roles e níveis de acesso
 - [ ] **Upload de Imagens** - Fotos de quartos e clientes
 - [ ] **Notificações** - Sistema de alertas em tempo real
-- [ ] **Deploy Production** - Docker + PostgreSQL + Nginx
-
-## 🚀 **Como Contribuir**
-
-1. **Fork o repositório**
-2. **Crie uma branch** para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. **Commit suas mudanças** (`git commit -m 'Add: nova funcionalidade'`)
-4. **Push para a branch** (`git push origin feature/nova-funcionalidade`)
-5. **Abra um Pull Request**
-- [ ] Adicionar testes automatizados
-- [ ] Configurar Docker
-- [ ] Implementar CI/CD
-- [ ] Adicionar logging estruturado
-- [ ] Migração para PostgreSQL
-- [ ] Deploy em produção
+- [ ] **Configurar Docker** - Containerização completa
+- [ ] **Implementar CI/CD** - Pipeline de deploy automatizado
 
 ---
 
