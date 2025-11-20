@@ -64,6 +64,46 @@ npm run dev
 - Frontend: http://localhost:3000  
 - Login padrão: `admin` / `admin123`
 
+## 🔐 Sistema de Autenticação e Permissões
+
+### Níveis de Acesso
+
+O sistema possui dois níveis de permissão:
+
+**👑 ADMIN (Administrador)**
+- Acesso total ao sistema
+- Gerenciamento de usuários
+- Criação e edição de quartos
+- Gestão completa de clientes e reservas
+- Visualização de métricas e relatórios
+- Configurações do sistema
+
+**🧹 RECEPTIONIST (Recepcionista/Zeladoria)**
+- Visualização do dashboard
+- Cadastro e edição de clientes
+- Criação de reservas
+- Consulta de quartos disponíveis
+- Acesso limitado (sem permissões administrativas)
+
+### Credenciais Padrão
+
+**Administrador:**
+- Usuário: `admin`
+- Senha: `admin123`
+- Email: `admin@plataformahotel.com`
+
+**Recepcionista:**
+- Usuário: `LaudelinoSGS`
+- Senha: `Lilica@007`
+- Email: `recepcao@plataformahotel.com`
+
+### Regras de Segurança
+
+- **Senhas:** Mínimo 6 caracteres, criptografadas com bcrypt
+- **Tokens JWT:** Expiração configurável (padrão: 30 dias)
+- **Bloqueio:** Conta bloqueada após 5 tentativas de login falhas
+- **Auditoria:** Todas as ações são registradas no sistema
+
 ## 🧪 Testes
 
 ```bash
