@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen relative overflow-hidden">
+  <div class="min-h-screen relative overflow-hidden flex flex-col">
     <AnimatedBackground />
     
-    <div class="relative z-10">
+    <div class="relative z-10 flex flex-col flex-1">
     <nav class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-700/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
@@ -276,6 +276,8 @@
         </div>
       </section>
     </main>
+    
+    <AppFooter />
     </div>
   </div>
 </template>

@@ -236,6 +236,8 @@
       </form>
       </div>
     </div>
+    
+    <AppFooter />
   </div>
 </template>
 
