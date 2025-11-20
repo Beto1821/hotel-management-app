@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="min-h-screen relative overflow-hidden flex flex-col">
     <!-- Background Image with Overlay -->
     <div class="absolute inset-0 z-0">
       <img src="/loginbackgrpound.png" alt="Hotel Background" class="w-full h-full object-cover" />
@@ -24,14 +24,15 @@
     <div class="circle-animation absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-purple-400/10 animate-pulse-slow"></div>
     <div class="circle-animation absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-indigo-400/10 animate-pulse-slower"></div>
 
-    <!-- Register Card -->
-    <div class="max-w-md w-full space-y-8 relative z-10">
-      <div class="flex justify-end">
-        <ThemeToggle />
-      </div>
+    <!-- Register Card - Centralizado -->
+    <div class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-md w-full space-y-8 relative z-10">
+        <div class="flex justify-end">
+          <ThemeToggle />
+        </div>
 
-      <!-- Glass Card Effect -->
-      <div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/50">
+        <!-- Glass Card Effect -->
+        <div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/50">
         <!-- Header -->
         <div>
           <div class="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg transform hover:scale-110 transition-transform duration-300 p-4">
@@ -189,6 +190,7 @@
             </p>
           </div>
         </form>
+      </div>
       </div>
     </div>
     
