@@ -61,41 +61,58 @@ npm run dev
 
 **Acesso:**  
 - Backend: http://localhost:8000  
-- Frontend: http://localhost:3000  
-- Login padrão: `admin` / `admin123`
+- Frontend: http://localhost:3000
 
 ## 🔐 Sistema de Autenticação e Permissões
 
-### Níveis de Acesso
+### Níveis de Acesso (4 Hierarquias)
 
-O sistema possui dois níveis de permissão:
+O sistema possui 4 níveis hierárquicos de permissão:
 
-**👑 ADMIN (Administrador)**
-- Acesso total ao sistema
-- Gerenciamento de usuários
-- Criação e edição de quartos
-- Gestão completa de clientes e reservas
-- Visualização de métricas e relatórios
-- Configurações do sistema
+**👑 MASTER (Administrador Master)**
+- **Nível:** 1 (Mais Alto)
+- **Acesso:** TOTAL e IRRESTRITO ao sistema
+- **Permissões:**
+  - Criação de usuários com qualquer nível de permissão
+  - Gerenciamento completo de usuários (criar, editar, excluir)
+  - Acesso total a quartos, clientes, reservas
+  - Configurações avançadas do sistema
+  - Visualização de logs de auditoria
+  - Acesso a métricas e relatórios completos
+- **Responsável:** Adalberto Ribeiro (Desenvolvedor/Proprietário)
 
-**🧹 RECEPTIONIST (Recepcionista/Zeladoria)**
-- Visualização do dashboard
-- Cadastro e edição de clientes
-- Criação de reservas
-- Consulta de quartos disponíveis
-- Acesso limitado (sem permissões administrativas)
+**🔧 ADMIN (Administrador)**
+- **Nível:** 2
+- **Acesso:** Gerencial Completo
+- **Permissões:**
+  - Gestão completa de quartos (CRUD)
+  - Gestão completa de clientes e reservas
+  - Visualização de dashboard e relatórios
+  - Sem acesso a criação de usuários
+  - Sem acesso a configurações críticas do sistema
 
-### Credenciais Padrão
+**📋 RECEPTIONIST (Recepcionista)**
+- **Nível:** 3
+- **Acesso:** Operacional
+- **Permissões:**
+  - Cadastro e edição de clientes
+  - Criação e consulta de reservas
+  - Consulta de quartos disponíveis
+  - Visualização limitada do dashboard
+  - Sem acesso a exclusões ou configurações
 
-**Administrador:**
-- Usuário: `admin`
-- Senha: `admin123`
-- Email: `admin@plataformahotel.com`
+**👁️ VIEWER (Visualizador)**
+- **Nível:** 4 (Mais Baixo)
+- **Acesso:** SOMENTE LEITURA
+- **Permissões:**
+  - Visualização de dashboard (apenas consulta)
+  - Consulta de clientes (sem edição)
+  - Consulta de quartos (sem modificação)
+  - Consulta de reservas (sem alteração)
+  - **Nenhuma** permissão de criação, edição ou exclusão
+- **Uso:** Contas criadas pelo MASTER têm este nível por padrão
 
-**Recepcionista:**
-- Usuário: `LaudelinoSGS`
-- Senha: `Lilica@007`
-- Email: `recepcao@plataformahotel.com`
+> **⚠️ Importante:** Apenas o usuário MASTER pode criar novos usuários. Novos usuários são criados automaticamente com nível VIEWER e devem ter suas permissões elevadas manualmente pelo MASTER.
 
 ### Regras de Segurança
 
@@ -103,6 +120,7 @@ O sistema possui dois níveis de permissão:
 - **Tokens JWT:** Expiração configurável (padrão: 30 dias)
 - **Bloqueio:** Conta bloqueada após 5 tentativas de login falhas
 - **Auditoria:** Todas as ações são registradas no sistema
+- **Hierarquia:** Usuários só podem gerenciar contas de nível inferior ao seu
 
 ## 🧪 Testes
 
@@ -177,7 +195,33 @@ hotel_app/
 
 ## 🚀 Deploy e Produção
 
-### Docker (Recomendado)
+### 🌐 Hospedagem Hostinger
+
+O sistema está hospedado na **Hostinger** com as seguintes especificações:
+
+**Servidor:** VPS Ubuntu (srv1139419)  
+**Domínio:** https://plataformahotel.online  
+**SSL:** Certificado Let's Encrypt (HTTPS ativado)  
+**Servidor Web:** Nginx como proxy reverso  
+**Gerenciamento de Processos:** PM2  
+
+**Serviços em Execução:**
+- **Backend API:** PM2 (hotel-api) - Porta 8000
+- **Frontend:** PM2 (hotel-frontend) - Porta 3000
+- **Banco de Dados:** MySQL 8.0
+
+**Documentação da API:**
+- Swagger UI: https://plataformahotel.online/docs
+- ReDoc: https://plataformahotel.online/redoc
+
+**Características:**
+- ✅ Alta disponibilidade (PM2 auto-restart)
+- ✅ HTTPS com certificado SSL
+- ✅ Backup automático do banco de dados
+- ✅ Monitoramento de recursos
+- ✅ Deploy contínuo via Git
+
+### Docker (Desenvolvimento Local)
 
 ```bash
 # Construir imagens
