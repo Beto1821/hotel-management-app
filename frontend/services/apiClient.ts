@@ -165,11 +165,13 @@ export const loginRequest = (username: string, password: string) => {
 /**
  * Requisição para registro
  * @param username - Nome de usuário
+ * @param email - Email do usuário
  * @param password - Senha
  */
-export const registerRequest = (username: string, password: string) =>
+export const registerRequest = (username: string, email: string, password: string) =>
   apiPost('/api/v1/auth/register', {
     username,
+    email,
     password
   })
 
