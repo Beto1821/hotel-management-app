@@ -1,13 +1,16 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <div class="min-h-screen relative overflow-hidden">
+    <AnimatedBackground />
+    
+    <div class="relative z-10">
     <!-- Navigation Header -->
-    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <nav class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-700/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <!-- Logo and Title -->
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-8 w-8 bg-blue-600 dark:bg-blue-700 rounded-lg flex items-center justify-center">
+              <div class="h-8 w-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
                 <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 7h.01M7 3h.01" />
                 </svg>
@@ -46,7 +49,7 @@
       <div class="px-4 py-6 sm:px-0">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+            <h1 class="text-3xl font-bold text-white dark:text-gray-100 drop-shadow-lg">
               Clientes
             </h1>
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -394,6 +397,7 @@
         </div>
       </div>
     </main>
+    </div>
   </div>
 </template>
 

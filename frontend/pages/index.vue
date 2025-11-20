@@ -1,11 +1,14 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
-    <nav class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+  <div class="min-h-screen relative overflow-hidden">
+    <AnimatedBackground />
+    
+    <div class="relative z-10">
+    <nav class="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl shadow-sm border-b border-gray-200/50 dark:border-gray-700/50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <div class="h-8 w-8 bg-blue-600 dark:bg-blue-700 rounded-lg flex items-center justify-center">
+              <div class="h-8 w-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
                 <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 7h.01M7 3h.01" />
                 </svg>
@@ -25,7 +28,7 @@
             <ThemeToggle />
             <button
               type="button"
-              class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+              class="text-sm font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               @click="handleLogout"
             >
               Sair
@@ -37,10 +40,10 @@
 
     <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
       <header class="px-4 sm:px-0">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 class="text-3xl font-bold text-white dark:text-gray-100 drop-shadow-lg">
           Dashboard do Hotel
         </h1>
-        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        <p class="mt-2 text-sm text-white/90 dark:text-gray-300">
           Bem-vindo ao sistema de gerenciamento de hotel
         </p>
       </header>
@@ -48,7 +51,7 @@
       <!-- Stats Cards -->
       <section class="px-4 py-6 sm:px-0">
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-white/20 dark:border-gray-700/30 hover:shadow-xl hover:scale-105 transition-all duration-300">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
@@ -70,11 +73,11 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-white/20 dark:border-gray-700/30 hover:shadow-xl hover:scale-105 transition-all duration-300">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="h-6 w-6 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
@@ -92,11 +95,11 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-white/20 dark:border-gray-700/30 hover:shadow-xl hover:scale-105 transition-all duration-300">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="h-6 w-6 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 7h.01M7 3h.01" />
                   </svg>
                 </div>
@@ -114,11 +117,11 @@
             </div>
           </div>
 
-          <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+          <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm overflow-hidden shadow-lg rounded-lg border border-white/20 dark:border-gray-700/30 hover:shadow-xl hover:scale-105 transition-all duration-300">
             <div class="p-5">
               <div class="flex items-center">
                 <div class="flex-shrink-0">
-                  <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="h-6 w-6 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
                 </div>
@@ -140,19 +143,19 @@
 
       <!-- Quick Actions -->
       <section class="px-4 py-6 sm:px-0">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+        <h2 class="text-lg font-medium text-white dark:text-gray-100 mb-4 drop-shadow-lg">
           Ações Rápidas
         </h2>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <!-- Clientes -->
           <NuxtLink
             to="/clients"
-            class="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200"
+            class="block p-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg border border-white/20 dark:border-gray-700/30 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <div class="h-10 w-10 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                  <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="h-10 w-10 bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 rounded-lg flex items-center justify-center shadow-md">
+                  <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                   </svg>
                 </div>
@@ -161,7 +164,7 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                   Clientes
                 </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
                   Gerenciar clientes do hotel
                 </p>
               </div>
@@ -171,12 +174,12 @@
           <!-- Reservas -->
           <NuxtLink
             to="/reservas"
-            class="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200"
+            class="block p-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg border border-white/20 dark:border-gray-700/30 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <div class="h-10 w-10 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                  <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="h-10 w-10 bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 rounded-lg flex items-center justify-center shadow-md">
+                  <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
@@ -185,7 +188,7 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                   Reservas
                 </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
                   Gerenciar reservas e hospedagens
                 </p>
               </div>
@@ -195,12 +198,12 @@
           <!-- Quartos -->
           <NuxtLink
             to="/quartos"
-            class="block p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200"
+            class="block p-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg border border-white/20 dark:border-gray-700/30 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             <div class="flex items-center">
               <div class="flex-shrink-0">
-                <div class="h-10 w-10 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
-                  <svg class="h-6 w-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="h-10 w-10 bg-gradient-to-br from-orange-500 to-orange-600 dark:from-orange-600 dark:to-orange-700 rounded-lg flex items-center justify-center shadow-md">
+                  <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 7h.01M7 3h.01" />
                   </svg>
                 </div>
@@ -209,7 +212,7 @@
                 <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">
                   Quartos
                 </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
                   Gerenciar quartos e ocupação
                 </p>
               </div>
@@ -220,18 +223,18 @@
 
       <!-- Recent Activity -->
       <section class="px-4 py-6 sm:px-0">
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
+        <h2 class="text-lg font-medium text-white dark:text-gray-100 mb-4 drop-shadow-lg">
           Atividade Recente
         </h2>
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg rounded-lg border border-white/20 dark:border-gray-700/30">
           <div class="px-6 py-4">
-            <div v-if="isLoading" class="text-sm text-gray-500 dark:text-gray-400">
+            <div v-if="isLoading" class="text-sm text-gray-600 dark:text-gray-300">
               Carregando dashboard...
             </div>
             <div v-else-if="errorMessage" class="text-sm text-red-500 dark:text-red-400">
               {{ errorMessage }}
             </div>
-            <div v-else-if="recentActivities.length === 0" class="text-sm text-gray-500 dark:text-gray-400">
+            <div v-else-if="recentActivities.length === 0" class="text-sm text-gray-600 dark:text-gray-300">
               Nenhuma atividade recente disponível.
             </div>
             <div v-else class="flow-root">
@@ -256,11 +259,11 @@
                       </div>
                       <div class="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div>
-                          <p class="text-sm text-gray-500 dark:text-gray-400">
+                          <p class="text-sm text-gray-600 dark:text-gray-300">
                             {{ activity.description }}
                           </p>
                         </div>
-                        <div class="text-right text-sm whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        <div class="text-right text-sm whitespace-nowrap text-gray-600 dark:text-gray-300">
                           {{ activity.relativeTime }}
                         </div>
                       </div>
@@ -273,6 +276,7 @@
         </div>
       </section>
     </main>
+    </div>
   </div>
 </template>
 
