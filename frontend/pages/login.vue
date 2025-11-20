@@ -1,27 +1,88 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
+  <div class="min-h-screen relative overflow-hidden flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Background Image with Overlay -->
+    <div class="absolute inset-0 z-0">
+      <img src="/loginbackgrpound.png" alt="Hotel Background" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-purple-900/70 to-indigo-900/80 backdrop-blur-sm"></div>
+    </div>
+
+    <!-- Floating Elements - Images -->
+    <div class="floating-element absolute top-20 left-10 w-24 h-24 opacity-25">
+      <img src="/cartoon.png" alt="Hotel Icon" class="w-full h-full object-contain animate-float drop-shadow-lg" />
+    </div>
+    <div class="floating-element absolute top-40 right-20 w-32 h-32 opacity-20">
+      <img src="/rec2.png" alt="Hotel Icon" class="w-full h-full object-contain animate-float-delayed drop-shadow-xl" />
+    </div>
+    <div class="floating-element absolute bottom-32 left-20 w-36 h-36 opacity-15">
+      <img src="/cartoon.png" alt="Hotel Icon" class="w-full h-full object-contain animate-float-slow drop-shadow-2xl" />
+    </div>
+    <div class="floating-element absolute bottom-20 right-32 w-28 h-28 opacity-25">
+      <img src="/rec2.png" alt="Hotel Icon" class="w-full h-full object-contain animate-float drop-shadow-lg" />
+    </div>
+    <div class="floating-element absolute top-1/3 left-1/4 w-20 h-20 opacity-20">
+      <img src="/cartoon.png" alt="Hotel Icon" class="w-full h-full object-contain animate-float-delayed drop-shadow-md" />
+    </div>
+    <div class="floating-element absolute bottom-1/3 right-1/4 w-24 h-24 opacity-15">
+      <img src="/rec2.png" alt="Hotel Icon" class="w-full h-full object-contain animate-float-slow drop-shadow-lg" />
+    </div>
+
+    <!-- Floating SVG Icons -->
+    <div class="absolute top-32 right-1/4 w-16 h-16 text-white/20 animate-float-slow">
+      <svg fill="currentColor" viewBox="0 0 24 24" class="drop-shadow-lg">
+        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5zm0 2.18l8 4V17c0 4.52-3.15 8.72-8 10-4.85-1.28-8-5.48-8-10V8.18l8-4zM11 9v2h2V9h-2zm0 4v6h2v-6h-2z"/>
+        <path d="M3 10v10c0 2.76 2.24 5 5 5h8c2.76 0 5-2.24 5-5V10H3zm7 10H8v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm0-4H6v-2h12v2z"/>
+      </svg>
+    </div>
+    <div class="absolute bottom-40 left-1/3 w-20 h-20 text-purple-300/20 animate-float">
+      <svg fill="currentColor" viewBox="0 0 24 24" class="drop-shadow-xl">
+        <path d="M19 9.3V4h-3v2.6L12 3L2 12h3v8h5v-6h4v6h5v-8h3l-3-2.7zM10 10c0-1.1.9-2 2-2s2 .9 2 2h-4z"/>
+      </svg>
+    </div>
+    <div class="absolute top-1/2 left-12 w-14 h-14 text-blue-200/25 animate-float-delayed">
+      <svg fill="currentColor" viewBox="0 0 24 24" class="drop-shadow-md">
+        <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0 7.59 6.59C7.22 6.95 7 7.45 7 8v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2c0-1.1-.9-2-2-2z"/>
+      </svg>
+    </div>
+    <div class="absolute top-2/3 right-16 w-18 h-18 text-indigo-200/20 animate-float-slow">
+      <svg fill="currentColor" viewBox="0 0 24 24" class="drop-shadow-lg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-2.5l7.51-3.49L17.5 6.5 9.99 9.99 6.5 17.5zm5.5-6.6c.61 0 1.1.49 1.1 1.1s-.49 1.1-1.1 1.1-1.1-.49-1.1-1.1.49-1.1 1.1-1.1z"/>
+      </svg>
+    </div>
+    <div class="absolute bottom-1/4 left-1/2 w-16 h-16 text-pink-200/15 animate-float">
+      <svg fill="currentColor" viewBox="0 0 24 24" class="drop-shadow-md">
+        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+      </svg>
+    </div>
+
+    <!-- Animated Circles -->
+    <div class="circle-animation absolute top-1/4 left-1/4 w-64 h-64 rounded-full bg-blue-400/10 animate-pulse-slow"></div>
+    <div class="circle-animation absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-purple-400/10 animate-pulse-slower"></div>
+
+    <!-- Login Card -->
+    <div class="max-w-md w-full space-y-8 relative z-10">
       <div class="flex justify-end">
         <ThemeToggle />
       </div>
 
-      <div>
-        <div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
-          <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-          </svg>
+      <!-- Glass Card Effect -->
+      <div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/50">
+        <div>
+          <div class="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg transform hover:scale-110 transition-transform duration-300">
+            <svg class="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+          </div>
+          <h2 class="mt-6 text-center text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Bem-vindo de volta
+          </h2>
+          <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
+            Hotel Management System
+          </p>
         </div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-gray-100">
-          Faça login em sua conta
-        </h2>
-        <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
-          Hotel Management System
-        </p>
-      </div>
 
       <!-- Form -->
       <form class="mt-8 space-y-6" @submit.prevent="handleLogin">
-        <div v-if="errorMessage" class="rounded-md bg-red-50 dark:bg-red-900/20 p-4">
+        <div v-if="errorMessage" class="rounded-xl bg-red-50 dark:bg-red-900/30 p-4 border border-red-200 dark:border-red-800 animate-shake">
           <div class="flex">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -39,7 +100,7 @@
           </div>
         </div>
 
-        <div v-if="successMessage" class="rounded-md bg-green-50 dark:bg-green-900/20 p-4">
+        <div v-if="successMessage" class="rounded-xl bg-green-50 dark:bg-green-900/30 p-4 border border-green-200 dark:border-green-800 animate-fade-in">
           <div class="flex">
             <div class="flex-shrink-0">
               <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -54,35 +115,53 @@
           </div>
         </div>
 
-        <div class="rounded-md shadow-sm -space-y-px">
+        <div class="space-y-4">
           <!-- Username field -->
-          <div>
-            <label for="username" class="sr-only">Username</label>
-            <input
-              id="username"
-              v-model="username"
-              name="username"
-              type="text"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              placeholder="Nome de usuário"
-              :disabled="isLoading"
-            >
+          <div class="group">
+            <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Nome de usuário
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <input
+                id="username"
+                v-model="username"
+                name="username"
+                type="text"
+                required
+                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 sm:text-sm"
+                placeholder="Digite seu usuário"
+                :disabled="isLoading"
+              >
+            </div>
           </div>
 
           <!-- Password field -->
-          <div>
-            <label for="password" class="sr-only">Password</label>
-            <input
-              id="password"
-              v-model="password"
-              name="password"
-              type="password"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-              placeholder="Senha"
-              :disabled="isLoading"
-            >
+          <div class="group">
+            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Senha
+            </label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <svg class="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <input
+                id="password"
+                v-model="password"
+                name="password"
+                type="password"
+                required
+                class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800/50 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 sm:text-sm"
+                placeholder="Digite sua senha"
+                :disabled="isLoading"
+              >
+            </div>
           </div>
         </div>
 
@@ -93,15 +172,15 @@
               id="remember-me"
               name="remember-me"
               type="checkbox"
-              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 dark:border-gray-600 rounded cursor-pointer"
             >
-            <label for="remember-me" class="ml-2 block text-sm text-gray-900 dark:text-gray-100">
+            <label for="remember-me" class="ml-2 block text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
               Lembrar de mim
             </label>
           </div>
 
           <div class="text-sm">
-            <a href="#" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+            <a href="#" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors">
               Esqueceu sua senha?
             </a>
           </div>
@@ -111,13 +190,13 @@
         <div>
           <button
             type="submit"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
             :disabled="isLoading || !username || !password"
           >
             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
               <svg
                 v-if="!isLoading"
-                class="h-5 w-5 text-blue-500 group-hover:text-blue-400"
+                class="h-5 w-5 text-blue-200 group-hover:text-white transition-colors"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -126,7 +205,7 @@
               </svg>
               <svg
                 v-else
-                class="animate-spin h-5 w-5 text-blue-500"
+                class="animate-spin h-5 w-5 text-white"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -149,15 +228,114 @@
         <div class="text-center">
           <p class="text-sm text-gray-600 dark:text-gray-400">
             Não tem uma conta?
-            <NuxtLink to="/register" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300">
+            <NuxtLink to="/register" class="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors">
               Cadastre-se aqui
             </NuxtLink>
           </p>
         </div>
       </form>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(-5deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-15px) scale(1.05);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-slower {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 7s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 6s ease-in-out infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+</style>
 
 <script setup lang="ts">
 // Imports e composables
