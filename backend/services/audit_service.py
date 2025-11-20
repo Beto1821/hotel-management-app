@@ -1,6 +1,7 @@
 """
 Serviço para registro de auditoria de ações do sistema
 """
+import json
 from datetime import datetime
 from typing import Optional
 from sqlalchemy.orm import Session
@@ -45,7 +46,7 @@ class AuditService:
             resource_id=resource_id,
             ip_address=ip_address,
             user_agent=user_agent,
-            details=details,
+            details=json.dumps(details) if details else None,
             timestamp=datetime.utcnow()
         )
         
