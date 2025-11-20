@@ -8,10 +8,8 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-8 w-8 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-                <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-4m-5 0H9m0 0H5m0 0h2M7 7h.01M7 3h.01" />
-                </svg>
+              <div class="h-10 w-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-1.5">
+                <img src="/log_plataformahote.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
               </div>
               <div class="ml-4">
                 <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
