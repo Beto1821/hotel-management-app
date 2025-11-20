@@ -1,203 +1,78 @@
-# 🏨 Hotel Management App
+# 🏨 Plataforma Hotel
 
-## 📖 Descrição do Projeto
+Sistema completo de gerenciamento hoteleiro com dashboard interativo, gestão de quartos, clientes e reservas.
 
-O **Hotel Management App** é uma aplicação full-stack completa para gerenciamento de hotéis, construída com FastAPI (Python) para o backend e Nuxt 3 (Vue.js) para o frontend.
+## 🚀 Stack Tecnológica
 
-O sistema oferece um dashboard intuitivo, gerenciamento completo de quartos, clientes e reservas, com autenticação JWT e interface moderna.
+**Backend:** FastAPI, SQLAlchemy, MySQL, JWT  
+**Frontend:** Nuxt 3, Vue 3, TypeScript, Tailwind CSS  
+**Deploy:** Hostinger (https://plataformahotel.online)
 
-### ✨ Funcionalidades Principais
+## ✨ Funcionalidades
 
-- 📊 **Dashboard Interativo**: Métricas em tempo real (total de clientes, reservas ativas, quartos ocupados, receita mensal)
-- 🏠 **Gestão de Quartos**: CRUD completo com filtros, busca e calendário de ocupação
-- 👥 **Gestão de Clientes**: Cadastro e gerenciamento de hóspedes
-- 📅 **Sistema de Reservas**: Controle completo de reservas com validações
-- 🔐 **Autenticação**: Sistema seguro com JWT e OAuth2
-- 📱 **Interface Responsiva**: Design moderno com Tailwind CSS
-- 🧪 **Testes Automatizados**: Cobertura completa da API
+- 📊 Dashboard com métricas em tempo real
+- 🏠 Gestão completa de quartos (CRUD, filtros, calendário)
+- 👥 Gerenciamento de clientes e histórico
+- 📅 Sistema de reservas com validações
+- 🔐 Autenticação segura (JWT + OAuth2)
+- 🎨 Interface moderna com tema claro/escuro
+- 📱 Design responsivo
+- 🧪 Testes automatizados
 
-### 🏗️ Stack Tecnológica
+## 📚 Documentação
 
--   **Backend**: Python, FastAPI, SQLAlchemy, Pydantic, PyMySQL, Pytest
--   **Frontend**: TypeScript, Nuxt 3, Vue 3, Tailwind CSS, v-money3
--   **Banco de Dados**: MySQL (produção) / SQLite (testes)
--   **Autenticação**: JWT com OAuth2
--   **Deploy**: Docker Ready
+- **API Docs:** https://plataformahotel.online/docs (Swagger)
+- **Postman:** [Coleção completa da API](https://documenter.postman.com/preview/23527601-83a0b0f9-5f22-43b5-8e34-6e352bc856b9)
 
-### � Documentação Complementar
-- [`docs/git-workflow.md`](docs/git-workflow.md) — checklist de versionamento e boas práticas de branches/commits.
-- [`docs/maintenance.md`](docs/maintenance.md) — notas de limpeza e auditoria recorrente do repositório.
-- [`docs/releases/v1.0.0.md`](docs/releases/v1.0.0.md) — resumo da versão atual e próximos passos recomendados.
+## ⚡ Início Rápido
 
-### 📚 Documentação da API (Postman)
-
-A documentação completa da API, com todos os endpoints e exemplos, está disponível publicamente no Postman:
-
--   [Acessar a Documentação da API](https://documenter.postman.com/preview/23527601-83a0b0f9-5f22-43b5-8e34-6e352bc856b9?environment=&versionTag=latest&apiName=CURRENT&version=latest&documentationLayout=classic-double-column&documentationTheme=dark&logo=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&logoDark=https%3A%2F%2Fres.cloudinary.com%2Fpostman%2Fimage%2Fupload%2Ft_team_logo%2Fv1%2Fteam%2Fanonymous_team&right-sidebar=303030&top-bar=FFFFFF&highlight=FF6C37&right-sidebar-dark=303030&top-bar-dark=212121&highlight-dark=FF6C37)
-
----
-
-# 🚀 Como Executar o Projeto
-
-É necessário rodar o Backend e o Frontend em terminais separados.
-
-> **Nota:** mantenha o ambiente virtual apenas dentro da pasta `backend` (por exemplo, `backend/.venv`). A raiz do repositório não deve conter virtualenv ativa.
-
-### 1. Backend (API FastAPI)
-
+### Backend
 ```bash
-# Navegue até a pasta do backend
 cd backend
-
-# Crie e ative o ambiente virtual (se for a primeira vez)
 python -m venv .venv
-source .venv/bin/activate
-
-# Instale as dependências
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-# Configure o banco de dados MySQL
-# Crie um arquivo .env com suas credenciais:
-cat > .env << 'EOF'
-DB_USER=root
-DB_PASSWORD=sua_senha_mysql
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=HOTEL_APP
-EOF
-
-# Execute o script SQL para criar as tabelas
-mysql -u root -p < database/init.sql
-
-# Execute o servidor
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
-
-✅ **Backend rodando em `http://localhost:8000`**
--   **Docs Interativos (Swagger)**: `http://localhost:8000/docs`
--   **Dashboard de métricas**: Disponível após login
-
-### 2. Frontend (App Nuxt 3)
-
-```bash
-# Navegue até a pasta do frontend
-cd frontend
-
-# Instale as dependências
-npm install
-
-# Execute o servidor de desenvolvimento
-npm run dev
-```
-
-✅ **Frontend rodando em `http://localhost:3000`**
-
-### 🔑 Credenciais de Teste
-
-Para acessar o sistema, use as credenciais padrão:
-- **Usuário**: `admin`
-- **Senha**: `admin123`
-
----
-
-## 💾 Configuração do Banco de Dados
-
-### MySQL (Recomendado para Produção)
-
-1. **Instalar MySQL** (se não tiver):
-```bash
-# macOS
-brew install mysql
-brew services start mysql
-
-# Ubuntu/Debian
-sudo apt-get install mysql-server
-sudo systemctl start mysql
-```
-
-2. **Criar o banco de dados**:
-```bash
+# Configurar MySQL
 mysql -u root -p
 CREATE DATABASE HOTEL_APP;
 exit
-```
 
-3. **Configurar credenciais** no arquivo `backend/.env`:
-```env
-DB_USER=root
-DB_PASSWORD=sua_senha_mysql
+# Criar .env
+echo "DB_USER=root
+DB_PASSWORD=sua_senha
 DB_HOST=localhost
 DB_PORT=3306
-DB_NAME=HOTEL_APP
-```
+DB_NAME=HOTEL_APP" > .env
 
-4. **Executar script de inicialização**:
-```bash
-cd backend
+# Inicializar tabelas
 mysql -u root -p < database/init.sql
+
+# Executar
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### SQLite (Para desenvolvimento rápido)
-
-Para usar SQLite em desenvolvimento, apenas remova ou comente as variáveis do MySQL no `.env`. O sistema automaticamente usará SQLite.
-
----
-
-## 🧪 Testes Automatizados
-
-### Backend (Python/FastAPI)
-```bash
-cd backend
-source .venv/bin/activate
-pip install pytest httpx
-pytest -v
-```
-
-### Frontend (TypeScript/Vue)
+### Frontend
 ```bash
 cd frontend
-npm run test        # Testes unitários
-npm run test:e2e    # Testes end-to-end (se configurados)
+npm install
+npm run dev
 ```
 
----
+**Acesso:**  
+- Backend: http://localhost:8000  
+- Frontend: http://localhost:3000  
+- Login padrão: `admin` / `admin123`
 
-## 📱 Funcionalidades Implementadas
+## 🧪 Testes
 
-### 📊 Dashboard
-- ✅ Métricas em tempo real
-- ✅ Total de clientes cadastrados  
-- ✅ Reservas ativas
-- ✅ Quartos ocupados
-- ✅ Receita mensal
-- ✅ Atividade recente
+```bash
+# Backend
+cd backend && pytest -v
 
-### 🏠 Gestão de Quartos
-- ✅ Listar todos os quartos
-- ✅ Adicionar novo quarto
-- ✅ Editar quarto existente
-- ✅ Excluir quarto
-- ✅ Filtros por status
-- ✅ Busca por número/tipo
-- ✅ Calendário de ocupação
-- ✅ Máscara monetária para diárias
-
-### 👥 Gestão de Clientes  
-- ✅ CRUD completo de clientes
-- ✅ Validação de dados
-- ✅ Busca e filtros
-- ✅ Histórico de reservas
-
-### 📅 Sistema de Reservas
-- ✅ Criar reservas
-- ✅ Gerenciar status
-- ✅ Validações de datas
-- ✅ Cálculo automático de valores
-
-### 🔐 Autenticação
-- ✅ Login seguro com JWT
-- ✅ Proteção de rotas
-- ✅ Sessões persistentes
+# Frontend  
+cd frontend && npm run test
+```
 
 ---
 
@@ -322,9 +197,36 @@ Para dúvidas ou problemas:
 - Node.js (LTS recomendado) e npm ou yarn
 - Git
 
----
+## 📂 Estrutura do Projeto
 
-## 🐍 1. Backend (FastAPI)
+```
+backend/
+├── main.py              # Ponto de entrada da API
+├── core/                # Configurações e database
+├── models/              # Modelos SQLAlchemy
+├── schemas/             # Validação Pydantic
+├── services/            # Lógica de negócio
+└── api/endpoints/       # Rotas da API
+
+frontend/
+├── pages/               # Páginas (login, dashboard, etc)
+├── components/          # Componentes reutilizáveis
+├── composables/         # Lógica compartilhada
+├── middleware/          # Proteção de rotas
+└── services/            # Cliente API
+```
+
+## 👨‍💻 Desenvolvedor
+
+**Adalberto Ribeiro**  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/adalberto-ramos-ribeiro-344092107/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/Beto1821)
+
+**Hospedado por:** Hostinger
+
+## 📄 Licença
+
+© 2025 Plataforma Hotel. Todos os direitos reservados.
 
 ### A. Configuração do Ambiente Virtual
 
