@@ -8,13 +8,13 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <div class="h-10 w-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-1.5">
+              <div class="h-12 w-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-2">
                 <img src="/log_plataformahote.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
               </div>
             </div>
             <div class="ml-4">
               <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                Hotel Management
+                Plataforma Hotel
               </h1>
               <p v-if="userInfo" class="text-sm text-gray-500 dark:text-gray-400">
                 Olá, {{ userInfo.username }}
@@ -466,9 +466,9 @@ const handleLogout = async () => {
 
 // SEO e meta tags
 useHead({
-  title: 'Dashboard - Hotel Management',
+  title: 'Dashboard - Plataforma Hotel',
   meta: [
-    { name: 'description', content: 'Dashboard do sistema de gerenciamento de hotel' }
+    { name: 'description', content: 'Dashboard da Plataforma Hotel' }
   ]
 })
 </script>

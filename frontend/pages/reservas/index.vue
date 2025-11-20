@@ -8,7 +8,7 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-10 w-10 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-1.5">
+              <div class="h-12 w-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-2">
                 <img src="/log_plataformahote.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
               </div>
               <div class="ml-4">
@@ -660,9 +660,9 @@ onMounted(async () => {
 })
 
 useHead({
-  title: 'Reservas - Hotel Management',
+  title: 'Reservas - Plataforma Hotel',
   meta: [
-    { name: 'description', content: 'Gestão de reservas do hotel' }
+    { name: 'description', content: 'Gestão de reservas da Plataforma Hotel' }
   ]
 })
 </script>

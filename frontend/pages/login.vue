@@ -68,14 +68,14 @@
         <!-- Glass Card Effect -->
         <div class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-white/20 dark:border-gray-700/50">
         <div>
-          <div class="mx-auto h-20 w-20 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg transform hover:scale-110 transition-transform duration-300 p-4">
+          <div class="mx-auto h-28 w-28 flex items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg transform hover:scale-110 transition-transform duration-300 p-5">
             <img src="/log_plataformahote.png" alt="Plataforma Hotel Logo" class="w-full h-full object-contain" />
           </div>
           <h2 class="mt-6 text-center text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Bem-vindo de volta
           </h2>
           <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400 font-medium">
-            Hotel Management System
+            Plataforma Hotel
           </p>
         </div>
 
