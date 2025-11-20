@@ -12,8 +12,9 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     """
     Schema para criação de usuários.
-    Herda de UserBase e adiciona o campo password.
+    Herda de UserBase e adiciona o campo password e email.
     """
+    email: str
     password: str
 
 
