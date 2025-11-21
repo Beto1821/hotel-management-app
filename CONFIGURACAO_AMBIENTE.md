@@ -6,13 +6,13 @@ Este guia explica como alternar entre configurações de desenvolvimento local e
 
 ### Backend
 
-- **`.env`** - Arquivo ativo (NÃO commitar - está no .gitignore)
-- **`.env.local`** - Template para desenvolvimento local
-- **`.env.production`** - Template para produção
+- **`.env`** - Arquivo ativo (NÃO commitar - está no .gitignore) ⚠️
+- **`.env.example`** - Template de referência (pode commitar) ✅
+- **`.env.production`** - Configuração de produção (NÃO commitar) ⚠️
 
 ### Frontend
 
-- **`.env`** - Arquivo ativo (NÃO commitar - está no .gitignore)
+- **`.env`** - Arquivo ativo (NÃO commitar - está no .gitignore) ⚠️
 
 ---
 
@@ -20,42 +20,38 @@ Este guia explica como alternar entre configurações de desenvolvimento local e
 
 ### 1. Configurar Variáveis de Ambiente
 
-#### `.env.local` (Desenvolvimento Local)
+#### `.env` (Desenvolvimento Local)
 ```env
-# Database
-DB_USER=root
-DB_PASSWORD=sua_senha_mysql_local
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=HOTEL_APP
+# Database - Desenvolvimento
+DATABASE_URL=mysql+pymysql://root:sua_senha@localhost:3306/HOTEL_APP
 
-# JWT
-SECRET_KEY=your-secret-key-for-development
+# JWT - Gerar com: python -c "import secrets; print(secrets.token_urlsafe(32))"
+SECRET_KEY=sua-chave-de-desenvolvimento-32-chars-minimo
 ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=1440
+ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-# Pool de Conexões
-DB_POOL_SIZE=5
-DB_MAX_OVERFLOW=10
+# CORS - Desenvolvimento
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000,http://127.0.0.1:3000
+
+# Environment
+ENVIRONMENT=development
 ```
 
 #### `.env.production` (Produção)
 ```env
-# Database
-DB_USER=seu_usuario_producao
-DB_PASSWORD=senha_super_segura_producao
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=HOTEL_APP
+# Database - PRODUÇÃO
+DATABASE_URL=mysql+pymysql://usuario_prod:senha_forte_prod@localhost:3306/HOTEL_APP
 
-# JWT
-SECRET_KEY=chave-secreta-super-segura-de-producao-mudar-isto
+# JWT - GERAR NOVA SECRET_KEY FORTE!
+SECRET_KEY=use-python-c-import-secrets-print-secrets-token-urlsafe-32
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
-# Pool de Conexões
-DB_POOL_SIZE=10
-DB_MAX_OVERFLOW=20
+# CORS - Produção
+ALLOWED_ORIGINS=https://plataformahotel.online,https://www.plataformahotel.online
+
+# Environment
+ENVIRONMENT=production
 ```
 
 ### 2. Alternar entre Ambientes (Backend)
@@ -63,14 +59,29 @@ DB_MAX_OVERFLOW=20
 **Para Desenvolvimento Local:**
 ```bash
 cd backend
-cp .env.local .env
-uvicorn main:app --reload
+
+# Criar .env baseado no .env.example
+cp .env.example .env
+nano .env  # Editar com suas credenciais locais
+
+# Gerar SECRET_KEY
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+# Iniciar servidor de desenvolvimento
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-**Para Produção:**
+**Para Produção (no servidor):**
 ```bash
 cd backend
+
+# Copiar configuração de produção
 cp .env.production .env
+nano .env  # Configurar credenciais de produção
+
+# Reiniciar serviço
+sudo systemctl restart hotel-api
+# OU com PM2:
 pm2 restart hotel-api
 ```
 
@@ -83,13 +94,17 @@ pm2 restart hotel-api
 #### Desenvolvimento Local
 ```env
 # API Base URL - Local Development
-NUXT_PUBLIC_API_URL=http://127.0.0.1:8000
+NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
+# OU
+NUXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000/api/v1
 ```
 
 #### Produção
 ```env
 # API Base URL - Production
-NUXT_PUBLIC_API_URL=https://plataformahotel.online
+NUXT_PUBLIC_API_BASE_URL=https://plataformahotel.online/api/v1
+# OU se API estiver em subdomínio:
+NUXT_PUBLIC_API_BASE_URL=https://api.plataformahotel.online/api/v1
 ```
 
 ### 2. Alternar entre Ambientes (Frontend)
@@ -98,7 +113,7 @@ NUXT_PUBLIC_API_URL=https://plataformahotel.online
 
 Edite `frontend/.env`:
 ```env
-NUXT_PUBLIC_API_URL=http://127.0.0.1:8000
+NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
 ```
 
 Depois reinicie:
@@ -112,30 +127,47 @@ npm run dev
 
 Edite `frontend/.env`:
 ```env
-NUXT_PUBLIC_API_URL=https://plataformahotel.online
+NUXT_PUBLIC_API_BASE_URL=https://plataformahotel.online/api/v1
 ```
 
 Depois faça build e deploy:
 ```bash
 cd frontend
+npm install
 npm run build
+
+# Deploy com PM2
 pm2 restart hotel-frontend
+
+# OU deploy com servidor web estático
+# Copiar pasta .output/public para servidor
 ```
 
 ---
 
 ## 🔐 Segurança - IMPORTANTE!
 
-### Arquivos que NÃO devem ir para o Git (já estão no .gitignore):
+### ⚠️ Arquivos que NÃO devem ir para o Git (já estão no .gitignore):
 
-- ✅ `.env` (backend e frontend)
-- ✅ `.env.local`
-- ✅ `.env.production`
-- ✅ Qualquer arquivo com senhas ou chaves
+- ✅ `.env` (backend e frontend) - **NUNCA COMMITAR!**
+- ✅ `.env.production` - **NUNCA COMMITAR!**
+- ✅ `.env.local` - **NUNCA COMMITAR!**
+- ✅ Qualquer arquivo com senhas ou chaves reais
 
-### Arquivos que podem ir para o Git:
+### ✅ Arquivos que podem (e devem) ir para o Git:
 
-- ✅ `.env.example` (template sem valores sensíveis)
+- ✅ `.env.example` - Template sem valores sensíveis
+- ✅ `CONFIGURACAO_AMBIENTE.md` - Este arquivo de documentação
+
+### 🔑 Como gerar SECRET_KEY segura:
+
+```bash
+# No terminal:
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+
+# Copie o resultado e cole no .env:
+# SECRET_KEY=resultado_gerado_aqui
+```
 
 ---
 
@@ -143,17 +175,34 @@ pm2 restart hotel-frontend
 
 ### Antes de fazer Deploy para Produção:
 
-- [ ] Alterar `SECRET_KEY` no `.env.production` para uma chave segura
-- [ ] Verificar credenciais do banco de dados
-- [ ] Testar localmente antes
+- [ ] **Gerar SECRET_KEY forte** (32+ caracteres)
+  ```bash
+  python -c "import secrets; print(secrets.token_urlsafe(32))"
+  ```
+- [ ] Alterar `DATABASE_URL` no `.env` de produção
+- [ ] Configurar `ALLOWED_ORIGINS` com domínios de produção
+- [ ] Definir `ENVIRONMENT=production`
+- [ ] Verificar `NUXT_PUBLIC_API_BASE_URL` no frontend
+- [ ] Testar localmente antes com `.env.example`
 - [ ] Fazer backup do banco de dados de produção
-- [ ] Commitar código (sem arquivos `.env`)
+- [ ] Garantir que `.env` NÃO está no Git
+- [ ] Commitar código (apenas `.env.example`)
 - [ ] SSH no servidor
 - [ ] `git pull origin main`
 - [ ] Copiar `.env.production` para `.env` no servidor
-- [ ] `pm2 restart hotel-api`
-- [ ] `pm2 restart hotel-frontend`
+- [ ] Editar `.env` com credenciais reais
+- [ ] Reiniciar serviços:
+  ```bash
+  sudo systemctl restart hotel-api  # Backend
+  # OU
+  pm2 restart hotel-api
+  
+  # Frontend
+  cd frontend && npm run build
+  pm2 restart hotel-frontend
+  ```
 - [ ] Testar em produção
+- [ ] Verificar logs para erros
 
 ---
 
@@ -164,37 +213,39 @@ pm2 restart hotel-frontend
 ```bash
 # Backend
 cd backend
-cp .env.local .env
-uvicorn main:app --reload
+cp .env.example .env
+nano .env  # Configurar DATABASE_URL, SECRET_KEY, etc.
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 # Frontend (outro terminal)
 cd frontend
-# Editar .env para usar http://127.0.0.1:8000
+nano .env  # NUXT_PUBLIC_API_BASE_URL=http://localhost:8000/api/v1
 npm run dev
 ```
 
-### Produção (Deploy)
+### Produção (Deploy no Servidor)
 
 ```bash
 # SSH no servidor
-ssh u119-3ggbuuczowkc@srv1139419.hstgr.cloud
-
-# Ir para o diretório do projeto
-cd ~/hotel_app
+ssh usuario@seu-servidor.com
 
 # Atualizar código
+cd ~/caminho/projeto
 git pull origin main
 
 # Backend
 cd backend
 cp .env.production .env
-pm2 restart hotel-api
+nano .env  # Editar credenciais reais de produção
+sudo systemctl restart hotel-api
 
 # Frontend
 cd ../frontend
-# Verificar .env aponta para https://plataformahotel.online
+nano .env  # NUXT_PUBLIC_API_BASE_URL=https://plataformahotel.online/api/v1
+npm install
 npm run build
-pm2 restart hotel-frontend
+sudo systemctl restart hotel-frontend
+# OU pm2 restart hotel-frontend
 ```
 
 ---
@@ -223,15 +274,53 @@ pm2 restart hotel-frontend
 
 ## 🆘 Troubleshooting
 
+### Backend não inicia - "SECRET_KEY não definida"
+**Causa:** Arquivo `.env` não existe ou SECRET_KEY não está definida  
+**Solução:**
+```bash
+cd backend
+cp .env.example .env
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+# Copiar resultado e colar em SECRET_KEY no .env
+```
+
 ### Frontend não conecta ao backend
-- Verificar `NUXT_PUBLIC_API_URL` no `.env` do frontend
-- Reiniciar o servidor frontend após alterar `.env`
+**Causa:** `NUXT_PUBLIC_API_BASE_URL` incorreta no `.env`  
+**Solução:**
+```bash
+cd frontend
+nano .env
+# Verificar URL: http://localhost:8000/api/v1 (dev) ou https://... (prod)
+# Reiniciar: Ctrl+C e npm run dev
+```
 
 ### Erro 401 (Unauthorized)
-- Verificar se o usuário existe no banco correto (local ou produção)
-- Verificar se a `SECRET_KEY` é a mesma em todos os arquivos de auth
+**Causa:** Token inválido ou SECRET_KEY diferente  
+**Solução:**
+- Verificar se SECRET_KEY é a mesma no backend
+- Fazer logout e login novamente
+- Verificar se usuário existe no banco correto
 
 ### Banco de dados não conecta
-- Verificar credenciais no `.env`
-- Verificar se o MySQL está rodando
-- Verificar se o banco `HOTEL_APP` existe
+**Causa:** DATABASE_URL incorreta ou MySQL não rodando  
+**Solução:**
+```bash
+# Verificar MySQL
+sudo systemctl status mysql
+# OU
+mysql -u root -p
+
+# Verificar DATABASE_URL no .env
+nano backend/.env
+# Formato: mysql+pymysql://usuario:senha@host:porta/banco
+```
+
+### CORS Error no frontend
+**Causa:** Origem não permitida em ALLOWED_ORIGINS  
+**Solução:**
+```bash
+# Adicionar origem em backend/.env
+nano backend/.env
+# ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000,...
+# Reiniciar backend
+```

@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from api.api import api_router
 from core.database import create_tables
+from core.config import ALLOWED_ORIGINS, IS_PRODUCTION
 
 
 @asynccontextmanager
@@ -23,19 +24,15 @@ app = FastAPI(
     title="Hotel Management API",
     description="API para gerenciamento de hotel com autenticação JWT",
     version="1.0.0",
-    lifespan=lifespan
+    lifespan=lifespan,
+    docs_url="/docs" if not IS_PRODUCTION else None,
+    redoc_url="/redoc" if not IS_PRODUCTION else None,
 )
 
 # Configurar CORS para permitir chamadas do frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        # Produção — frontend servido via domínio
-        "https://plataformahotel.online",
-        "https://www.plataformahotel.online",
-    ],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

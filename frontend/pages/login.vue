@@ -376,6 +376,8 @@ const handleLogin = async () => {
   successMessage.value = ''
   isLoading.value = true
 
+  const { $toast, $alert } = useNuxtApp()
+
   try {
     // Chamar a API de login
     const response = await loginRequest(username.value, password.value)
@@ -383,14 +385,22 @@ const handleLogin = async () => {
     // Salvar o token usando o composable
     login(response.access_token)
 
+    // Mostrar notificação de sucesso
+    $toast.fire({
+      icon: 'success',
+      title: 'Login realizado com sucesso!'
+    })
+
     // Redirecionar para o dashboard
     await router.push('/')
   } catch (error: any) {
     // Tratar erro de credenciais inválidas
     if (error.status === 401) {
       errorMessage.value = 'Nome de usuário ou senha incorretos.'
+      await $alert.error('Erro de Autenticação', 'Nome de usuário ou senha incorretos.')
     } else {
       errorMessage.value = error.data?.detail || 'Ocorreu um erro inesperado. Tente novamente.'
+      await $alert.error('Erro', error.data?.detail || 'Ocorreu um erro inesperado. Tente novamente.')
     }
   } finally {
     isLoading.value = false

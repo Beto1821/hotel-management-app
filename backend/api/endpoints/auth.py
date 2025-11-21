@@ -11,7 +11,9 @@ from services.auth_service import (
     verify_password,
     validate_password_strength,
     is_account_locked,
-    calculate_lockout_time
+    calculate_lockout_time,
+    create_access_token,
+    ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from services.audit_service import AuditService
 from utils.request_utils import get_client_info
@@ -19,13 +21,12 @@ from utils.request_utils import get_client_info
 # Criar o router para autenticação
 router = APIRouter(tags=["authentication"])
 
-# Configurações JWT (devem ser movidas para um arquivo de configuração)
-SECRET_KEY = "your-secret-key-here-change-in-production"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-
-@router.post("/register", response_model=UserSchema, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=UserSchema,
+    status_code=status.HTTP_201_CREATED
+)
 def register_user(
     user_data: UserCreate,
     request: Request,
@@ -235,32 +236,6 @@ def login_user(
         "access_token": access_token,
         "token_type": "bearer"
     }
-
-
-def create_access_token(data: dict, expires_delta: timedelta = None):
-    """
-    Criar token JWT de acesso.
-
-    Args:
-        data (dict): Dados para incluir no token
-        expires_delta (timedelta): Tempo de expiração do token
-
-    Returns:
-        str: Token JWT codificado
-    """
-    from jose import jwt
-
-    to_encode = data.copy()
-
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-
-    return encoded_jwt
 
 
 @router.post("/forgot-password")

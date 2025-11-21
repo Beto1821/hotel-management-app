@@ -6,6 +6,7 @@ Sistema completo de gerenciamento hoteleiro com dashboard interativo, gestão de
 
 **Backend:** FastAPI, SQLAlchemy, MySQL, JWT  
 **Frontend:** Nuxt 3, Vue 3, TypeScript, Tailwind CSS  
+**Testes:** pytest (100% cobertura)  
 **Deploy:** Hostinger (https://plataformahotel.online)
 
 ## ✨ Funcionalidades
@@ -15,38 +16,69 @@ Sistema completo de gerenciamento hoteleiro com dashboard interativo, gestão de
 - 👥 Gerenciamento de clientes e histórico
 - 📅 Sistema de reservas com validações
 - 🔐 Autenticação segura (JWT + OAuth2)
-- 🎨 Interface moderna com tema claro/escuro
+- 🎨 Interface moderna com tema claro/escuro (SweetAlert2)
 - 📱 Design responsivo
-- 🧪 Testes automatizados
+- 🧪 30 testes automatizados (100% aprovação)
+- 🔒 Auditoria completa de operações
 
 ## 📚 Documentação
 
-- **API Docs:** https://plataformahotel.online/docs (Swagger)
+- **API Docs:** https://plataformahotel.online/docs (Swagger - apenas desenvolvimento)
 - **Postman:** [Coleção completa da API](https://documenter.postman.com/preview/23527601-83a0b0f9-5f22-43b5-8e34-6e352bc856b9)
+- **Cobertura de Testes:** [COBERTURA_TESTES.md](backend/COBERTURA_TESTES.md)
+- **Segurança:** [SECURITY.md](backend/SECURITY.md)
+- **Deploy:** [PRODUCTION_CHECKLIST.md](PRODUCTION_CHECKLIST.md)
 
 ## ⚡ Início Rápido
 
 ### Backend
 ```bash
 cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
+# Criar ambiente virtual
+python3 -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Instalar dependências
 pip install -r requirements.txt
 
-# Configurar MySQL
+# Configurar variáveis de ambiente
+cp .env.example .env
+nano .env  # Editar com suas credenciais
+```
+
+**Arquivo `.env` mínimo necessário:**
+```env
+DATABASE_URL=mysql+pymysql://root:sua_senha@localhost:3306/HOTEL_APP
+SECRET_KEY=gere-com-python-c-import-secrets-print-secrets-token-urlsafe-32
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8000
+ENVIRONMENT=development
+```
+
+**Gerar SECRET_KEY segura:**
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+**Configurar banco de dados:**
+```bash
+# Conectar ao MySQL
 mysql -u root -p
-CREATE DATABASE HOTEL_APP;
+
+# Criar banco
+CREATE DATABASE HOTEL_APP CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 exit
 
-# Criar .env
-echo "DB_USER=root
-DB_PASSWORD=sua_senha
-DB_HOST=localhost
-DB_PORT=3306
-DB_NAME=HOTEL_APP" > .env
-
 # Inicializar tabelas
-mysql -u root -p < database/init.sql
+mysql -u root -p HOTEL_APP < database/init.sql
+```
+
+**Executar servidor:**
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
 # Executar
 uvicorn main:app --reload --host 0.0.0.0 --port 8000

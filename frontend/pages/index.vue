@@ -410,12 +410,11 @@ const loadDashboard = async () => {
       monthlyRevenue: data.stats.monthly_revenue
     }
 
-    // Buscar atividades recentes da API
-    const activitiesResponse = await apiGet('/dashboard/activities')
-    const activities = activitiesResponse.data
+    // Buscar atividades recentes da API (máximo 10, mais recentes primeiro)
+    const activities = await apiGet('/api/v1/dashboard/activities?limit=10')
     
     // Transformar atividades para o formato esperado
-    recentActivities.value = activities.map((activity: any) => {
+    recentActivities.value = (activities || []).map((activity: any) => {
       const actionMap: Record<string, { description: string; icon: string; iconBg: string }> = {
         'LOGIN_SUCCESS': { description: '🔐 Login realizado', icon: 'user', iconBg: 'bg-green-500' },
         'LOGIN_FAILED': { description: '❌ Falha no login', icon: 'cancel', iconBg: 'bg-red-500' },

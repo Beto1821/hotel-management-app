@@ -30,6 +30,7 @@
     "@nuxtjs/tailwindcss": "^6.8.4",
     "@pinia/nuxt": "^0.5.1",
     "pinia": "^2.1.7",
+    "sweetalert2": "^11.26.3",
     "v-money3": "^3.24.1",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5"

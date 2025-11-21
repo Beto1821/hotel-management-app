@@ -80,7 +80,7 @@ class ClientService:
             return None
 
         # Atualizar apenas campos fornecidos
-        update_data = client_data.dict(exclude_unset=True)
+        update_data = client_data.model_dump(exclude_unset=True)
         for field, value in update_data.items():
             setattr(db_client, field, value)
 

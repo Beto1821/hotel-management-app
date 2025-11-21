@@ -26,7 +26,9 @@ class QuartoUpdate(BaseModel):
     tipo: Optional[Literal["standard", "deluxe", "suite"]] = None
     capacidade: Optional[int] = None
     valor_diaria: Optional[float] = None
-    status: Optional[Literal["livre", "ocupado", "limpeza", "manutencao"]] = None
+    status: Optional[
+        Literal["livre", "ocupado", "limpeza", "manutencao"]
+    ] = None
     descricao: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)

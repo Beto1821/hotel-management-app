@@ -6,10 +6,7 @@ from sqlalchemy.orm import Session
 from core.database import get_db
 from models.user_model import User
 from schemas.user_schema import TokenData
-
-# Configurações JWT (devem ser movidas para um arquivo de configuração)
-SECRET_KEY = "your-secret-key-here-change-in-production"
-ALGORITHM = "HS256"
+from core.config import SECRET_KEY, ALGORITHM
 
 # Esquema OAuth2 para Bearer Token
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")

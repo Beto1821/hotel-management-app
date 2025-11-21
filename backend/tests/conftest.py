@@ -9,9 +9,10 @@ from sqlalchemy.pool import StaticPool
 # Garantir que a aplicação use o banco de dados em memória durante os testes
 os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
 
-from main import app
-from models.base import Base
-from core.database import get_db
+# Imports após configuração do ambiente
+from main import app  # noqa: E402
+from models.base import Base  # noqa: E402
+from core.database import get_db  # noqa: E402
 
 # Configuração do banco de dados de teste em memória
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"

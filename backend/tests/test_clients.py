@@ -4,17 +4,24 @@ from fastapi.testclient import TestClient
 
 @pytest.fixture(scope="module")
 def auth_headers(test_client: TestClient):
-    """Cria um token compartilhado para autenticação entre os testes do módulo."""
+    """
+    Cria um token compartilhado para autenticação entre os testes
+    do módulo.
+    """
     # Registra um usuário de teste
     test_client.post(
         "/api/v1/auth/register",
-        json={"username": "clienttestuser", "password": "testpassword"},
+        json={
+            "username": "clienttestuser",
+            "email": "clienttestuser@example.com",
+            "password": "ClientTest123!"
+        },
     )
 
     # Faz login para obter o token
     response = test_client.post(
         "/api/v1/auth/token",
-        data={"username": "clienttestuser", "password": "testpassword"},
+        data={"username": "clienttestuser", "password": "ClientTest123!"},
     )
     token = response.json()["access_token"]
     return {"Authorization": f"Bearer {token}"}

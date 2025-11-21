@@ -7,7 +7,11 @@ def test_register_user(test_client: TestClient):
     """
     response = test_client.post(
         "/api/v1/auth/register",
-        json={"username": "testuser", "password": "testpassword"},
+        json={
+            "username": "testuser",
+            "email": "testuser@example.com",
+            "password": "TestPass123!"
+        },
     )
     assert response.status_code == 201
     data = response.json()
@@ -22,13 +26,17 @@ def test_login_for_access_token(test_client: TestClient):
     # Primeiro, registra um usuário para poder fazer login
     test_client.post(
         "/api/v1/auth/register",
-        json={"username": "loginuser", "password": "loginpassword"},
+        json={
+            "username": "loginuser",
+            "email": "loginuser@example.com",
+            "password": "LoginPass123!"
+        },
     )
 
     # Agora, tenta fazer o login
     response = test_client.post(
         "/api/v1/auth/token",
-        data={"username": "loginuser", "password": "loginpassword"},
+        data={"username": "loginuser", "password": "LoginPass123!"},
     )
     assert response.status_code == 200
     data = response.json()

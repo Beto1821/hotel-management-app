@@ -2,8 +2,8 @@
 fastapi
 uvicorn[standard]
 sqlalchemy
-pydantic
-passlib[bcrypt]  # Para hashing de senhas
+pydantic[email]  # [email] para suporte a EmailStr
+bcrypt>=4.0.0  # Para hashing de senhas
 python-jose[cryptography] # Para JWT (Autenticação)
 python-dotenv
 ruff
@@ -13,3 +13,8 @@ pyotp  # Para autenticação de dois fatores (2FA)
 qrcode  # Para gerar QR codes de configuração 2FA
 pillow  # Dependência do qrcode
 python-multipart  # Para formulários OAuth2
+email-validator  # Para validação de emails com Pydantic
+pytest  # Framework de testes
+pytest-asyncio  # Suporte para testes assíncronos
+requests  # Para testes HTTP
+

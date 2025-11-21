@@ -1,12 +1,12 @@
-from passlib.context import CryptContext
+import bcrypt
 from typing import Optional
 import re
 import pyotp
 import secrets
 from datetime import datetime, timedelta
+from jose import jwt
 
-# Configuração do contexto de criptografia usando bcrypt
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 def get_password_hash(password: str) -> str:
@@ -19,8 +19,11 @@ def get_password_hash(password: str) -> str:
     Returns:
         str: Senha hasheada
     """
-    truncated_password = password.encode('utf-8')[:72]
-    return pwd_context.hash(truncated_password)
+    # Bcrypt limita senhas a 72 bytes
+    password_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode('utf-8')
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -34,8 +37,9 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     Returns:
         bool: True se as senhas coincidirem, False caso contrário
     """
-    truncated_plain_password = plain_password.encode('utf-8')[:72]
-    return pwd_context.verify(truncated_plain_password, hashed_password)
+    password_bytes = plain_password.encode('utf-8')
+    hashed_bytes = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(password_bytes, hashed_bytes)
 
 
 def authenticate_user(username: str, password: str) -> Optional[dict]:
@@ -105,7 +109,11 @@ def generate_2fa_secret() -> str:
     return pyotp.random_base32()
 
 
-def generate_2fa_qr_uri(secret: str, username: str, issuer: str = "Hotel App") -> str:
+def generate_2fa_qr_uri(
+    secret: str,
+    username: str,
+    issuer: str = "Hotel App"
+) -> str:
     """
     Gera URI para QR Code de configuração do 2FA.
     
@@ -146,23 +154,29 @@ def generate_reset_token() -> str:
     return secrets.token_urlsafe(32)
 
 
-def is_account_locked(failed_attempts: int, locked_until: Optional[datetime]) -> bool:
+def is_account_locked(
+    failed_attempts: int,
+    locked_until: Optional[datetime]
+) -> bool:
     """
     Verifica se uma conta está bloqueada por tentativas de login falhadas.
     
     Args:
         failed_attempts (int): Número de tentativas falhadas
-        locked_until (Optional[datetime]): Data/hora até quando a conta está bloqueada
+        locked_until (Optional[datetime]): Data/hora até quando a conta
+            está bloqueada
         
     Returns:
         bool: True se a conta está bloqueada
     """
     # Bloqueia após 5 tentativas falhadas
     if failed_attempts >= 5:
-        # Se não tem locked_until definido, está bloqueado permanentemente até reset
+        # Se não tem locked_until definido, está bloqueado
+        # permanentemente até reset
         if locked_until is None:
             return True
-        # Se tem locked_until, verifica se ainda está dentro do período de bloqueio
+        # Se tem locked_until, verifica se ainda está dentro do
+        # período de bloqueio
         if datetime.utcnow() < locked_until:
             return True
     
@@ -177,7 +191,8 @@ def calculate_lockout_time(failed_attempts: int) -> Optional[datetime]:
         failed_attempts (int): Número de tentativas falhadas
         
     Returns:
-        Optional[datetime]: Data/hora até quando bloquear, ou None se não bloquear
+        Optional[datetime]: Data/hora até quando bloquear, ou None se
+            não bloquear
     """
     if failed_attempts >= 5:
         # Bloqueio progressivo: 15 min, 30 min, 1h, 2h, 4h...
@@ -189,23 +204,30 @@ def calculate_lockout_time(failed_attempts: int) -> Optional[datetime]:
     return None
 
 
-def create_access_token(data: dict, expires_delta: Optional[int] = None) -> str:
+def create_access_token(
+    data: dict,
+    expires_delta: Optional[timedelta] = None
+) -> str:
     """
-    Esqueleto da função para criação de token JWT.
-
-    Esta função deve:
-    1. Criar um payload JWT com os dados fornecidos
-    2. Definir tempo de expiração do token
-    3. Codificar e retornar o token JWT
+    Cria um token JWT de acesso.
 
     Args:
-        data (dict): Dados para incluir no token
-        expires_delta (Optional[int]): Tempo de expiração em minutos
+        data (dict): Dados para incluir no token (ex: {"sub": username})
+        expires_delta (Optional[timedelta]): Tempo de expiração do token
 
     Returns:
         str: Token JWT codificado
     """
-    # TODO: Implementar criação de token JWT
-    # TODO: Usar python-jose para codificação
-    # TODO: Definir SECRET_KEY e ALGORITHM
-    pass
+    to_encode = data.copy()
+    
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(
+            minutes=ACCESS_TOKEN_EXPIRE_MINUTES
+        )
+    
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    
+    return encoded_jwt

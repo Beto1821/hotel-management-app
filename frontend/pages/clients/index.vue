@@ -488,12 +488,14 @@ const loadClients = async () => {
 
 // Submeter formulário (criar ou atualizar)
 const submitForm = async () => {
+  const { $alert, $toast } = useNuxtApp()
+  
   try {
     loading.value = true
 
     // Validação básica
     if (!form.value.name || !form.value.email || !form.value.phone || !form.value.document) {
-      showMessage('error', 'Preencha todos os campos obrigatórios')
+      await $alert.warning('Atenção', 'Preencha todos os campos obrigatórios')
       return
     }
 
@@ -508,18 +510,24 @@ const submitForm = async () => {
     if (editingClient.value) {
       // Atualizar cliente existente
       await updateClient(editingClient.value.id, clientData)
-      showMessage('success', 'Cliente atualizado com sucesso!')
+      $toast.fire({
+        icon: 'success',
+        title: 'Cliente atualizado com sucesso!'
+      })
     } else {
       // Criar novo cliente
       await createClient(clientData)
-      showMessage('success', 'Cliente adicionado com sucesso!')
+      $toast.fire({
+        icon: 'success',
+        title: 'Cliente adicionado com sucesso!'
+      })
     }
 
     // Recarregar lista
     await loadClients()
     cancelForm()
   } catch (error) {
-    showMessage('error', 'Erro ao salvar cliente. Verifique os dados e tente novamente.')
+    await $alert.error('Erro', 'Erro ao salvar cliente. Verifique os dados e tente novamente.')
   } finally {
     loading.value = false
   }
@@ -540,7 +548,14 @@ const editClient = (client: Client) => {
 
 // Função para remover cliente
 const removeClient = async (id: number) => {
-  if (!confirm('Tem certeza que deseja excluir este cliente?')) {
+  const { $alert, $toast } = useNuxtApp()
+  
+  const result = await $alert.confirm(
+    'Tem certeza?',
+    'Esta ação não pode ser desfeita. O cliente será excluído permanentemente.'
+  )
+  
+  if (!result.isConfirmed) {
     return
   }
 
@@ -548,9 +563,12 @@ const removeClient = async (id: number) => {
   try {
     await deleteClient(id)
     await loadClients() // Recarregar a lista
-    showMessage('success', 'Cliente excluído com sucesso!')
+    $toast.fire({
+      icon: 'success',
+      title: 'Cliente excluído com sucesso!'
+    })
   } catch (error: any) {
-    showMessage(error.data?.detail || 'Falha ao excluir cliente.', 'error')
+    await $alert.error('Erro', error.data?.detail || 'Falha ao excluir cliente.')
   } finally {
     loading.value = false
   }
