@@ -25,25 +25,29 @@ router = APIRouter()
 @router.post("/", response_model=Quarto, status_code=status.HTTP_201_CREATED)
 def create_quarto(
     quarto: QuartoCreate,
-    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
+    request: Request = None
 ) -> Quarto:
     """Cria um novo quarto."""
     new_quarto = quarto_service.create_quarto(db=db, quarto_data=quarto)
     
     # Registrar auditoria
-    client_info = get_client_info(request)
-    AuditService.log_action(
-        db=db,
-        user_id=current_user.id,
-        action="CREATE_ROOM",
-        resource="ROOM",
-        resource_id=new_quarto.id,
-        ip_address=client_info["ip_address"],
-        user_agent=client_info["user_agent"],
-        details={"room_number": new_quarto.numero, "room_type": new_quarto.tipo}
-    )
+    try:
+        if request:
+            client_info = get_client_info(request)
+            AuditService.log_action(
+                db=db,
+                user_id=current_user.id,
+                action="CREATE_ROOM",
+                resource="ROOM",
+                resource_id=new_quarto.id,
+                ip_address=client_info["ip_address"],
+                user_agent=client_info["user_agent"],
+                details={"room_number": new_quarto.numero, "room_type": new_quarto.tipo}
+            )
+    except Exception as e:
+        print(f"Erro ao registrar auditoria: {e}")
     
     return new_quarto
 
@@ -98,9 +102,9 @@ def get_quarto(
 def update_quarto(
     quarto_id: int,
     quarto_update: QuartoUpdate,
-    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
+    request: Request = None
 ) -> Quarto:
     """Atualiza os dados de um quarto."""
     db_quarto = quarto_service.update_quarto(
@@ -115,17 +119,21 @@ def update_quarto(
         )
     
     # Registrar auditoria
-    client_info = get_client_info(request)
-    AuditService.log_action(
-        db=db,
-        user_id=current_user.id,
-        action="UPDATE_ROOM",
-        resource="ROOM",
-        resource_id=db_quarto.id,
-        ip_address=client_info["ip_address"],
-        user_agent=client_info["user_agent"],
-        details={"room_number": db_quarto.numero, "room_type": db_quarto.tipo}
-    )
+    try:
+        if request:
+            client_info = get_client_info(request)
+            AuditService.log_action(
+                db=db,
+                user_id=current_user.id,
+                action="UPDATE_ROOM",
+                resource="ROOM",
+                resource_id=db_quarto.id,
+                ip_address=client_info["ip_address"],
+                user_agent=client_info["user_agent"],
+                details={"room_number": db_quarto.numero, "room_type": db_quarto.tipo}
+            )
+    except Exception as e:
+        print(f"Erro ao registrar auditoria: {e}")
     
     return db_quarto
 
