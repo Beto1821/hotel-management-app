@@ -714,6 +714,8 @@ async function submitForm() {
   } catch (error: any) {
     const detail = error?.data?.detail || 'Erro ao salvar quarto.'
     showMessage('error', detail)
+  } finally {
+    loading.value = false
   }
 }
 
