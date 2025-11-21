@@ -410,7 +410,36 @@ const loadDashboard = async () => {
       monthlyRevenue: data.stats.monthly_revenue
     }
 
-    recentActivities.value = data.recent_activities.map(transformActivity)
+    // Buscar atividades recentes da API
+    const activitiesResponse = await apiClient.get('/dashboard/activities')
+    const activities = activitiesResponse.data
+    
+    // Transformar atividades para o formato esperado
+    recentActivities.value = activities.map((activity: any) => {
+      const actionMap: Record<string, { description: string; icon: string; iconBg: string }> = {
+        'LOGIN_SUCCESS': { description: '🔐 Login realizado', icon: 'user', iconBg: 'bg-green-500' },
+        'LOGIN_FAILED': { description: '❌ Falha no login', icon: 'cancel', iconBg: 'bg-red-500' },
+        'LOGOUT': { description: '🚪 Logout', icon: 'user', iconBg: 'bg-gray-500' },
+        'CREATE_CLIENT': { description: '➕ Cliente criado', icon: 'user-plus', iconBg: 'bg-blue-500' },
+        'UPDATE_CLIENT': { description: '✏️ Cliente atualizado', icon: 'wrench', iconBg: 'bg-yellow-500' },
+        'DELETE_CLIENT': { description: '🗑️ Cliente excluído', icon: 'cancel', iconBg: 'bg-red-500' },
+        'USER_CREATED': { description: '👤 Usuário criado', icon: 'user-plus', iconBg: 'bg-indigo-500' }
+      }
+      
+      const actionInfo = actionMap[activity.action] || { 
+        description: `${activity.action} - ${activity.resource}`, 
+        icon: 'calendar', 
+        iconBg: 'bg-gray-500' 
+      }
+      
+      return {
+        id: activity.id,
+        description: actionInfo.description,
+        relativeTime: formatRelativeTime(activity.timestamp),
+        icon: actionInfo.icon,
+        iconBg: actionInfo.iconBg
+      }
+    })
   } catch (error) {
     console.error('Erro ao carregar dashboard', error)
     errorMessage.value = 'Não foi possível carregar os dados do dashboard.'
