@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Request
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -8,6 +8,8 @@ from dependencies.auth import get_current_active_user
 from models.user_model import User
 from schemas.reserva import Reserva, ReservaCreate, ReservaUpdate
 from services import reserva_service
+from services.audit_service import AuditService
+from utils.request_utils import get_client_info
 
 
 router = APIRouter()
@@ -16,11 +18,27 @@ router = APIRouter()
 @router.post("/", response_model=Reserva, status_code=status.HTTP_201_CREATED)
 def create_reserva(
     reserva: ReservaCreate,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
     """Cria uma nova reserva."""
-    return reserva_service.create_reserva(db=db, reserva=reserva)
+    new_reserva = reserva_service.create_reserva(db=db, reserva=reserva)
+    
+    # Registrar auditoria
+    client_info = get_client_info(request)
+    AuditService.log_action(
+        db=db,
+        user_id=current_user.id,
+        action="CREATE_RESERVATION",
+        resource="RESERVATION",
+        resource_id=new_reserva.id,
+        ip_address=client_info["ip_address"],
+        user_agent=client_info["user_agent"],
+        details={"client_id": new_reserva.cliente_id, "quarto_id": new_reserva.quarto_id}
+    )
+    
+    return new_reserva
 
 
 @router.get("/", response_model=List[Reserva])
@@ -63,6 +81,7 @@ def read_reserva(
 def update_reserva(
     reserva_id: int,
     reserva: ReservaUpdate,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
@@ -72,12 +91,27 @@ def update_reserva(
     )
     if db_reserva is None:
         raise HTTPException(status_code=404, detail="Reserva não encontrada")
+    
+    # Registrar auditoria
+    client_info = get_client_info(request)
+    AuditService.log_action(
+        db=db,
+        user_id=current_user.id,
+        action="UPDATE_RESERVATION",
+        resource="RESERVATION",
+        resource_id=db_reserva.id,
+        ip_address=client_info["ip_address"],
+        user_agent=client_info["user_agent"],
+        details={"status": db_reserva.status}
+    )
+    
     return db_reserva
 
 
 @router.delete("/{reserva_id}", response_model=Reserva)
 def delete_reserva(
     reserva_id: int,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
@@ -85,4 +119,18 @@ def delete_reserva(
     db_reserva = reserva_service.delete_reserva(db, reserva_id=reserva_id)
     if db_reserva is None:
         raise HTTPException(status_code=404, detail="Reserva não encontrada")
+    
+    # Registrar auditoria
+    client_info = get_client_info(request)
+    AuditService.log_action(
+        db=db,
+        user_id=current_user.id,
+        action="DELETE_RESERVATION",
+        resource="RESERVATION",
+        resource_id=db_reserva.id,
+        ip_address=client_info["ip_address"],
+        user_agent=client_info["user_agent"],
+        details={"status": "CANCELADA"}
+    )
+    
     return db_reserva
