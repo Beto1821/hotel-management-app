@@ -1,17 +1,17 @@
 """Schemas Pydantic para recursos de quartos."""
 
 from datetime import date
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict
 
 
 class QuartoBase(BaseModel):
     numero: str
-    tipo: str
+    tipo: Literal["standard", "deluxe", "suite"]
     capacidade: int = 1
     valor_diaria: float
-    status: str = "disponivel"
+    status: Literal["livre", "ocupado", "limpeza", "manutencao"] = "livre"
     descricao: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
@@ -23,10 +23,10 @@ class QuartoCreate(QuartoBase):
 
 class QuartoUpdate(BaseModel):
     numero: Optional[str] = None
-    tipo: Optional[str] = None
+    tipo: Optional[Literal["standard", "deluxe", "suite"]] = None
     capacidade: Optional[int] = None
     valor_diaria: Optional[float] = None
-    status: Optional[str] = None
+    status: Optional[Literal["livre", "ocupado", "limpeza", "manutencao"]] = None
     descricao: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)

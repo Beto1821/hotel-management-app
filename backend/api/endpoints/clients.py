@@ -30,9 +30,9 @@ router = APIRouter(
              status_code=status.HTTP_201_CREATED)
 async def create_client(
     client_data: ClientCreate,
+    request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-    request: Request = None
+    current_user: User = Depends(get_current_user)
 ):
     """
     Cria um novo cliente
@@ -42,18 +42,17 @@ async def create_client(
         
         # Registrar auditoria
         try:
-            if request:
-                client_info = get_client_info(request)
-                AuditService.log_action(
-                    db=db,
-                    user_id=current_user.id,
-                    action="CREATE_CLIENT",
-                    resource="CLIENT",
-                    resource_id=client.id,
-                    ip_address=client_info["ip_address"],
-                    user_agent=client_info["user_agent"],
-                    details={"client_name": client.nome}
-                )
+            client_info = get_client_info(request)
+            AuditService.log_action(
+                db=db,
+                user_id=current_user.id,
+                action="CREATE_CLIENT",
+                resource="CLIENT",
+                resource_id=client.id,
+                ip_address=client_info["ip_address"],
+                user_agent=client_info["user_agent"],
+                details={"client_name": client.nome}
+            )
         except Exception as e:
             # Log de auditoria falhou, mas não impede a criação do cliente
             print(f"Erro ao registrar auditoria: {e}")
@@ -117,9 +116,9 @@ async def get_client(
 async def update_client(
     client_id: int,
     client_data: ClientUpdate,
+    request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-    request: Request = None
+    current_user: User = Depends(get_current_user)
 ):
     """
     Atualiza um cliente existente
@@ -134,33 +133,20 @@ async def update_client(
         
         # Registrar auditoria
         try:
-            if request:
-                client_info = get_client_info(request)
-                AuditService.log_action(
-                    db=db,
-                    user_id=current_user.id,
-                    action="UPDATE_CLIENT",
-                    resource="CLIENT",
-                    resource_id=client.id,
-                    ip_address=client_info["ip_address"],
-                    user_agent=client_info["user_agent"],
-                    details={"client_name": client.nome}
-                )
+            client_info = get_client_info(request)
+            AuditService.log_action(
+                db=db,
+                user_id=current_user.id,
+                action="UPDATE_CLIENT",
+                resource="CLIENT",
+                resource_id=client.id,
+                ip_address=client_info["ip_address"],
+                user_agent=client_info["user_agent"],
+                details={"client_name": client.nome}
+            )
         except Exception as e:
             # Log de auditoria falhou, mas não impede a atualização
             print(f"Erro ao registrar auditoria: {e}")
-        
-        return client
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=str(e)
-            resource="CLIENT",
-            resource_id=client.id,
-            ip_address=client_info["ip_address"],
-            user_agent=client_info["user_agent"],
-            details={"client_name": client.nome}
-        )
         
         return client
     except ValueError as e:

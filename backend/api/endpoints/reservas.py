@@ -18,27 +18,26 @@ router = APIRouter()
 @router.post("/", response_model=Reserva, status_code=status.HTTP_201_CREATED)
 def create_reserva(
     reserva: ReservaCreate,
+    request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
-    request: Request = None
+    current_user: User = Depends(get_current_active_user)
 ):
     """Cria uma nova reserva."""
     new_reserva = reserva_service.create_reserva(db=db, reserva=reserva)
     
     # Registrar auditoria
     try:
-        if request:
-            client_info = get_client_info(request)
-            AuditService.log_action(
-                db=db,
-                user_id=current_user.id,
-                action="CREATE_RESERVATION",
-                resource="RESERVATION",
-                resource_id=new_reserva.id,
-                ip_address=client_info["ip_address"],
-                user_agent=client_info["user_agent"],
-                details={"client_id": new_reserva.cliente_id, "quarto_id": new_reserva.quarto_id}
-            )
+        client_info = get_client_info(request)
+        AuditService.log_action(
+            db=db,
+            user_id=current_user.id,
+            action="CREATE_RESERVATION",
+            resource="RESERVATION",
+            resource_id=new_reserva.id,
+            ip_address=client_info["ip_address"],
+            user_agent=client_info["user_agent"],
+            details={"client_id": new_reserva.cliente_id, "quarto_id": new_reserva.quarto_id}
+        )
     except Exception as e:
         print(f"Erro ao registrar auditoria: {e}")
     
@@ -85,9 +84,9 @@ def read_reserva(
 def update_reserva(
     reserva_id: int,
     reserva: ReservaUpdate,
+    request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
-    request: Request = None
+    current_user: User = Depends(get_current_active_user)
 ):
     """Atualiza uma reserva."""
     db_reserva = reserva_service.update_reserva(
@@ -98,18 +97,17 @@ def update_reserva(
     
     # Registrar auditoria
     try:
-        if request:
-            client_info = get_client_info(request)
-            AuditService.log_action(
-                db=db,
-                user_id=current_user.id,
-                action="UPDATE_RESERVATION",
-                resource="RESERVATION",
-                resource_id=db_reserva.id,
-                ip_address=client_info["ip_address"],
-                user_agent=client_info["user_agent"],
-                details={"status": db_reserva.status}
-            )
+        client_info = get_client_info(request)
+        AuditService.log_action(
+            db=db,
+            user_id=current_user.id,
+            action="UPDATE_RESERVATION",
+            resource="RESERVATION",
+            resource_id=db_reserva.id,
+            ip_address=client_info["ip_address"],
+            user_agent=client_info["user_agent"],
+            details={"status": db_reserva.status}
+        )
     except Exception as e:
         print(f"Erro ao registrar auditoria: {e}")
 
@@ -120,9 +118,9 @@ def update_reserva(
 @router.delete("/{reserva_id}", response_model=Reserva)
 def delete_reserva(
     reserva_id: int,
+    request: Request,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_active_user),
-    request: Request = None
+    current_user: User = Depends(get_current_active_user)
 ):
     """Cancela uma reserva (altera o status para 'cancelada')."""
     db_reserva = reserva_service.delete_reserva(db, reserva_id=reserva_id)
@@ -131,18 +129,17 @@ def delete_reserva(
     
     # Registrar auditoria
     try:
-        if request:
-            client_info = get_client_info(request)
-            AuditService.log_action(
-                db=db,
-                user_id=current_user.id,
-                action="DELETE_RESERVATION",
-                resource="RESERVATION",
-                resource_id=db_reserva.id,
-                ip_address=client_info["ip_address"],
-                user_agent=client_info["user_agent"],
-                details={"status": "CANCELADA"}
-            )
+        client_info = get_client_info(request)
+        AuditService.log_action(
+            db=db,
+            user_id=current_user.id,
+            action="DELETE_RESERVATION",
+            resource="RESERVATION",
+            resource_id=db_reserva.id,
+            ip_address=client_info["ip_address"],
+            user_agent=client_info["user_agent"],
+            details={"status": "CANCELADA"}
+        )
     except Exception as e:
         print(f"Erro ao registrar auditoria: {e}")
 

@@ -130,14 +130,16 @@
 
             <div>
               <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
-              <input
+              <select
                 id="tipo"
                 v-model="form.tipo"
-                type="text"
-                required
                 class="mt-1 input-field"
-                placeholder="Standard, Luxo, etc."
+                required
               >
+                <option v-for="option in tipoOptions" :key="option" :value="option">
+                  {{ tipoLabels[option] || option }}
+                </option>
+              </select>
             </div>
 
             <div>
@@ -534,7 +536,8 @@ const showForm = ref(false)
 const editingRoom = ref<Room | null>(null)
 const searchTerm = ref('')
 const statusFilter = ref<'todos' | string>('todos')
-const statusOptions = ['disponivel', 'ocupado', 'manutencao']
+const statusOptions = ['livre', 'ocupado', 'limpeza', 'manutencao']
+const tipoOptions = ['standard', 'deluxe', 'suite']
 
 type RoomFormState = {
   numero: string
@@ -557,7 +560,7 @@ const moneyConfig = {
 const form = reactive<RoomFormState>({
   numero: '',
   tipo: '',
-  status: 'disponivel',
+  status: 'livre',
   capacidade: 1,
   valor_diaria: '',
   descricao: ''
@@ -573,9 +576,16 @@ const calendarRange = ref({
 const message = ref<{ type: 'success' | 'error'; text: string } | null>(null)
 
 const statusLabels: Record<string, string> = {
-  disponivel: 'Disponível',
+  livre: 'Livre',
   ocupado: 'Ocupado',
-  manutencao: 'Em manutenção'
+  limpeza: 'Limpeza',
+  manutencao: 'Manutenção'
+}
+
+const tipoLabels: Record<string, string> = {
+  standard: 'Standard',
+  deluxe: 'Deluxe',
+  suite: 'Suíte'
 }
 
 const filteredRooms = computed(() => {
@@ -754,7 +764,7 @@ function cancelForm() {
   editingRoom.value = null
   form.numero = ''
   form.tipo = ''
-  form.status = 'disponivel'
+  form.status = 'livre'
   form.capacidade = ''
   form.valor_diaria = ''
   form.descricao = ''

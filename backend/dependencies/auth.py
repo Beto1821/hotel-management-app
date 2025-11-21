@@ -12,7 +12,7 @@ SECRET_KEY = "your-secret-key-here-change-in-production"
 ALGORITHM = "HS256"
 
 # Esquema OAuth2 para Bearer Token
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 
 def get_current_user(

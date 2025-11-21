@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import ClassVar, List, Optional, TYPE_CHECKING
 
-from sqlalchemy import Float, Integer, String, Text
+from sqlalchemy import Float, Integer, String, Text, Enum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from models.base import Base
@@ -20,8 +20,14 @@ class Quarto(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     numero: Mapped[str] = mapped_column(String(10), unique=True, index=True)
-    tipo: Mapped[str] = mapped_column(String(50))
-    status: Mapped[str] = mapped_column(String(20), default="disponivel")
+    tipo: Mapped[str] = mapped_column(
+        Enum('standard', 'deluxe', 'suite', name='tipo_quarto_enum'),
+        nullable=False
+    )
+    status: Mapped[str] = mapped_column(
+        Enum('livre', 'ocupado', 'limpeza', 'manutencao', name='status_quarto_enum'),
+        default="livre"
+    )
     capacidade: Mapped[int] = mapped_column(Integer, default=1)
     valor_diaria: Mapped[float] = mapped_column(Float, nullable=False)
     descricao: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
