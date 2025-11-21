@@ -283,7 +283,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { useAuth } from '~/composables/useAuth'
-import { getDashboardSummary, type DashboardActivityResponse } from '~/services/apiClient'
+import apiClient, { getDashboardSummary, type DashboardActivityResponse } from '~/services/apiClient'
 
 // Meta da página - protegida por middleware de auth
 definePageMeta({
