@@ -3,7 +3,7 @@ Endpoints da API para gerenciamento de Clientes
 """
 
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 
 from core.database import get_db
@@ -15,6 +15,8 @@ from schemas.client_schemas import (
     ClientResponse
 )
 from services.client_service import ClientService
+from services.audit_service import AuditService
+from utils.request_utils import get_client_info
 
 # Router para clientes
 router = APIRouter(
@@ -28,6 +30,7 @@ router = APIRouter(
              status_code=status.HTTP_201_CREATED)
 async def create_client(
     client_data: ClientCreate,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -36,6 +39,20 @@ async def create_client(
     """
     try:
         client = ClientService.create_client(db, client_data)
+        
+        # Registrar auditoria
+        client_info = get_client_info(request)
+        AuditService.log_action(
+            db=db,
+            user_id=current_user.id,
+            action="CREATE_CLIENT",
+            resource="CLIENT",
+            resource_id=client.id,
+            ip_address=client_info["ip_address"],
+            user_agent=client_info["user_agent"],
+            details={"client_name": client.nome}
+        )
+        
         return client
     except ValueError as e:
         raise HTTPException(
@@ -95,6 +112,7 @@ async def get_client(
 async def update_client(
     client_id: int,
     client_data: ClientUpdate,
+    request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -108,6 +126,20 @@ async def update_client(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Cliente não encontrado"
             )
+        
+        # Registrar auditoria
+        client_info = get_client_info(request)
+        AuditService.log_action(
+            db=db,
+            user_id=current_user.id,
+            action="UPDATE_CLIENT",
+            resource="CLIENT",
+            resource_id=client.id,
+            ip_address=client_info["ip_address"],
+            user_agent=client_info["user_agent"],
+            details={"client_name": client.nome}
+        )
+        
         return client
     except ValueError as e:
         raise HTTPException(

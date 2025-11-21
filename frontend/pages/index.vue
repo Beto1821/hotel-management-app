@@ -423,6 +423,9 @@ const loadDashboard = async () => {
         'CREATE_CLIENT': { description: '➕ Cliente criado', icon: 'user-plus', iconBg: 'bg-blue-500' },
         'UPDATE_CLIENT': { description: '✏️ Cliente atualizado', icon: 'wrench', iconBg: 'bg-yellow-500' },
         'DELETE_CLIENT': { description: '🗑️ Cliente excluído', icon: 'cancel', iconBg: 'bg-red-500' },
+        'CREATE_ROOM': { description: '🏨 Quarto criado', icon: 'calendar', iconBg: 'bg-green-500' },
+        'UPDATE_ROOM': { description: '🔧 Quarto atualizado', icon: 'wrench', iconBg: 'bg-yellow-500' },
+        'DELETE_ROOM': { description: '🗑️ Quarto excluído', icon: 'cancel', iconBg: 'bg-red-500' },
         'USER_CREATED': { description: '👤 Usuário criado', icon: 'user-plus', iconBg: 'bg-indigo-500' }
       }
       
