@@ -568,7 +568,6 @@ async function submitForm() {
     }
 
     await loadRooms()
-    await fetchCalendar()
     cancelForm()
   } catch (error: any) {
     const detail = error?.data?.detail || 'Erro ao salvar quarto.'
