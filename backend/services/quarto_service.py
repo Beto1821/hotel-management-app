@@ -222,10 +222,10 @@ def get_calendario_ocupacao(
             data_fim,
         )
         
-        # Se o quarto está marcado como "ocupado", marcar dias >= hoje
+        # Se o quarto está marcado como "ocupado", marcar SOMENTE hoje
         if quarto.status == "ocupado":
             for dia in dias:
-                if dia.status == "livre" and dia.data >= hoje:
+                if dia.status == "livre" and dia.data == hoje:
                     dia.status = "ocupado"
         
         calendario.append(
