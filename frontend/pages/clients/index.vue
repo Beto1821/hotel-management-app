@@ -10,8 +10,8 @@
           <!-- Logo and Title -->
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-12 w-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-2">
-                <img src="/log_plataformahote.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
+              <div class="h-16 w-16 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-2">
+                <img src="/Ring.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
               </div>
               <div class="ml-4">
                 <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -488,14 +488,12 @@ const loadClients = async () => {
 
 // Submeter formulário (criar ou atualizar)
 const submitForm = async () => {
-  const { $alert, $toast } = useNuxtApp()
-  
   try {
     loading.value = true
 
     // Validação básica
     if (!form.value.name || !form.value.email || !form.value.phone || !form.value.document) {
-      await $alert.warning('Atenção', 'Preencha todos os campos obrigatórios')
+      showMessage('error', 'Preencha todos os campos obrigatórios')
       return
     }
 
@@ -510,24 +508,18 @@ const submitForm = async () => {
     if (editingClient.value) {
       // Atualizar cliente existente
       await updateClient(editingClient.value.id, clientData)
-      $toast.fire({
-        icon: 'success',
-        title: 'Cliente atualizado com sucesso!'
-      })
+      showMessage('success', 'Cliente atualizado com sucesso!')
     } else {
       // Criar novo cliente
       await createClient(clientData)
-      $toast.fire({
-        icon: 'success',
-        title: 'Cliente adicionado com sucesso!'
-      })
+      showMessage('success', 'Cliente adicionado com sucesso!')
     }
 
     // Recarregar lista
     await loadClients()
     cancelForm()
   } catch (error) {
-    await $alert.error('Erro', 'Erro ao salvar cliente. Verifique os dados e tente novamente.')
+    showMessage('error', 'Erro ao salvar cliente. Verifique os dados e tente novamente.')
   } finally {
     loading.value = false
   }
@@ -548,14 +540,7 @@ const editClient = (client: Client) => {
 
 // Função para remover cliente
 const removeClient = async (id: number) => {
-  const { $alert, $toast } = useNuxtApp()
-  
-  const result = await $alert.confirm(
-    'Tem certeza?',
-    'Esta ação não pode ser desfeita. O cliente será excluído permanentemente.'
-  )
-  
-  if (!result.isConfirmed) {
+  if (!confirm('Tem certeza que deseja excluir este cliente?')) {
     return
   }
 
@@ -563,12 +548,9 @@ const removeClient = async (id: number) => {
   try {
     await deleteClient(id)
     await loadClients() // Recarregar a lista
-    $toast.fire({
-      icon: 'success',
-      title: 'Cliente excluído com sucesso!'
-    })
+    showMessage('success', 'Cliente excluído com sucesso!')
   } catch (error: any) {
-    await $alert.error('Erro', error.data?.detail || 'Falha ao excluir cliente.')
+    showMessage(error.data?.detail || 'Falha ao excluir cliente.', 'error')
   } finally {
     loading.value = false
   }
