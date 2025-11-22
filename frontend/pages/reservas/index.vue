@@ -8,8 +8,8 @@
         <div class="flex justify-between items-center h-16">
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-12 w-12 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-2">
-                <img src="/log_plataformahote.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
+              <div class="h-14 w-14 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-1.5">
+                <img src="/Ring.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
               </div>
               <div class="ml-4">
                 <h1 class="text-xl font-semibold text-gray-900 dark:text-gray-100">

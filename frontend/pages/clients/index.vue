@@ -10,7 +10,7 @@
           <!-- Logo and Title -->
           <div class="flex items-center">
             <NuxtLink to="/" class="flex items-center">
-              <div class="h-16 w-16 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-2">
+              <div class="h-14 w-14 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-lg p-1.5">
                 <img src="/Ring.png" alt="Plataforma Hotel" class="w-full h-full object-contain" />
               </div>
               <div class="ml-4">
