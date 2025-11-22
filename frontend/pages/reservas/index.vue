@@ -487,6 +487,7 @@ import {
   type ReservationUpdate,
   getClients,
   getRooms,
+  getRoomCalendar,
   type Client,
   type Room
 } from '~/services/apiClient'
@@ -837,20 +838,11 @@ async function fetchCalendar() {
   
   try {
     calendarLoading.value = true
-    const config = useRuntimeConfig()
-    const token = localStorage.getItem('token')
-    
-    const response = await $fetch(`${config.public.apiBase}/quartos/calendario`, {
-      method: 'GET',
-      params: {
-        data_inicio: calendarRange.value.start,
-        data_fim: calendarRange.value.end
-      },
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    calendarData.value = response as any[]
+    const response = await getRoomCalendar(
+      calendarRange.value.start,
+      calendarRange.value.end
+    )
+    calendarData.value = response
   } catch (error) {
     console.error('Erro ao carregar calendário:', error)
     calendarData.value = []
