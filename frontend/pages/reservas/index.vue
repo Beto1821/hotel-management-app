@@ -374,6 +374,99 @@
           </div>
         </div>
       </div>
+
+      <!-- Calendário de Ocupação -->
+      <div class="px-4 py-6 sm:px-0">
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
+              Calendário de Ocupação
+            </h2>
+            <div class="flex gap-2">
+              <input
+                v-model="calendarRange.start"
+                type="date"
+                class="input-field"
+                @change="fetchCalendar"
+              >
+              <span class="flex items-center text-gray-500 dark:text-gray-400">até</span>
+              <input
+                v-model="calendarRange.end"
+                type="date"
+                class="input-field"
+                @change="fetchCalendar"
+              >
+            </div>
+          </div>
+
+          <div v-if="calendarLoading" class="text-center py-8">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Carregando calendário...</p>
+          </div>
+
+          <div v-else-if="calendarData.length === 0" class="text-center py-8">
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Nenhuma ocupação encontrada para o período selecionado
+            </p>
+          </div>
+
+          <div v-else class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+              <thead class="bg-gray-50 dark:bg-gray-900">
+                <tr>
+                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Quarto
+                  </th>
+                  <th
+                    v-for="day in calendarDays"
+                    :key="day"
+                    class="px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-400 uppercase"
+                  >
+                    {{ formatCalendarDay(day) }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                <tr v-for="room in calendarData" :key="room.quarto_id">
+                  <td class="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
+                    Quarto {{ room.numero }}
+                    <span class="block text-xs text-gray-500 dark:text-gray-400">{{ room.tipo }}</span>
+                  </td>
+                  <td
+                    v-for="day in calendarDays"
+                    :key="day"
+                    class="px-2 py-3 text-center text-xs"
+                  >
+                    <div
+                      class="h-8 rounded flex items-center justify-center"
+                      :class="getCellClass(room, day)"
+                      :title="getCellTitle(room, day)"
+                    >
+                      {{ getCellContent(room, day) }}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Legenda -->
+          <div class="mt-4 flex gap-4 justify-center text-xs">
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 rounded"></div>
+              <span class="text-gray-600 dark:text-gray-400">Livre</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 rounded"></div>
+              <span class="text-gray-600 dark:text-gray-400">Ocupado</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-4 h-4 bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 rounded"></div>
+              <span class="text-gray-600 dark:text-gray-400">Check-in/Check-out</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
     
     <AppFooter />
@@ -439,6 +532,28 @@ const form = ref<{
 })
 
 const message = ref<{ type: 'success' | 'error'; text: string } | null>(null)
+
+// Calendário de ocupação
+const calendarLoading = ref(false)
+const calendarData = ref<any[]>([])
+const calendarRange = ref({
+  start: formatDateInput(addDays(new Date(), 0)),
+  end: formatDateInput(addDays(new Date(), 7))
+})
+
+const calendarDays = computed(() => {
+  const days: string[] = []
+  const start = new Date(calendarRange.value.start)
+  const end = new Date(calendarRange.value.end)
+  
+  const current = new Date(start)
+  while (current <= end) {
+    days.push(formatDateInput(current))
+    current.setDate(current.getDate() + 1)
+  }
+  
+  return days
+})
 
 const filteredReservations = computed(() => {
   return reservations.value.filter((reserva) => {
@@ -655,8 +770,97 @@ async function openCreateForm() {
   showForm.value = true
 }
 
+// Funções do calendário
+function formatDateInput(date: Date): string {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date)
+  result.setDate(result.getDate() + days)
+  return result
+}
+
+function formatCalendarDay(dateStr: string): string {
+  const date = new Date(dateStr + 'T00:00:00')
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  return `${day}/${month}`
+}
+
+function getCellClass(room: any, day: string): string {
+  const reservation = room.reservations?.find((r: any) => {
+    return day >= r.data_checkin && day < r.data_checkout
+  })
+  
+  if (!reservation) {
+    return 'bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-200'
+  }
+  
+  // Check-in ou check-out
+  if (day === reservation.data_checkin || day === reservation.data_checkout) {
+    return 'bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200'
+  }
+  
+  // Ocupado
+  return 'bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-200'
+}
+
+function getCellTitle(room: any, day: string): string {
+  const reservation = room.reservations?.find((r: any) => {
+    return day >= r.data_checkin && day < r.data_checkout
+  })
+  
+  if (!reservation) return 'Livre'
+  
+  if (day === reservation.data_checkin) return `Check-in - ${reservation.client_name}`
+  if (day === reservation.data_checkout) return `Check-out - ${reservation.client_name}`
+  
+  return `Ocupado - ${reservation.client_name}`
+}
+
+function getCellContent(room: any, day: string): string {
+  const reservation = room.reservations?.find((r: any) => {
+    return day >= r.data_checkin && day < r.data_checkout
+  })
+  
+  if (!reservation) return '✓'
+  
+  if (day === reservation.data_checkin) return 'IN'
+  if (day === reservation.data_checkout) return 'OUT'
+  
+  return '●'
+}
+
+async function fetchCalendar() {
+  if (!calendarRange.value.start || !calendarRange.value.end) return
+  
+  try {
+    calendarLoading.value = true
+    const response = await $fetch('/api/v1/quartos/calendario', {
+      method: 'GET',
+      params: {
+        data_inicio: calendarRange.value.start,
+        data_fim: calendarRange.value.end
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    calendarData.value = response as any[]
+  } catch (error) {
+    console.error('Erro ao carregar calendário:', error)
+    calendarData.value = []
+  } finally {
+    calendarLoading.value = false
+  }
+}
+
 onMounted(async () => {
-  await Promise.all([loadReservations(), loadAuxiliaryData()])
+  await Promise.all([loadReservations(), loadAuxiliaryData(), fetchCalendar()])
 })
 
 useHead({
