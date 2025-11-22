@@ -270,9 +270,9 @@
                     </span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
-                    {{ formatDate(reserva.data_check_in) }} - {{ formatDate(reserva.data_check_out) }}
+                    {{ formatDate(reserva.data_checkin) }} - {{ formatDate(reserva.data_checkout) }}
                     <span class="block text-xs text-gray-500 dark:text-gray-400">
-                      {{ quantidadeNoites(reserva.data_check_in, reserva.data_check_out) }} noites
+                      {{ quantidadeNoites(reserva.data_checkin, reserva.data_checkout) }} noites
                     </span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
@@ -561,7 +561,7 @@ const filteredReservations = computed(() => {
       statusFilter.value === 'todos' || reserva.status === statusFilter.value
 
     const matchesMonth = monthFilter.value
-      ? reserva.data_check_in.slice(0, 7) === monthFilter.value
+      ? reserva.data_checkin.slice(0, 7) === monthFilter.value
       : true
 
     return matchesStatus && matchesMonth
@@ -683,10 +683,10 @@ async function submitForm() {
     if (editingReservation.value) {
       const payload: ReservationUpdate = {}
 
-      if (form.value.data_checkin !== editingReservation.value.data_check_in) {
+      if (form.value.data_checkin !== editingReservation.value.data_checkin) {
         payload.data_checkin = form.value.data_checkin
       }
-      if (form.value.data_checkout !== editingReservation.value.data_check_out) {
+      if (form.value.data_checkout !== editingReservation.value.data_checkout) {
         payload.data_checkout = form.value.data_checkout
       }
       if (form.value.status !== editingReservation.value.status) {
@@ -721,8 +721,8 @@ function editReservation(reserva: Reservation) {
   form.value = {
   client_id: reserva.client_id,
     quarto_id: reserva.quarto_id,
-    data_checkin: reserva.data_check_in,
-    data_checkout: reserva.data_check_out,
+    data_checkin: reserva.data_checkin,
+    data_checkout: reserva.data_checkout,
     status: reserva.status
   }
   showForm.value = true

@@ -385,8 +385,8 @@ export const getRoomCalendar = (
 
 export interface Reservation {
   id: number
-  data_check_in: string
-  data_check_out: string
+  data_checkin: string
+  data_checkout: string
   quarto_id: number
   client_id: number
   valor_total: number
