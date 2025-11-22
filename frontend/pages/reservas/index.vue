@@ -795,11 +795,16 @@ function formatCalendarDay(dateStr: string): string {
 function getCellClass(room: any, day: string): string {
   const dayData = room.ocupacao?.find((o: any) => o.data === day)
   
-  if (!dayData || !dayData.reserva_id) {
+  if (!dayData) {
     return 'bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-200'
   }
   
-  // Ocupado (status pode ser 'ocupado', 'checkin', 'checkout')
+  // Livre (sem reserva e status livre)
+  if (dayData.status === 'livre') {
+    return 'bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-200'
+  }
+  
+  // Ocupado (com ou sem reserva)
   if (dayData.status === 'ocupado') {
     return 'bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-200'
   }
@@ -811,7 +816,7 @@ function getCellClass(room: any, day: string): string {
 function getCellTitle(room: any, day: string): string {
   const dayData = room.ocupacao?.find((o: any) => o.data === day)
   
-  if (!dayData || !dayData.reserva_id) return 'Livre'
+  if (!dayData || dayData.status === 'livre') return 'Livre'
   
   const statusMap: Record<string, string> = {
     'ocupado': 'Ocupado',
@@ -825,7 +830,7 @@ function getCellTitle(room: any, day: string): string {
 function getCellContent(room: any, day: string): string {
   const dayData = room.ocupacao?.find((o: any) => o.data === day)
   
-  if (!dayData || !dayData.reserva_id) return '✓'
+  if (!dayData || dayData.status === 'livre') return '✓'
   
   if (dayData.status === 'checkin') return 'IN'
   if (dayData.status === 'checkout') return 'OUT'
