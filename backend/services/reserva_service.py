@@ -79,7 +79,7 @@ def calcular_valor_total(
 def create_reserva(db: Session, reserva: ReservaCreate) -> Reserva:
     """Cria uma reserva após validar disponibilidade e calcular o valor."""
     if not is_quarto_disponivel(
-        db, reserva.quarto_id, reserva.data_check_in, reserva.data_check_out
+        db, reserva.quarto_id, reserva.data_checkin, reserva.data_checkout
     ):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -87,14 +87,14 @@ def create_reserva(db: Session, reserva: ReservaCreate) -> Reserva:
         )
 
     valor_total = calcular_valor_total(
-        db, reserva.quarto_id, reserva.data_check_in, reserva.data_check_out
+        db, reserva.quarto_id, reserva.data_checkin, reserva.data_checkout
     )
 
     db_reserva = Reserva(
         quarto_id=reserva.quarto_id,
-        client_id=reserva.cliente_id,
-        data_checkin=reserva.data_check_in,
-        data_checkout=reserva.data_check_out,
+        client_id=reserva.client_id,
+        data_checkin=reserva.data_checkin,
+        data_checkout=reserva.data_checkout,
         valor_total=valor_total,
         status=STATUS_PENDENTE,
     )

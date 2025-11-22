@@ -8,10 +8,10 @@ from schemas.quarto import Quarto
 
 
 class ReservaBase(BaseModel):
-    data_check_in: date = Field(alias="data_checkin")
-    data_check_out: date = Field(alias="data_checkout")
+    data_checkin: date
+    data_checkout: date
     quarto_id: int
-    cliente_id: int = Field(alias="client_id")
+    client_id: int
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -21,8 +21,8 @@ class ReservaCreate(ReservaBase):
 
 
 class ReservaUpdate(BaseModel):
-    data_check_in: Optional[date] = Field(default=None, alias="data_checkin")
-    data_check_out: Optional[date] = Field(default=None, alias="data_checkout")
+    data_checkin: Optional[date] = None
+    data_checkout: Optional[date] = None
     status: Optional[str] = None
 
     model_config = ConfigDict(populate_by_name=True)
