@@ -324,112 +324,6 @@
         </div>
       </div>
 
-      <section class="px-4 py-6 sm:px-0">
-        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                Calendário de Ocupação
-              </h2>
-              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Visualize rapidamente quais quartos estão livres ou reservados no período selecionado.
-              </p>
-            </div>
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div>
-                <label for="inicio" class="block text-sm font-medium text-gray-700">Data inicial</label>
-                <input
-                  id="inicio"
-                  v-model="calendarRange.inicio"
-                  type="date"
-                  class="mt-1 input-field"
-                >
-              </div>
-              <div>
-                <label for="fim" class="block text-sm font-medium text-gray-700">Data final</label>
-                <input
-                  id="fim"
-                  v-model="calendarRange.fim"
-                  type="date"
-                  class="mt-1 input-field"
-                >
-              </div>
-              <button
-                class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-                :disabled="calendarLoading"
-                @click="fetchCalendar"
-              >
-                <svg
-                  v-if="calendarLoading"
-                  class="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                </svg>
-                {{ calendarLoading ? 'Carregando...' : 'Atualizar calendário' }}
-              </button>
-            </div>
-          </div>
-
-          <div v-if="calendarLoading" class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            Carregando ocupação...
-          </div>
-
-          <div v-else-if="calendarData.length === 0" class="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            {{ rooms.length ? 'Nenhum quarto encontrado no período selecionado.' : 'Cadastre quartos para visualizar a ocupação.' }}
-          </div>
-
-          <div v-else class="mt-6 space-y-6">
-            <div
-              v-for="quarto in calendarData"
-              :key="quarto.quarto_id"
-              class="border border-gray-200 dark:border-gray-700 rounded-lg"
-            >
-              <div class="p-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100">
-                    Quarto {{ quarto.numero }} · {{ quarto.tipo }}
-                  </h3>
-                  <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Capacidade: {{ quarto.capacidade }} · Diária: {{ formatCurrency(quarto.valor_diaria) }}
-                  </p>
-                </div>
-                <span
-                  class="inline-flex px-2 py-1 text-xs font-semibold leading-5 rounded-full"
-                  :class="statusBadgeClass(quarto.status)"
-                >
-                  {{ statusLabels[quarto.status] || quarto.status }}
-                </span>
-              </div>
-
-              <div class="p-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
-                <div
-                  v-for="dia in quarto.ocupacao"
-                  :key="`${quarto.quarto_id}-${dia.data}`"
-                  class="border border-gray-200 dark:border-gray-700 rounded-md p-3"
-                  :class="dia.status === 'reservado' ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'"
-                >
-                  <p class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                    {{ formatDate(dia.data) }}
-                  </p>
-                  <p
-                    class="text-xs font-semibold uppercase tracking-wide"
-                    :class="dia.status === 'reservado' ? 'text-red-600' : 'text-green-600'"
-                  >
-                    {{ dia.status }}
-                  </p>
-                  <p v-if="dia.reserva_id" class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Reserva #{{ dia.reserva_id }} · Cliente {{ dia.cliente_id }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <div v-if="message" class="fixed bottom-4 right-4 max-w-sm">
         <div
           class="rounded-md p-4"
@@ -566,13 +460,6 @@ const form = reactive<RoomFormState>({
   descricao: ''
 })
 
-const calendarLoading = ref(false)
-const calendarData = ref<RoomCalendar[]>([])
-const calendarRange = ref({
-  inicio: formatDateInput(new Date()),
-  fim: formatDateInput(addDays(new Date(), 7))
-})
-
 const message = ref<{ type: 'success' | 'error'; text: string } | null>(null)
 
 const statusLabels: Record<string, string> = {
@@ -610,24 +497,6 @@ function formatCurrency(value: number): string {
   })
 }
 
-function formatDateInput(date: Date): string {
-  return date.toISOString().split('T')[0]
-}
-
-function addDays(date: Date, days: number): Date {
-  const clone = new Date(date)
-  clone.setDate(clone.getDate() + days)
-  return clone
-}
-
-function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  })
-}
-
 function statusBadgeClass(status: string): string {
   const map: Record<string, string> = {
     disponivel: 'bg-green-100 text-green-800',
@@ -655,26 +524,6 @@ async function loadRooms() {
     rooms.value = []
   } finally {
     loadingRooms.value = false
-  }
-}
-
-async function fetchCalendar() {
-  if (!calendarRange.value.inicio || !calendarRange.value.fim) {
-    showMessage('error', 'Informe as datas inicial e final.')
-    return
-  }
-
-  try {
-    calendarLoading.value = true
-    calendarData.value = await getRoomCalendar(
-      calendarRange.value.inicio,
-      calendarRange.value.fim
-    )
-  } catch (error) {
-    showMessage('error', 'Não foi possível carregar o calendário.')
-    calendarData.value = []
-  } finally {
-    calendarLoading.value = false
   }
 }
 
@@ -750,7 +599,6 @@ async function removeRoom(id: number) {
     await deleteRoom(id)
     showMessage('success', 'Quarto removido com sucesso!')
     await loadRooms()
-    await fetchCalendar()
   } catch (error: any) {
     const detail = error?.data?.detail || 'Falha ao remover quarto.'
     showMessage('error', detail)
@@ -777,20 +625,6 @@ function handleLogout() {
 
 onMounted(async () => {
   await loadRooms()
-  await fetchCalendar()
-})
-
-let debounceTimer: ReturnType<typeof setTimeout> | null = null
-watch([
-  () => calendarRange.value.inicio,
-  () => calendarRange.value.fim
-], () => {
-  if (debounceTimer) {
-    clearTimeout(debounceTimer)
-  }
-  debounceTimer = setTimeout(() => {
-    fetchCalendar()
-  }, 600)
 })
 
 useHead({
