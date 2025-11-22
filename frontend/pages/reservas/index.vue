@@ -792,45 +792,42 @@ function formatCalendarDay(dateStr: string): string {
 }
 
 function getCellClass(room: any, day: string): string {
-  const reservation = room.reservations?.find((r: any) => {
-    return day >= r.data_checkin && day < r.data_checkout
-  })
+  const dayData = room.ocupacao?.find((o: any) => o.data === day)
   
-  if (!reservation) {
+  if (!dayData || !dayData.reserva_id) {
     return 'bg-green-100 dark:bg-green-900 border border-green-300 dark:border-green-700 text-green-800 dark:text-green-200'
   }
   
-  // Check-in ou check-out
-  if (day === reservation.data_checkin || day === reservation.data_checkout) {
-    return 'bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200'
+  // Ocupado (status pode ser 'ocupado', 'checkin', 'checkout')
+  if (dayData.status === 'ocupado') {
+    return 'bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-200'
   }
   
-  // Ocupado
-  return 'bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 text-blue-800 dark:text-blue-200'
+  // Check-in ou check-out
+  return 'bg-yellow-100 dark:bg-yellow-900 border border-yellow-300 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200'
 }
 
 function getCellTitle(room: any, day: string): string {
-  const reservation = room.reservations?.find((r: any) => {
-    return day >= r.data_checkin && day < r.data_checkout
-  })
+  const dayData = room.ocupacao?.find((o: any) => o.data === day)
   
-  if (!reservation) return 'Livre'
+  if (!dayData || !dayData.reserva_id) return 'Livre'
   
-  if (day === reservation.data_checkin) return `Check-in - ${reservation.client_name}`
-  if (day === reservation.data_checkout) return `Check-out - ${reservation.client_name}`
+  const statusMap: Record<string, string> = {
+    'ocupado': 'Ocupado',
+    'checkin': 'Check-in',
+    'checkout': 'Check-out'
+  }
   
-  return `Ocupado - ${reservation.client_name}`
+  return statusMap[dayData.status] || dayData.status
 }
 
 function getCellContent(room: any, day: string): string {
-  const reservation = room.reservations?.find((r: any) => {
-    return day >= r.data_checkin && day < r.data_checkout
-  })
+  const dayData = room.ocupacao?.find((o: any) => o.data === day)
   
-  if (!reservation) return '✓'
+  if (!dayData || !dayData.reserva_id) return '✓'
   
-  if (day === reservation.data_checkin) return 'IN'
-  if (day === reservation.data_checkout) return 'OUT'
+  if (dayData.status === 'checkin') return 'IN'
+  if (dayData.status === 'checkout') return 'OUT'
   
   return '●'
 }
@@ -840,14 +837,17 @@ async function fetchCalendar() {
   
   try {
     calendarLoading.value = true
-    const response = await $fetch('/api/v1/quartos/calendario', {
+    const config = useRuntimeConfig()
+    const token = localStorage.getItem('token')
+    
+    const response = await $fetch(`${config.public.apiBase}/quartos/calendario`, {
       method: 'GET',
       params: {
         data_inicio: calendarRange.value.start,
         data_fim: calendarRange.value.end
       },
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
+        Authorization: `Bearer ${token}`
       }
     })
     calendarData.value = response as any[]
