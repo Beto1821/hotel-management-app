@@ -21,8 +21,8 @@ class Reserva(Base):
     __tablename__: ClassVar[str] = "reservas"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    data_checkin: Mapped[date] = mapped_column("data_check_in", Date, nullable=False)
-    data_checkout: Mapped[date] = mapped_column("data_check_out", Date, nullable=False)
+    data_checkin: Mapped[date] = mapped_column(Date, nullable=False)
+    data_checkout: Mapped[date] = mapped_column(Date, nullable=False)
     valor_total: Mapped[float] = mapped_column(Float, nullable=False)
     status: Mapped[str] = mapped_column(String, default="pendente")
 
@@ -30,7 +30,7 @@ class Reserva(Base):
         ForeignKey("quartos.id"), nullable=False
     )
     client_id: Mapped[int] = mapped_column(
-        "cliente_id", ForeignKey("clients.id"), nullable=False
+        ForeignKey("clients.id"), nullable=False
     )
 
     quarto: Mapped["Quarto"] = relationship(
