@@ -1,6 +1,5 @@
 import os
 from typing import Generator
-from urllib.parse import quote
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine
@@ -11,19 +10,15 @@ from models.base import Base
 # Carregar variáveis do arquivo .env
 load_dotenv()
 
+# Obter DATABASE_URL do arquivo .env
+DATABASE_URL = os.getenv("DATABASE_URL")
+if not DATABASE_URL:
+    raise ValueError(
+        "DATABASE_URL não definida! "
+        "Adicione DATABASE_URL ao seu arquivo .env "
+        "(ex: mysql+pymysql://user:password@localhost:3306/database)"
+    )
 
-# Construir URL do banco de dados usando variáveis separadas
-db_user = os.getenv("DB_USER", "root")
-db_password = os.getenv("DB_PASSWORD", "password")
-db_host = os.getenv("DB_HOST", "localhost")
-db_port = os.getenv("DB_PORT", "3306")
-db_name = os.getenv("DB_NAME", "HOTEL_APP")
-
-# Codificar a senha para URL (necessário se contém caracteres especiais como @)
-encoded_password = quote(db_password, safe="")
-
-# Construir a URL sempre a partir das variáveis individuais para evitar problemas de codificação
-DATABASE_URL = f"mysql+pymysql://{db_user}:{encoded_password}@{db_host}:{db_port}/{db_name}"
 
 # Opções de conexão com base no tipo de banco
 def _engine_options(url: str) -> dict:
@@ -31,7 +26,8 @@ def _engine_options(url: str) -> dict:
         return {"connect_args": {"check_same_thread": False}}
     return {"pool_pre_ping": True}
 
-# Configuração do banco de dados    
+
+# Configuração do banco de dados
 engine = create_engine(
     DATABASE_URL,
     pool_size=int(os.getenv("DB_POOL_SIZE", "5")),
@@ -56,13 +52,13 @@ def get_db() -> Generator[Session, None, None]:
     finally:
         db.close()
 
+
 def create_tables():
     """
     Criar todas as tabelas no banco de dados configurado.
     Esta função deve ser chamada na inicialização da aplicação.
     """
     Base.metadata.create_all(bind=engine)
-
 
 
 # Removido: _apply_sqlite_schema_patches (apenas relevante para SQLite)
