@@ -213,6 +213,8 @@ def get_calendario_ocupacao(
         reservas_por_quarto[reserva.quarto_id].append(reserva)
 
     calendario: List[QuartoCalendar] = []
+    hoje = date.today()
+    
     for quarto in quartos:
         dias = _build_day_entries(
             reservas_por_quarto.get(quarto.id, []),
@@ -220,10 +222,10 @@ def get_calendario_ocupacao(
             data_fim,
         )
         
-        # Se o quarto está marcado como "ocupado", marcar todos os dias como ocupados
+        # Se o quarto está marcado como "ocupado", marcar dias >= hoje
         if quarto.status == "ocupado":
             for dia in dias:
-                if dia.status == "livre":
+                if dia.status == "livre" and dia.data >= hoje:
                     dia.status = "ocupado"
         
         calendario.append(
