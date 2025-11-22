@@ -54,10 +54,18 @@ def _build_day_entries(
         dia = data_inicio + timedelta(days=offset)
         reserva = ocupacao_por_dia.get(dia)
         if reserva:
+            # Determinar o status do dia baseado na reserva
+            if dia == reserva.data_checkin:
+                day_status = "checkin"
+            elif dia == reserva.data_checkout:
+                day_status = "checkout"
+            else:
+                day_status = "ocupado"
+            
             dias.append(
                 QuartoCalendarDay(
                     data=dia,
-                    status="reservado",
+                    status=day_status,
                     reserva_id=reserva.id,
                     reserva_status=reserva.status,
                     cliente_id=reserva.client_id,
@@ -211,6 +219,13 @@ def get_calendario_ocupacao(
             data_inicio,
             data_fim,
         )
+        
+        # Se o quarto está marcado como "ocupado", marcar todos os dias como ocupados
+        if quarto.status == "ocupado":
+            for dia in dias:
+                if dia.status == "livre":
+                    dia.status = "ocupado"
+        
         calendario.append(
             QuartoCalendar(
                 quarto_id=quarto.id,
