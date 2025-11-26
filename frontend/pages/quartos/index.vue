@@ -438,7 +438,7 @@ type RoomFormState = {
   tipo: string
   status: string
   capacidade: number | ''
-  valor_diaria: number | ''
+  valor_diaria: number | string | ''
   descricao: string
 }
 
