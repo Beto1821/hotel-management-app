@@ -295,7 +295,7 @@ def forgot_password(
     # Por enquanto, retorna o token (APENAS PARA DESENVOLVIMENTO)
     return {
         "message": "Token de reset gerado com sucesso. Em produção, seria enviado por email.",
-        "reset_token": reset_token,  # REMOVER EM PRODUÇÃO
+        # "reset_token": reset_token,  # REMOVER EM PRODUÇÃO
         "expires_at": user.reset_token_expires
     }
 
