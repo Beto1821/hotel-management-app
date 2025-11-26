@@ -275,36 +275,6 @@ docker-compose logs -f
 
 ---
 
-## 🤝 Contribuição
-
-1. Fork o projeto
-2. Crie sua feature branch (`git checkout -b feature/nova-feature`)
-3. Commit suas mudanças (`git commit -m 'Add nova feature'`)
-4. Push para a branch (`git push origin feature/nova-feature`)
-5. Abra um Pull Request
-
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## 👨‍💻 Desenvolvedor
-
-Desenvolvido com ❤️ por [Beto1821](https://github.com/Beto1821)
-
----
-
-## 📞 Suporte
-
-Para dúvidas ou problemas:
-- 🐛 [Issues do GitHub](https://github.com/Beto1821/hotel-management-app/issues)
-- 📧 Entre em contato através do GitHub
-
----
-
 **✨ Projeto Hotel Management App - Gerenciamento de hotéis moderno e eficiente!**
 
 ## 📋 Pré-requisitos
