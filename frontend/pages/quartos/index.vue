@@ -445,10 +445,10 @@ type RoomFormState = {
 const moneyConfig = {
   decimal: ',',
   thousands: '.',
-  prefix: 'R$ ',
+  prefix: '',
   suffix: '',
   precision: 2,
-  masked: true,
+  masked: false,
 }
 
 const form = reactive<RoomFormState>({
@@ -583,8 +583,8 @@ function editRoom(room: Room) {
   form.tipo = room.tipo
   form.status = room.status
   form.capacidade = room.capacidade
-  // Format with R$ prefix and comma decimal for v-money3 masked mode
-  form.valor_diaria = `R$ ${room.valor_diaria.toFixed(2).replace('.', ',')}`
+  // Format with comma decimal for v-money3
+  form.valor_diaria = room.valor_diaria.toFixed(2).replace('.', ',')
   form.descricao = room.descricao || ''
   showForm.value = true
 }
