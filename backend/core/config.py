@@ -22,8 +22,19 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 IS_PRODUCTION = ENVIRONMENT == "production"
 
-# CORS Origins
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost:3000,http://localhost:8000"
-).split(",")
+# CORS Origins - Configuração segura
+if IS_PRODUCTION:
+    # Em produção, ALLOWED_ORIGINS é obrigatório
+    allowed_origins_str = os.getenv("ALLOWED_ORIGINS")
+    if not allowed_origins_str:
+        raise ValueError(
+            "ALLOWED_ORIGINS não definida em produção! "
+            "Defina ALLOWED_ORIGINS no .env com os domínios permitidos"
+        )
+    ALLOWED_ORIGINS = [origin.strip() for origin in allowed_origins_str.split(",")]
+else:
+    # Em desenvolvimento, usa localhost como fallback
+    ALLOWED_ORIGINS = os.getenv(
+        "ALLOWED_ORIGINS",
+        "http://localhost:3000,http://localhost:8000"
+    ).split(",")
