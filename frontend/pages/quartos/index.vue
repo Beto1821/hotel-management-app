@@ -173,7 +173,8 @@
               <input
                 id="valor_diaria"
                 v-model="form.valor_diaria"
-                v-money3="moneyConfig"
+                type="text"
+                placeholder="Ex: 200,00 ou 150,50"
                 class="mt-1 input-field"
                 required
               >
@@ -534,12 +535,9 @@ async function submitForm() {
   }
 
   const capacidadeValue = Number(form.capacidade) || 1
-  const valorDiariaNumber = Number(
-    String(form.valor_diaria)
-      .replace(/[R$\s]/g, '') // remove R$ e espaços
-      .replace('.', '')        // remove separador de milhar
-      .replace(',', '.')
-  )
+  // Accept both comma and dot as decimal separator
+  const valorDiariaStr = String(form.valor_diaria).trim().replace(',', '.')
+  const valorDiariaNumber = parseFloat(valorDiariaStr)
 
   if (!Number.isFinite(valorDiariaNumber) || valorDiariaNumber <= 0) {
     showMessage('error', 'Informe um valor de diária válido.')
@@ -583,7 +581,7 @@ function editRoom(room: Room) {
   form.tipo = room.tipo
   form.status = room.status
   form.capacidade = room.capacidade
-  // Format with comma decimal for v-money3
+  // Format with comma decimal (pt-BR)
   form.valor_diaria = room.valor_diaria.toFixed(2).replace('.', ',')
   form.descricao = room.descricao || ''
   showForm.value = true
